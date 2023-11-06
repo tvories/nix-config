@@ -22,6 +22,7 @@
   ];
   environment.systemPackages = [
     pkgs.wget
+    pkgs.google-cloud-sdk
   ];
   wsl = {
     enable = true;

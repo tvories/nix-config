@@ -50,18 +50,19 @@
     in
     {
       # Custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
+      overlays = import ./nixos/overlays { inherit inputs; };
 
       nixosConfigurations = {
         # Metal
-        "nas" = mkNixos [./hosts/nas];
+        "nas" = mkNixos [./nixos/hosts/nas];
         # VMs
-        "nas-vm" = mkNixos [./hosts/nas-vm];
+        "nas-vm" = mkNixos [./nixos/hosts/nas-vm];
         # WSL
         "wsl" = mkNixos [
-          ./hosts/wsl
+          ./nixos/hosts/wsl
           vscode-server.nixosModules.default
           nixoswsl.nixosModules.wsl
+          sops-nix.nixosModules.sops
           ];
       };
     };

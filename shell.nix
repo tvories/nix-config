@@ -12,7 +12,9 @@ in
 nixpkgs.mkShell {
   packages = [
     nixpkgs.nil
-    nixpkgs.git
+    # nixpkgs.git
     nixpkgsUnstable.btop
+    nixpkgs.sops
+    nixpkgs.age
   ];
 }

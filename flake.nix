@@ -58,12 +58,7 @@
         # VMs
         "nas-vm" = mkNixos [./nixos/hosts/nas-vm];
         # WSL
-        "wsl" = mkNixos [
-          ./nixos/hosts/wsl
-          vscode-server.nixosModules.default
-          nixoswsl.nixosModules.wsl
-          sops-nix.nixosModules.sops
-          ];
+        "wsl" = mkNixos [./nixos/hosts/wsl];
       };
     };
 }

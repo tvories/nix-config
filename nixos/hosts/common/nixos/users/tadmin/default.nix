@@ -2,11 +2,15 @@
 let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
+  sops.secrets.tadmin-password = {
+    sopsFile = ./secret.sops.yaml;
+    neededForUsers = true;
+  };
   users.mutableUsers = false;
   users.users.tadmin = {
     isNormalUser = true;
     shell = pkgs.fish;
-    hashedPassword = 
+    passwordFile = config.sops.secrets.tadmin-password.path;
     extraGroups = [
       "wheel"
     ] ++ ifTheyExist [

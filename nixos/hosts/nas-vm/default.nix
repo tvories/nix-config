@@ -49,6 +49,8 @@
     nameservers = ["192.168.1.240" "192.168.1.241"];
   };
 
+  sops.age.keyFile = "/home/tadmin/.config/sops/age/keys.txt";
+
   # Group config
   users.groups = {
     backup-rw = {

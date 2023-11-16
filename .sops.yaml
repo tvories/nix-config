@@ -4,4 +4,5 @@ creation_rules:
     gcp_kms: projects/taylor-cloud/locations/global/keyRings/sops/cryptoKeys/sops-key
     age: >-
       age1q07mwz002uj9fe262u0uz4xhp2v0jqdppjpald0e259zx3u9yu5sx4klhy,
-      age1ph42pqyrj6k3yyz2q3wtuelnxtx4cywqr38lajvhdduhamhtlufss83wne
+      age1ph42pqyrj6k3yyz2q3wtuelnxtx4cywqr38lajvhdduhamhtlufss83wne,
+      age1m3cutzgsjkq6fct3mqkcvph0j3xs8yzzywhqtxwf263p9x7a5gwsjc5jg9

@@ -10,6 +10,5 @@
     lsd
     zoxide
     tree
-    byobu
   ];
 }

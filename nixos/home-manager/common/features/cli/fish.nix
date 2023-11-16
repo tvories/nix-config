@@ -10,7 +10,7 @@ in
 
     plugins = [
       { name = "done"; src = pkgs.fishPlugins.done.src; }
-      { name = "puffer"; src = pkgs.fishPlugins.puffer.src; }
+      # { name = "puffer"; src = pkgs.fishPlugins.puffer.src; } # ! Caused my terminal to slow down a lot
       {
         name = "zoxide";
         src = pkgs.fetchFromGitHub {

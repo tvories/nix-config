@@ -4,7 +4,7 @@
     inputs.sops-nix.nixosModules.sops
     # ./locale.nix
     ./nix.nix
-    # ./packages.nix
+    ./packages.nix
     # ./openssh.nix
     # ./systemd-initrd.nix
     # ./secrets.nix

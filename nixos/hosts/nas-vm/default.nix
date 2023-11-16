@@ -96,6 +96,9 @@
     };
   };
 
+  # QEMU 
+  services.qemuGuest.enable = true;
+
   # may fix issues with network service failing during a nixos-rebuild
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;

@@ -2,12 +2,12 @@
 let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
-  sops.secrets.tadmin-password = {
+  sops.secrets.taylor-password = {
     sopsFile = ./secret.sops.yaml;
     neededForUsers = true;
   };
   users.mutableUsers = false;
-  users.users.tadmin = {
+  users.users.taylor = {
     isNormalUser = true;
     shell = pkgs.fish;
     passwordFile = config.sops.secrets.taylor-password.path;
@@ -25,5 +25,5 @@ in
     packages = [ pkgs.home-manager ];
   };
 
-  home-manager.users.tadmin = import ../../../../../home-manager/tadmin_${config.networking.hostName}.nix;
+  home-manager.users.taylor = import ../../../../../home-manager/taylor_${config.networking.hostName}.nix;
 }

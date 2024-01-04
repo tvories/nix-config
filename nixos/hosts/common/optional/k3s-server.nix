@@ -10,10 +10,17 @@
   };
 
   services.k3s.extraFlags = toString [
-    "--tls-san" "${config.networking.hostName}.t-vo.us"
+    "--tls-san" "nas.mcbadass.local"
     "--disable" "local-storage"
     "--disable" "traefik"
+    # "--flannel-iface=vlan80"
+    # "--node-ip=${toString (builtins.elemAt config.networking.interfaces.vlan80.ipv4.addresses 0).address}"
+    # "--node-external-ip=${toString (builtins.elemAt config.networking.interfaces.vlan80.ipv4.addresses 0).address}"
+    "--flannel-backend=vxlan"
+    "--disable-network-policy"
   ];
+
+  networking.firewall.trustedInterfaces = [ "tunl0" "cni0" "flannel.1" ];
 
   environment.systemPackages = [ pkgs.unstable.k3s ];
 }

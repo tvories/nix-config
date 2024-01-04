@@ -19,5 +19,8 @@
     zfs = {
       enable = true;
     };
+    smartctl = {
+      enable = true;
+    };
   };
 }

@@ -1,0 +1,78 @@
+---
+
+- name: Nixos Bootstrapping (yikes, ansible!)
+  hosts:
+    - nas
+  become: true
+  vars:
+    ansible_user: "root"
+    users:
+      - name: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='admin_user', errors='warn') | d(omit) }}"
+        password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='admin_password', errors='warn') | d(omit) }}"
+      - name: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_taylor', errors='warn') | d(omit) }}"
+        password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_taylor_password', errors='warn') | d(omit) }}"
+      - name: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_scanner', errors='warn') | d(omit) }}"
+        password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_scanner_password', errors='warn') | d(omit) }}"
+
+  handlers:
+    - name: Set samba password correctly
+      ansible.builtin.shell: >
+        set -e -o pipefail
+        && (smbclient -U {{ item.name }}%{{ item.password }} -L 127.0.0.1 2>&1 > /dev/null)
+        || (echo '{{ item.password }}'; echo '{{ item.password }}')
+        | smbpasswd {{ item.name }}
+      args:
+        executable: bash
+      register: samba_verify_users
+      changed_when: "'New SMB password' in samba_verify_users.stdout"
+      loop: "{{ users }}"
+      no_log: true
+
+  tasks:
+    # I don't want my user passwords in version control. This is the easiest way for me to 
+    # set them in code
+    - name: Set user passwords
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        password: "{{ item.password | password_hash('sha512') }}"
+        append: true
+      loop: "{{ users }}"
+      no_log: true
+
+    - name: Create SOPs directory
+      ansible.builtin.file:
+        path: /var/lib/sops-nix
+        state: directory
+        mode: '0644'
+
+    - name: Create the SOPs age key
+      ansible.builtin.copy:
+        content: "{{ lookup('community.general.onepassword', 'nixos', vault='k8s', field=ansible_hostname ~ '-age', errors='warn') | d(omit) }}"
+        dest: /var/lib/sops-nix/key.txt
+
+    - name: Register existing samba users
+      ansible.builtin.shell: >
+        set -e -o pipefail
+        pdbedit -L -v | grep -E 'Unix username|Primary Group'
+      args:
+        executable: bash
+      register: samba_users
+      changed_when: false
+      failed_when: false
+      check_mode: false
+
+    - name: Shell - Create Samba users
+      ansible.builtin.shell: >
+        set -e -o pipefail
+        && (pdbedit --user={{ item.name }} 2>&1 > /dev/null)
+        || (echo '{{ item.password }}'; echo '{{ item.password }}')
+        | smbpasswd -s -a {{ item.name }}
+      args:
+        executable: bash
+      register: samba_create_users
+      changed_when: "'Added user' in samba_create_users.stdout"
+      loop: "{{ users }}"
+      no_log: true
+      when: item.name not in samba_users.stdout
+      notify:
+        - Set samba password correctly

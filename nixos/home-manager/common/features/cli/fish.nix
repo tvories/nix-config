@@ -30,6 +30,9 @@ in
       lt = mkIf hasLsd "lsd --tree";
       lla = mkIf hasLsd "lsd -la";
 
+      # kubernetes
+      k = "kubecolor";
+
       # other
       df = "df -h";
       du = "du -h";

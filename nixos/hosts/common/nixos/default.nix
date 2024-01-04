@@ -1,8 +1,8 @@
-{ inputs, outputs, ... }: {
+{ inputs, outputs, config, sops-nix, ... }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
-    # ./locale.nix
+    ./locale.nix
     ./nix.nix
     ./packages.nix
     # ./openssh.nix
@@ -24,6 +24,9 @@
     };
   };
 
+  # Shared sops location
+  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+
   # Increase open file limit for sudoers
   security.pam.loginLimits = [
     {
@@ -39,4 +42,29 @@
       value = "1048576";
     }
   ];
+
+  # sops.secrets.msmtp = {
+  #   sopsFile = ./secret.sops.yaml;
+  # }
+
+  # Email settings
+  programs.msmtp = {
+    enable = true;
+    accounts.default = {
+      host = "smtp-relay.mcbadass.local";
+      from = "${config.networking.hostName}@t-vo.us";
+    };
+    defaults = {
+      aliases = "/etc/aliases";
+    };
+  };
+
+  environment.etc = {
+    "aliases" = {
+      text = ''
+        root: ${config.networking.hostName}@t-vo.us
+      '';
+      mode = "0644";
+    };
+  };
 }

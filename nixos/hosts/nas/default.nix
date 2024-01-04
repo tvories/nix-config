@@ -2,57 +2,93 @@
 
 {
   imports = [
-      # Host-specific hardware
+      # Host-specific
       ./hardware-configuration.nix
+      ./disk-config.nix
+      ./zfs.nix
 
       # Common imports
       ../common/nixos
       ../common/nixos/users/taylor
       ../common/nixos/users/tadmin
+      ../common/nixos/users/service_accounts
       ../common/optional/fish.nix
       ../common/optional/k3s-server.nix
       ../common/optional/nfs-server.nix
-      ../common/optional/virtualbox.nix
       ../common/optional/samba-server.nix
-      ../common/optional/starship.nix
-      ../common/optional/smartd.nix
       ../common/optional/zfs.nix
-      # ../common/optional/monitoring.nix
+      ../common/optional/monitoring.nix
+      ../common/optional/smartd.nix
+      ../common/optional/chrony.nix
   ];
+
+  services.openssh.enable = true;
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2+7PUnROyy7dALYGxsQSN16hz4iblHXtFJ6dHCUIBW"
+  ];
+  networking.firewall.enable = false;
 
   networking = {
     hostName = "nas3";
-    hostId = "824119dfs";
-    networkmanager.enable = true;
-  };
-
-  # User config
-  users.users = {
-    taylor = {
-      isNormalUser = true;
-      extraGroups = [
-        "samba-users"
-      ];
+    hostId = "8023d2b9";
+    domain = "mcbadass.local";
+    dhcpcd.enable = false;
+    interfaces.enp1s0 = {
+      ipv4.addresses = [{
+        address = "192.168.1.24";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
     };
+    vlans = {
+      vlan20 = { id=20; interface="enp1s0"; };
+      vlan60 = { id=60; interface="enp1s0"; };
+      vlan80 = { id=80; interface="enp1s0"; };
+    };
+    interfaces.vlan20 = {
+      ipv4.addresses = [{
+        address = "192.168.20.24";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
+    };
+    interfaces.vlan60 = {
+      ipv4.addresses = [{
+        address = "192.168.60.24";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
+    };
+    interfaces.vlan80 = {
+      ipv4.addresses = [{
+        address = "192.168.80.24";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
+    };
+    defaultGateway = "192.168.1.1";
+    nameservers = ["192.168.1.240" "192.168.1.241"];
   };
 
   # Group config
   users.groups = {
-    external-services = {
-      gid = 65542;
+    backup-rw = {
+      gid = 65541;
+      members = ["taylor"];
     };
-    admins = {
+    docs-rw = {
+      gid = 65543;
+      members = ["taylor"];
+    };
+    media-rw = {
+      gid = 65539;
       members = ["taylor"];
     };
   };
 
-  # Packages
-  environment.systemPackages = [
-    pkgs.rclone
-  ];
-
   # ZFS config
   boot.zfs = {
+    devNodes = "/dev/disk/by-id";
     extraPools = [
       "ook"
     ];
@@ -72,9 +108,38 @@
       path = "/ook/Documents";
       "read only" = "no";
     };
-    Music = {
-      path = "/ook/Music";
+    paperless_inbox = {
+      path = "/ook/k8s/paperless/consume";
       "read only" = "no";
+    };
+    # Music = {
+    #   path = "/ook/Media/music";
+    #   "read only" = "no";
+    # };
+    Photos = {
+      path = "/ook/Photos";
+      "read only" = "no";
+    };
+    TimeMachineWork = {
+      path = "/ook/TimeMachine/work";
+      "writable" = "yes";
+      "durable handles" = "yes";
+      "kernel oplocks" = "no";
+      "kernel share modes" = "no";
+      "posix locking" = "no";
+      "vfs objects" = "catia fruit streams_xattr";
+      browseable = "no";
+      "read only" = "no";
+      "fruit:time machine" = "yes";
+      "fruit:metadata" = "stream";
+      "fruit:locking" = "netatalk";
+      "fruit:time machine max size" = "1.9T";
+      comment = "Work Macbook Time Machine";
+      "create mask" = "0600";
+      "directory mask" = "0700";
+      "case sensitive" = "true";
+      "default case" = "lower";
+      "preserve case" = "no";
     };
   };
 

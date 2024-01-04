@@ -7,8 +7,8 @@
     openFirewall = true;
     securityType = "user";
     extraConfig = ''
-      min protocol = SMB2
       workgroup = WORKGROUP
+      min protocol = SMB2
 
       browseable = yes
       guest ok = no
@@ -27,17 +27,19 @@
       veto files = /._*/.DS_Store/
       delete veto files = yes
 
-      ea support = yes
-      vfs objects = fruit streams_xattr
-      fruit:aapl = yes
-      fruit:metadata = stream
+      vfs objects = acl_xattr catia fruit streams_xattr
       fruit:model = MacSamba
-      fruit:posix_rename = yes
+      fruit:advertise_fullsync = true
+      fruit:metadata = stream
+      fruit:aapl = yes
       fruit:veto_appledouble = no
-      fruit:nfs_aces = no
+      fruit:zero_file_id = yes
+      fruit:posix_rename = yes
       fruit:wipe_intentionally_left_blank_rfork = yes
+      fruit:nfs_aces = no
       fruit:delete_empty_adfiles = yes
       spotlight = no
+      ea support = yes
     '';
   };
 }

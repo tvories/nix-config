@@ -12,5 +12,11 @@
     pkgs.yq
     pkgs.vault
     pkgs.minio-client
+    pkgs.python3
+    pkgs.byobu
+    pkgs.btop
+    pkgs.minio-client
   ];
+
+  programs.mtr.enable = true;
 }

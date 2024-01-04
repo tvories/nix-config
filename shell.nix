@@ -16,5 +16,8 @@ nixpkgs.mkShell {
     nixpkgsUnstable.btop
     nixpkgs.sops
     nixpkgs.age
+    nixpkgs.ansible
+    nixpkgs.python3
+    nixpkgs.ansible-lint
   ];
 }

@@ -25,6 +25,12 @@
   environment.systemPackages = [
     pkgs.wget
     pkgs.google-cloud-sdk
+    pkgs.powershell
+    pkgs._1password
+    pkgs.google-cloud-sdk
+    pkgs.sops
+    pkgs.nfs-utils
+    pkgs.nil
   ];
   networking = {
     hostName = "deskmonster";
@@ -38,6 +44,15 @@
       { src = "${coreutils}/bin/readlink"; }
     ];
   };
+
+  # WSL screams if you try to enable rpcbind. disabling and using nfsv4 appears to solve the issue
+  # services.rpcbind.enable = lib.mkForce false;
+  # fileSystems."/mnt/nfs/nas3" = {
+  #   device = "192.168.1.24:/ook";
+  #   fsType = "nfs";
+  #   options = [ "nfsvers=4.2" ];
+  # };
+
   programs.nix-ld.enable = true;
   services.vscode-server.enable = true;
   system.stateVersion = "23.05";

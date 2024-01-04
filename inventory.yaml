@@ -1,0 +1,11 @@
+all:
+  vars:
+    # ansible_user: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='admin_user', errors='warn') | d(omit) }}"
+    # ansible_become_password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='admin_password', errors='warn') | d(omit) }}"
+  children:
+    storage:
+      hosts:
+        nas-vm:
+          ansible_host: "192.168.1.230"
+        nas:
+          ansible_host: "192.168.1.24"

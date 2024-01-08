@@ -39,7 +39,7 @@
             keep = [
               {
                 type = "last_n";
-                count = 7;
+                count = 14;
               }
             ];
           };

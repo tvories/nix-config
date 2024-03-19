@@ -9,3 +9,5 @@ all:
           ansible_host: "192.168.1.230"
         nas:
           ansible_host: "192.168.1.24"
+        remote-pi:
+          ansible_host: "192.168.1.97"

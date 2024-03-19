@@ -55,7 +55,7 @@
 
   programs.nix-ld.enable = true;
   services.vscode-server.enable = true;
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
   sops.age.keyFile = "/home/tadmin/.config/sops/age/keys.txt";
 
   # Tadmin user
@@ -66,4 +66,6 @@
   };
 
   home-manager.users.tadmin = import ../../home-manager/tadmin_${config.networking.hostName}.nix;
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 }

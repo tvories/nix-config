@@ -6,11 +6,13 @@
       ./hardware-configuration.nix
       ./disk-config.nix
       ./zfs.nix
+      ./restic.nix
 
       # Common imports
       ../common/nixos
       ../common/nixos/users/taylor
       ../common/nixos/users/tadmin
+      ../common/nixos/users/kate
       ../common/nixos/users/service_accounts
       ../common/optional/fish.nix
       ../common/optional/k3s-server.nix
@@ -122,24 +124,24 @@
     };
     TimeMachineWork = {
       path = "/ook/TimeMachine/work";
-      "writable" = "yes";
-      "durable handles" = "yes";
-      "kernel oplocks" = "no";
-      "kernel share modes" = "no";
-      "posix locking" = "no";
-      "vfs objects" = "catia fruit streams_xattr";
-      browseable = "no";
+      # "writable" = "yes";
+      # "durable handles" = "yes";
+      # "kernel oplocks" = "no";
+      # "kernel share modes" = "no";
+      # "posix locking" = "no";
+      "vfs objects" = "acl_xattr catia fruit streams_xattr";
+      browseable = "yes";
       "read only" = "no";
       "fruit:time machine" = "yes";
-      "fruit:metadata" = "stream";
-      "fruit:locking" = "netatalk";
-      "fruit:time machine max size" = "1.9T";
+      # "fruit:metadata" = "stream";
+      # "fruit:locking" = "netatalk";
+      # "fruit:time machine max size" = "1.9T";
       comment = "Work Macbook Time Machine";
-      "create mask" = "0600";
-      "directory mask" = "0700";
-      "case sensitive" = "true";
-      "default case" = "lower";
-      "preserve case" = "no";
+      # "create mask" = "0600";
+      # "directory mask" = "0700";
+      # "case sensitive" = "true";
+      # "default case" = "lower";
+      # "preserve case" = "no";
     };
   };
 
@@ -153,5 +155,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }

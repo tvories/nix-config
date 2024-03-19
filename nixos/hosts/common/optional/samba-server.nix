@@ -21,9 +21,6 @@
       shadow: snapdir = .zfs/snapshot
       shadow: sort = desc
 
-      inherit acls = yes
-      map acl inherit = yes
-
       veto files = /._*/.DS_Store/
       delete veto files = yes
 

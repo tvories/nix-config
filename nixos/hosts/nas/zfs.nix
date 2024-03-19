@@ -41,6 +41,10 @@
                 type = "last_n";
                 count = 14;
               }
+              {
+                type = "regex";
+                regex = "zrepl_daily_20240125_100001_000";
+              }
             ];
           };
         }

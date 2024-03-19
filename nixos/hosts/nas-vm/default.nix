@@ -11,6 +11,7 @@
       ../common/nixos
       ../common/nixos/users/taylor
       ../common/nixos/users/tadmin
+      ../common/nixos/users/kate
       ../common/nixos/users/service_accounts
       ../common/optional/fish.nix
       ../common/optional/k3s-server.nix

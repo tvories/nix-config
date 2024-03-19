@@ -85,6 +85,17 @@
         };
       };
 
+      packages.aarch64-linux = {
+        bootstrap = nixos-generators.nixosGenerate {
+          system = "aarch64-linux";
+          format = "sd-aarch64";
+          modules = [
+            sops-nix.nixosModules.sops
+            ./nixos/hosts/bootstrap/configuration.nix
+          ];
+        };
+      };
+
       # Custom packages and modifications, exported as overlays
       overlays = import ./nixos/overlays { inherit inputs; };
 
@@ -97,6 +108,9 @@
 
         # WSL
         "wsl" = mkNixos [./nixos/hosts/wsl];
+
+        # Remote Pi
+        "remote-pi" = mkNixos [./nixos/hosts/remote-pi];
       };
     };
 }

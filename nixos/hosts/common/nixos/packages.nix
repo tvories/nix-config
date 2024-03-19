@@ -16,6 +16,9 @@
     pkgs.byobu
     pkgs.btop
     pkgs.minio-client
+    pkgs.dig
+    pkgs.inetutils
+    pkgs.restic
   ];
 
   programs.mtr.enable = true;

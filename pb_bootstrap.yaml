@@ -3,6 +3,7 @@
 - name: Nixos Bootstrapping (yikes, ansible!)
   hosts:
     - nas
+    # - remote-pi
   become: true
   vars:
     ansible_user: "root"
@@ -13,6 +14,8 @@
         password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_taylor_password', errors='warn') | d(omit) }}"
       - name: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_scanner', errors='warn') | d(omit) }}"
         password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_scanner_password', errors='warn') | d(omit) }}"
+      - name: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_kate', errors='warn') | d(omit) }}"
+        password: "{{ lookup('community.general.onepassword', 'nas3', vault='k8s', field='user_kate_password', errors='warn') | d(omit) }}"
 
   handlers:
     - name: Set samba password correctly

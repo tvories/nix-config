@@ -12,6 +12,8 @@
       source /home/taylor/restic/.restic-env;
       ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/tback-rest.cert -q /ook/Photos --tag nas3-photos -r $RESTIC_REPOSITORY_BASE/photos;
       ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_REPOSITORY_BASE/photos
+      ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/deskmonster-rest.cert -q /ook/Photos --tag nas3-photos -r $RESTIC_DESKMONSTER_BASE/photos;
+      ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_DESKMONSTER_BASE/photos
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -35,6 +37,8 @@
       source /home/taylor/restic/.restic-env;
       ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/tback-rest.cert -q /ook/Documents --tag nas3-documents -r $RESTIC_REPOSITORY_BASE/documents;
       ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_REPOSITORY_BASE/documents
+      ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/deskmonster-rest.cert -q /ook/Documents --tag nas3-documents -r $RESTIC_DESKMONSTER_BASE/documents;
+      ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_DESKMONSTER_BASE/documents
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -58,6 +62,8 @@
       source /home/taylor/restic/.restic-env;
       ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/tback-rest.cert -q /ook/k8s --tag nas3-k8s -r $RESTIC_REPOSITORY_BASE/k8s;
       ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_REPOSITORY_BASE/k8s
+      ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/deskmonster-rest.cert -q /ook/k8s --tag nas3-k8s -r $RESTIC_DESKMONSTER_BASE/k8s;
+      ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_DESKMONSTER_BASE/k8s
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -81,6 +87,8 @@
       source /home/taylor/restic/.restic-env;
       ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/tback-rest.cert -q /ook/minio --tag nas3-minio -r $RESTIC_REPOSITORY_BASE/minio;
       ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_REPOSITORY_BASE/minio
+      ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/deskmonster-rest.cert -q /ook/minio --tag nas3-minio -r $RESTIC_DESKMONSTER_BASE/minio;
+      ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_DESKMONSTER_BASE/minio
     '';
     serviceConfig = {
       Type = "oneshot";
@@ -104,6 +112,8 @@
       source /home/taylor/restic/.restic-env;
       ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/tback-rest.cert -q /ook/Backup --tag nas3-backups -r $RESTIC_REPOSITORY_BASE/backups;
       ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_REPOSITORY_BASE/backups
+      ${pkgs.restic}/bin/restic backup --cacert /home/taylor/restic/deskmonster-rest.cert -q /ook/Backup --tag nas3-backups -r $RESTIC_DESKMONSTER_BASE/backups;
+      ${pkgs.restic}/bin/restic forget -q --prune --keep-hourly 24 --keep-daily 7 -r $RESTIC_DESKMONSTER_BASE/backups
     '';
     serviceConfig = {
       Type = "oneshot";

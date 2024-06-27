@@ -19,6 +19,7 @@
     pkgs.dig
     pkgs.inetutils
     pkgs.restic
+    pkgs.ncdu
   ];
 
   programs.mtr.enable = true;

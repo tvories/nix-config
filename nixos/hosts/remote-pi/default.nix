@@ -140,6 +140,10 @@
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  system.stateVersion = "23.11";
+  nixpkgs.config.permittedInsecurePackages = [
+    "vault-1.14.10"
+  ];
+  
+  system.stateVersion = "24.05";
   # nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 }

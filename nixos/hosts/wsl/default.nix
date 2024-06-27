@@ -31,6 +31,7 @@
     pkgs.sops
     pkgs.nfs-utils
     pkgs.nil
+    # pkgs.binfmt
   ];
   networking = {
     hostName = "deskmonster";
@@ -38,12 +39,16 @@
   wsl = {
     enable = true;
     defaultUser = "tadmin";
+    # interop.register = true;
     extraBin = with pkgs; [
       { src = "${coreutils}/bin/uname"; }
       { src = "${coreutils}/bin/dirname"; }
       { src = "${coreutils}/bin/readlink"; }
     ];
   };
+  nixpkgs.config.permittedInsecurePackages = [
+    "vault-1.14.10"
+  ];
 
   # WSL screams if you try to enable rpcbind. disabling and using nfsv4 appears to solve the issue
   # services.rpcbind.enable = lib.mkForce false;
@@ -55,7 +60,7 @@
 
   programs.nix-ld.enable = true;
   services.vscode-server.enable = true;
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
   sops.age.keyFile = "/home/tadmin/.config/sops/age/keys.txt";
 
   # Tadmin user

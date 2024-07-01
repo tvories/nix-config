@@ -4,6 +4,7 @@
       ./hardware-configuration.nix
       ./wireguard.nix
       ./restic-server.nix
+      ./auto-reboot.nix
       
       # Common imports
       ../common/nixos
@@ -28,6 +29,7 @@
     hostName = "tback";
     domain = "mcbadass.local";
     dhcpcd.enable = true;
+    # useNetworkd = true;
   };
 
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";

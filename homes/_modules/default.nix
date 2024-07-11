@@ -4,7 +4,7 @@
 }:
 {
   imports = [
-    # ./mutability.nix
+    ./mutability.nix
 
     # ./deployment
     # ./development

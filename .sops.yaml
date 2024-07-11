@@ -2,7 +2,7 @@
 keys:
   - &host_nas_vm age1n582w08ffdd24aqrm5m4np4werlzlwc8cuwlr29ucjugx8v90fwqj9krjr
 creation_rules:
-  - path_regex: nixos/.*secret\.sops\.ya?ml$
+  - path_regex: .*\.sops\.ya?ml$
     gcp_kms: projects/taylor-cloud/locations/global/keyRings/sops/cryptoKeys/sops-key
     age: >-
       age1q07mwz002uj9fe262u0uz4xhp2v0jqdppjpald0e259zx3u9yu5sx4klhy,

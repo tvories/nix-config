@@ -1,0 +1,84 @@
+---
+version: "3"
+
+tasks:
+  apply-darwin:
+    desc: Build and apply nix-darwin configuration
+    silent: true
+    summary: |
+      Args:
+        host: Host to build and deploy to (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - task: build-darwin
+        vars:
+          host: "{{ .host }}"
+      - task: .prompt_to_continue
+      - darwin-rebuild switch --flake "{{.ROOT_DIR}}/#{{.host}}"
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which darwin-rebuild
+        msg: "darwin-rebuild not found"
+
+  build-darwin:
+    desc: Build nix-darwin configuration
+    silent: true
+    summary: |
+      Args:
+        host: Host to build and deploy to (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - darwin-rebuild build --flake "{{.ROOT_DIR}}/#{{.host}}"
+      - nvd diff /run/current-system result
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which darwin-rebuild
+        msg: "darwin-rebuild not found"
+
+  build-nixos:
+    desc: Build nixos configuration
+    silent: true
+    vars:
+      ssh_user: taylor
+    summary: |
+      Args:
+        host: Host to build and deploy to (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - nix-shell -p nixos-rebuild --run 'nixos-rebuild build --flake .#{{.host}} --fast --use-remote-sudo --build-host "{{.ssh_user}}@{{.host}}.mcbadass.local" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local"'
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+
+  apply-nixos:
+    desc: Build and apply nixos configuration
+    silent: true
+    vars:
+      ssh_user: taylor
+    summary: |
+      Args:
+        host: Host to build and deploy to (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - nix-shell -p nixos-rebuild --run 'nixos-rebuild switch --flake .#{{.host}} --fast --use-remote-sudo --build-host "{{.ssh_user}}@{{.host}}.mcbadass.local" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local"'
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+
+  .prompt_to_continue:
+    internal: true
+    prompt: Do you want to continue applying this configuration?

@@ -6,6 +6,17 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # impermanence
+    # https://github.com/nix-community/impermanence
+    impermanence.url = "github:nix-community/impermanence";
+
+    # nur
+    nur.url = "github:nix-community/NUR";
+
+    # nix-community hardware quirks
+    # https://github.com/nix-community
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     # Home manager
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
@@ -91,21 +102,24 @@
     disko,
     ... } @inputs:
     let
-      supportedSystems = ["x86_64-linux" "aarch64-darwin" "aarch64-linux"];
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+        "aarch64-linux"
+      ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      overlays = import ./overlays { inherit inputs; };
+      overlays = import ./overlays {inherit inputs;};
       mkSystemLib = import ./lib/mkSystem.nix {inherit inputs overlays;};
       flake-packages = self.packages;
 
       legacyPackages = forAllSystems (
-        system:
-          import nixpkgs {
-            inherit system;
-            overlays = builtins.attrValues overlays;
-            config.allowUnfree = true;
-          }
-      );
-      # inherit (self) outputs;
+      system:
+        import nixpkgs {
+          inherit system;
+          overlays = builtins.attrValues overlays;
+          config.allowUnfree = true;
+        }
+    );
     in
     {
       inherit overlays;
@@ -120,29 +134,27 @@
           }
       );
 
-    nixosConfigurations = {
-      # nas3 = mkSystemLib.mkNixosSystem "x86_64-linux" "nas3" flake-packages;
-      # tback = mkSystemLib.mkNixosSystem "x86_64-linux" "tback" flake-packages;
-      nas-vm = mkSystemLib.mkNixosSystem "x86_64-linux" "nas-vm" flake-packages;
-      wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
-    };
+      nixosConfigurations = {
+        nas-vm = mkSystemLib.mkNixosSystem "x86_64-linux" "nas-vm" flake-packages;
+        wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
+      };
 
-    darwinConfigurations = {
-      DVA-YY669XDT42 = mkSystemLib.mkDarwinSystem "aarch64-darwin" "DVA-YY669XDT42" flake-packages;
-    };
+      darwinConfigurations = {
+        DVA-YY669XDT42 = mkSystemLib.mkDarwinSystem "aarch64-darwin" "DVA-YY669XDT42" flake-packages;
+      };
 
-    # Convenience output that aggregates the outputs for home, nixos.
-    # Also used in ci to build targets generally.
-    ciSystems =
-      let
-        nixos = nixpkgs.lib.genAttrs
-          (builtins.attrNames inputs.self.nixosConfigurations)
-          (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-        darwin = nixpkgs.lib.genAttrs
-          (builtins.attrNames inputs.self.darwinConfigurations)
-          (attr: inputs.self.darwinConfigurations.${attr}.system);
-      in
-        nixos // darwin;
+      # Convenience output that aggregates the outputs for home, nixos.
+      # Also used in ci to build targets generally.
+      ciSystems =
+        let
+          nixos = nixpkgs.lib.genAttrs
+            (builtins.attrNames inputs.self.nixosConfigurations)
+            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
+          darwin = nixpkgs.lib.genAttrs
+            (builtins.attrNames inputs.self.darwinConfigurations)
+            (attr: inputs.self.darwinConfigurations.${attr}.system);
+        in
+          nixos // darwin;
     };
       # TODO: Old Config
       # mkNixos = modules: nixpkgs.lib.nixosSystem {

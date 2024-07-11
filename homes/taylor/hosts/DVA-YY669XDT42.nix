@@ -5,8 +5,8 @@
 }:
 {
   modules = {
-    # deployment.nix.enable = true;
-    # development.enable = true;
+    deployment.nix.enable = true;
+    development.enable = true;
     editor = {
       vscode = {
         enable = true;

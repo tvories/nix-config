@@ -6,7 +6,7 @@
   imports = [
     ./mutability.nix
 
-    # ./deployment
+    ./deployment
     # ./development
     ./editor
     # ./kubernetes

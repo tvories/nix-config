@@ -8,7 +8,7 @@
 
     # ./deployment
     # ./development
-    # ./editor
+    ./editor
     # ./kubernetes
     # ./security
     # ./shell

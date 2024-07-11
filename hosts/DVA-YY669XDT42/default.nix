@@ -12,11 +12,11 @@
     #   localHostName = hostname;
     # };
 
-    users.users.tvories = {
+    users.users.taylor = {
       name = "tvories";
       home = "/Users/tvories";
       shell = pkgs.fish;
-      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/tvories/config/ssh/ssh.pub);
+      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/taylor/config/ssh/ssh.pub);
     };
 
     system.activationScripts.postActivation.text = ''

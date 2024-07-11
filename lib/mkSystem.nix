@@ -78,7 +78,7 @@
             extraSpecialArgs = {
               inherit inputs hostname flake-packages;
             };
-            users.taylor = ../. + "/homes/taylor";
+            users.tvories = ../. + "/homes/taylor";
           };
         }
         ../hosts/_modules/common

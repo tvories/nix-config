@@ -2,6 +2,7 @@
   pkgs,
   lib,
   hostname,
+  nix-homebrew,
   ...
 }:
 {
@@ -12,7 +13,7 @@
     #   localHostName = hostname;
     # };
 
-    users.users.taylor = {
+    users.users.tvories = {
       name = "tvories";
       home = "/Users/tvories";
       shell = pkgs.fish;
@@ -24,13 +25,15 @@
       sudo chsh -s /run/current-system/sw/bin/fish tvories
     '';
 
+    #TODO: install homebrew somehow?
+
     homebrew = {
       taps = [
       ];
       brews = [
       ];
       casks = [
-        "discord"
+        # "discord"
         "google-chrome"
         "brave-browser"
         "obsidian"
@@ -41,8 +44,9 @@
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
-        "Keka" = 470158793;
+        # "Keka" = 470158793;
         "Passepartout" = 1433648537;
+        "Wireguard" = 1451685025;
       };
     };
   };

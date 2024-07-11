@@ -6,7 +6,9 @@ _:
     defaults = {
       NSGlobalDomain = {
         # Whether to automatically switch between light and dark mode.
-        AppleInterfaceStyleSwitchesAutomatically = true;
+        AppleInterfaceStyleSwitchesAutomatically = false;
+        # Set Dark Mode
+        AppleInterfaceStyle = "Dark";
         # Configures the keyboard control behavior.  Mode 3 enables full keyboard control
         AppleKeyboardUIMode = 3;
         # Whether to show all file extensions in Finder
@@ -40,6 +42,10 @@ _:
         # orientation = "left";
         # Show recent applications in the dock.
         show-recents = false;
+        # Enable spring loading for all Dock items. The default is false.
+        enable-spring-load-actions-on-all-items = true;
+        # Magnified icon size on hover. The default is 16.
+        largesize = 50;
       };
 
       finder = {

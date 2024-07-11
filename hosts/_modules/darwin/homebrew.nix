@@ -25,9 +25,11 @@ _:
       "notunes"
       "raycast"
       "shottr"
+      "firefox"
     ];
     masApps = {
-      "Caffeinated" = 1362171212;
+      # "Caffeinated" = 1362171212;
+      "Jolt of Caffeine" = 1437130425;
     };
   };
 }

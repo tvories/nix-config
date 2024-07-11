@@ -29,6 +29,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # For installing homebrew
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+
     # sops-nix
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -90,6 +93,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    nix-homebrew,
     nix-inspect,
     nixvim,
     nix-vscode-extensions,
@@ -161,7 +165,7 @@
       #   inherit modules;
       #   specialArgs = { inherit inputs outputs; };
       # };
-    
+
     # TODO: Old config
     # in
     # {
@@ -198,7 +202,7 @@
     #   nixosConfigurations = {
     #     # Metal
     #     "nas" = mkNixos [disko.nixosModules.disko ./nixos/hosts/nas];
-        
+
     #     # VMs
     #     "nas-vm" = mkNixos [disko.nixosModules.disko ./nixos/hosts/nas-vm];
 

@@ -7,7 +7,7 @@
     ./mutability.nix
 
     ./deployment
-    # ./development
+    ./development
     ./editor
     # ./kubernetes
     # ./security

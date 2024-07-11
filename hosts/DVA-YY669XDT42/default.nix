@@ -12,12 +12,12 @@
     #   localHostName = hostname;
     # };
 
-    # users.users.tvories = {
-    #   name = "tvories";
-    #   home = "/Users/tvories";
-    #   shell = pkgs.fish;
-    #   openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/tvories/config/ssh/ssh.pub);
-    # };
+    users.users.tvories = {
+      name = "tvories";
+      home = "/Users/tvories";
+      shell = pkgs.fish;
+      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/tvories/config/ssh/ssh.pub);
+    };
 
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells

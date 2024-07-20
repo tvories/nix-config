@@ -9,6 +9,6 @@ let
 in
 {
   nvim = callPackage ./nvim.nix inputs;
-  # shcopy = callPackage ./shcopy.nix inputs;
-  # usage = callPackage ./usage.nix inputs;
+  shcopy = callPackage ./shcopy.nix inputs;
+  usage = callPackage ./usage.nix inputs;
 }

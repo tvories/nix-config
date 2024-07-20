@@ -9,8 +9,8 @@ let
   inherit (config.home) username homeDirectory;
   cfg = config.modules.shell.fish;
   hasPackage = pname:
-     lib.any (p: p ? pname && p.pname == pname) config.home.packages;
-   hasAnyNixShell = hasPackage "any-nix-shell";
+    lib.any (p: p ? pname && p.pname == pname) config.home.packages;
+  hasAnyNixShell = hasPackage "any-nix-shell";
 in {
   options.modules.shell.fish = {
     enable = lib.mkEnableOption "fish";

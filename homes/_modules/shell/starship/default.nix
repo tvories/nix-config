@@ -31,6 +31,7 @@
           time_format = "%R"; # Hour:Minute Format
           style = "bg:blue fg:base bold";
           format = "[ 󱑍 $time [](fg:blue bg:peach)]($style)";
+          use_12hr = true;
         };
 
         username = {

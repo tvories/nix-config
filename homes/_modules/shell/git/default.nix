@@ -16,9 +16,9 @@ in {
     email = lib.mkOption {
       type = lib.types.str;
     };
-    signingKey = lib.mkOption {
-      type = lib.types.str;
-    };
+    # signingKey = lib.mkOption {
+    #   type = lib.types.str;
+    # };
     config = lib.mkOption {
       type = lib.types.attrs;
       default = {};
@@ -72,15 +72,16 @@ in {
           # Python virtualenvs
           ".venv"
         ];
-        signing = {
-          signByDefault = true;
-          key = cfg.signingKey;
-        };
+        # signing = {
+        #   signByDefault = true;
+        #   key = cfg.signingKey;
+        # };
       };
 
       home.packages = [
         pkgs.git-filter-repo
         pkgs.tig
+        pkgs.gh
       ];
     })
     (lib.mkIf (cfg.enable && isDarwin) {

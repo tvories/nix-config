@@ -1,5 +1,4 @@
 { inputs, outputs, config, pkgs, lib, home-manager, vscode-server, nixoswsl, ... }:
-
 {
   imports = [
       inputs.vscode-server.nixosModules.default

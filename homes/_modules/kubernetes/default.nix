@@ -5,7 +5,7 @@
 {
   imports = [
     ./flux
-    ./helmfile
+    # ./helmfile
     ./k9s
     ./krew
     ./kubecm

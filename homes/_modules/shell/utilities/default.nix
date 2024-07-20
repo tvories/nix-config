@@ -20,6 +20,8 @@
         vim
         wget
         yq-go
+        tree
+
       ];
   };
 }

@@ -12,8 +12,11 @@
   },
   "[terraform]": {
     "editor": {
-      "defaultFormatter": "hashicorp.terraform"
-    }
+      "defaultFormatter": "hashicorp.terraform",
+      "editor.insertSpaces": true,
+      "editor.formatOnSave": true
+    },
+    "languageServer.path": "/run/current-system/sw/bin/terraform-ls"
   },
   "ansible": {
     "python": {
@@ -25,8 +28,10 @@
       "enabled": true
     },
     "defaultFormatter": "esbenp.prettier-vscode",
-    "fontFamily": "'Monaspace Krypton','Font Awesome 6 Free Solid'",
-    "fontLigatures": "'calt', 'liga', 'dlig', 'ss01', 'ss02', 'ss03', 'ss06'",
+    "fontFamily": "JetBrainsMono Nerd Font",
+    "fontSize": 14,
+    "formatOnSave": true,
+    "fontLigatures": true,
     "guides": {
       "bracketPairs": true,
       "bracketPairsHorizontal": true,
@@ -37,6 +42,7 @@
     },
     "tabSize": 2
   },
+  "terminal.integrated.fontSize": 14,
   "explorer": {
     "compactFolders": false,
     "confirmDelete": false,
@@ -118,7 +124,7 @@
     "titleBarStyle": "custom"
   },
   "workbench": {
-    "colorTheme": "Catppuccin Macchiato",
+    "colorTheme": "Kanagawa",
     "iconTheme": "catppuccin-perfect-macchiato",
     "sideBar": {
       "location": "left"
@@ -135,5 +141,17 @@
     "helm": true
   },
   "extensions.autoCheckUpdates": false,
-  "extensions.autoUpdate": false
+  "extensions.autoUpdate": false,
+  "editor.tokenColorCustomizations": {
+    "[Kanagawa]": {
+      "comments": {
+        "foreground": "#FF9E3B"
+      }
+    }
+  },
+  "puppet.installDirectory": "/run/current-system/sw/bin/pdk",
+  "puppet.installType": "pdk",
+  "powershell.powerShellAdditionalExePaths": {
+    "pwsh": "/run/current-system/sw/bin/pwsh"
+  }
 }

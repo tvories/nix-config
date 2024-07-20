@@ -16,9 +16,10 @@ in {
       age.keyFile = ageKeyFile;
       age.generateKey = true;
 
-      # secrets = {
-      #   atuin_key = {};
-      # };
+      secrets = {
+        # atuin_key = {};
+        atuin_work_key = {};
+      };
     };
 
     home.sessionVariables = {

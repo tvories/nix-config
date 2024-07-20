@@ -24,6 +24,7 @@
         }
         inputs.home-manager.nixosModules.home-manager
         inputs.sops-nix.nixosModules.sops
+        inputs.disko.nixosModules.disko
         {
           home-manager = {
             useUserPackages = true;
@@ -66,11 +67,13 @@
           };
         }
         inputs.home-manager.darwinModules.home-manager
+        inputs.mac-app-util.darwinModules.default
         {
           home-manager = {
             useUserPackages = true;
             useGlobalPkgs = true;
             sharedModules = [
+              inputs.mac-app-util.homeManagerModules.default
               inputs.sops-nix.homeManagerModules.sops
               inputs.nixvim.homeManagerModules.nixvim
               inputs.catppuccin.homeManagerModules.catppuccin

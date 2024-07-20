@@ -1,9 +1,9 @@
-{ 
+{
   pkgs,
   lib,
   config,
   hostname,
-  ... 
+  ...
 }:
 let
   ifGroupsExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
@@ -13,8 +13,8 @@ in
       # Host-specific
       ./hardware-configuration.nix
       ./disk-config.nix
-      ./secrets.nix
-      
+      # ./secrets.nix
+
       #TODO: Old config
       # ./zfs.nix
 
@@ -37,42 +37,40 @@ in
   ];
 
   config = {
-    # ! Virtualbox Config
-    networking = {
-      hostName = "nas-vm";
-      hostId = "8023d2b9";
-      domain = "mcbadass.local";
-      dhcpcd.enable = false;
-      interfaces.enp0s3 = {
-        ipv4.addresses = [{
-          address = "192.168.1.230";
-          prefixLength = 24;
-        }];
-        mtu = 9000;
-      };
-      vlans = {
-        vlan20 = { id=20; interface="enp0s3"; };
-        vlan80 = { id=80; interface="enp0s3"; };
-      };
-      interfaces.vlan20 = {
-        ipv4.addresses = [{
-          address = "192.168.20.230";
-          prefixLength = 24;
-        }];
-        mtu = 9000;
-      };
-      interfaces.vlan80 = {
-        ipv4.addresses = [{
-          address = "192.168.80.230";
-          prefixLength = 24;
-        }];
-        mtu = 9000;
-      };
-      defaultGateway = "192.168.1.1";
-      nameservers = ["192.168.1.240" "192.168.1.241"];
+  # ! Virtualbox Config
+  networking = {
+    hostName = "nas-vm";
+    hostId = "8023d2b9";
+    domain = "mcbadass.local";
+    dhcpcd.enable = false;
+    interfaces.enp0s3 = {
+      ipv4.addresses = [{
+        address = "192.168.1.230";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
     };
+    vlans = {
+      vlan20 = { id=20; interface="enp0s3"; };
+      vlan80 = { id=80; interface="enp0s3"; };
+    };
+    interfaces.vlan20 = {
+      ipv4.addresses = [{
+        address = "192.168.20.230";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
+    };
+    interfaces.vlan80 = {
+      ipv4.addresses = [{
+        address = "192.168.80.230";
+        prefixLength = 24;
+      }];
+      mtu = 9000;
+    };
+    defaultGateway = "192.168.1.1";
+    nameservers = ["192.168.1.240" "192.168.1.241"];
   };
-
   users.users.taylor = {
     uid = 1000;
     name = "taylor";
@@ -101,11 +99,11 @@ in
     '';
 
   modules = {
-    filesystem.zfs = {
+    filesystems.zfs = {
       enable = true;
-      # mountPoolsAtBoot = [
-      #   "ook"
-      # ];
+      mountPoolsAtBoot = [
+        "ook"
+      ];
     };
 
     services = {
@@ -139,47 +137,40 @@ in
 
       users = {
         additionalUsers = {
-          # TODO: do I need users here?
+          kate = {
+            isNormalUser = true;
+            extraGroups = ifGroupsExist [
+              "samba-users"
+            ];
+          };
         };
         groups = {
           backup-rw = {
             gid = 65541;
             members = ["taylor"];
+          };
           admins = {
             gid = 991;
             members = [
               "taylor"
             ];
           };
+          docs-rw = {
+            gid = 65543;
+            members = ["taylor"];
+          };
+          media-rw = {
+            gid = 65539;
+            members = ["taylor"];
+          };
         };
       };
     };
+    # boot.loader = {
+    #   systemd-boot.enable = true;
+    #   efi.canTouchEfiVariables = true;
+    # };
   };
-
-  # services.openssh.enable = true;
-  # users.users.root.openssh.authorizedKeys.keys = [
-  #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2+7PUnROyy7dALYGxsQSN16hz4iblHXtFJ6dHCUIBW"
-  # ];
-
-  
-
-  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
-
-  # # Group config
-  # users.groups = {
-  #   backup-rw = {
-  #     gid = 65541;
-  #     members = ["taylor"];
-  #   };
-  #   docs-rw = {
-  #     gid = 65543;
-  #     members = ["taylor"];
-  #   };
-  #   media-rw = {
-  #     gid = 65539;
-  #     members = ["taylor"];
-  #   };
-  # };
 
   # # ZFS config
   # boot.zfs = {

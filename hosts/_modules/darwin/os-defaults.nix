@@ -2,15 +2,32 @@ _:
 {
   security.pam.enableSudoTouchIdAuth = true;
 
+  environment = {
+    pathsToLink = [ "/Applications" ];
+  };
+
   system = {
     defaults = {
+      finder = {
+        # Show status bar
+        ShowStatusBar = true;
+        # Default Finder window set to list view
+        FXPreferredViewStyle = "Nlsv";
+        # Show path bar
+        ShowPathbar = true;
+        # Show all extensions
+        AppleShowAllExtensions = true;
+        # Show icons on desktop
+        CreateDesktop = false;
+        # Disable warning when changing file extension
+        FXEnableExtensionChangeWarning = false;
+        _FXShowPosixPathInTitle = true;
+      };
       NSGlobalDomain = {
         # Whether to automatically switch between light and dark mode.
         AppleInterfaceStyleSwitchesAutomatically = false;
         # Set Dark Mode
         AppleInterfaceStyle = "Dark";
-        # Configures the keyboard control behavior.  Mode 3 enables full keyboard control
-        AppleKeyboardUIMode = 3;
         # Whether to show all file extensions in Finder
         AppleShowAllExtensions = true;
         # Whether to enable automatic capitalization.  The default is true
@@ -31,6 +48,14 @@ _:
         "com.apple.trackpad.enableSecondaryClick" = true;
         # Whether to autohide the menu bar.
         _HIHideMenuBar = false;
+
+        # Keyboard
+        # Configures the keyboard control behavior.  Mode 3 enables full keyboard control
+        AppleKeyboardUIMode = 3;
+        # If you press and hold certain keyboard keys when in a text area, the key’s character begins to repeat. For example, the Delete key continues to remove text for as long as you hold it down.
+        InitialKeyRepeat = 14;
+        # This sets how fast it repeats once it starts.
+        KeyRepeat = 2;
       };
 
       dock = {
@@ -42,26 +67,18 @@ _:
         # orientation = "left";
         # Show recent applications in the dock.
         show-recents = false;
+        # Magnify icon on hover. The default is false.
+        magnification = true;
         # Enable spring loading for all Dock items. The default is false.
         enable-spring-load-actions-on-all-items = true;
         # Magnified icon size on hover. The default is 16.
-        largesize = 50;
-      };
-
-      finder = {
-        # Show status bar
-        ShowStatusBar = true;
-        # Default Finder window set to list view
-        FXPreferredViewStyle = "Nlsv";
-        # Show path bar
-        ShowPathbar = true;
-        # Show all extensions
-        AppleShowAllExtensions = true;
-        # Show icons on desktop
-        CreateDesktop = false;
-        # Disable warning when changing file extension
-        FXEnableExtensionChangeWarning = false;
+        largesize = 120;
       };
     };
+
+    keyboard = {
+      enableKeyMapping = true;
+    };
   };
+
 }

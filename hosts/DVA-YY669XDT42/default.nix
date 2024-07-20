@@ -1,8 +1,7 @@
 {
   pkgs,
   lib,
-  hostname,
-  nix-homebrew,
+  # hostname,
   ...
 }:
 {
@@ -41,6 +40,8 @@
         # "plex"
         # "tableplus"
         "transmit"
+        "nextcloud"
+        "apache-directory-studio"
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
@@ -48,6 +49,55 @@
         "Passepartout" = 1433648537;
         "Wireguard" = 1451685025;
       };
+    };
+    programs.fish = {
+      shellAliases = {
+        tf = "terraform";
+        # Vault
+        platform-vault = "export VAULT_ADDR=https://platform-vault.davita.com; export VAULT_TOKEN=(vault login -token-only -method ldap)";
+        platform-vault-sea = "export VAULT_ADDR=https://platform-vault-sea.davita.com; export VAULT_TOKEN=(vault login -token-only -method ldap)";
+        gcp-vault = "export VAULT_ADDR=https://vault.gcp.davita.com; export VAULT_TOKEN=(vault login -token-only -method oidc)";
+
+        adsearch= "ldapsearch -o ldif-wrap=no -H ldaps://den3ha.adldap.davita.corp -b dc=davita,dc=corp -D $USER@davita.corp -W";
+      };
+    };
+    # Dock
+    system = {
+      defaults = {
+        dock = {
+          persistent-apps = [
+            "/Applications/Firefox.app"
+            "/Applications/iTerm.app"
+            "/Applications/Microsoft Outlook.app"
+            "/Applications/Microsoft Teams.app"
+            "/Applications/Obsidian.app"
+          ];
+        };
+      };
+    };
+
+    # Packages
+    environment.systemPackages = [
+      # Puppet stuff
+      pkgs.pdk
+      pkgs.puppet-lint
+      pkgs.ruby
+
+      pkgs.powershell
+      pkgs.openldap
+      pkgs.drawio
+      pkgs.terraform-ls
+      pkgs.jdk
+
+      (pkgs.bundlerApp {
+        pname = "morpheus-cli";
+        exes = ["morpheus"];
+        gemdir = ./.;
+      })
+    ];
+
+    nixpkgs.config = {
+      ruby.package = pkgs.ruby;
     };
   };
 }

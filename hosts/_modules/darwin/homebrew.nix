@@ -26,6 +26,8 @@ _:
       "raycast"
       "shottr"
       "firefox"
+      "1password-cli"
+      "scroll-reverser"
     ];
     masApps = {
       # "Caffeinated" = 1362171212;

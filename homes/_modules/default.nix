@@ -9,11 +9,11 @@
     ./deployment
     ./development
     ./editor
-    # ./kubernetes
-    # ./security
-    # ./shell
-    # ./themes
-    # ./virtualisation
+    ./kubernetes
+    ./security
+    ./shell
+    ./themes
+    ./virtualisation
   ];
 
   config = {

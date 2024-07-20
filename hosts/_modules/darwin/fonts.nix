@@ -8,6 +8,8 @@
       fira-code-nerdfont
       font-awesome
       monaspace
+      atkinson-hyperlegible
+      nerdfonts
     ];
   };
 }

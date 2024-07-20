@@ -19,6 +19,7 @@
         enable = true;
         package = flake-packages.${pkgs.system}.nvim;
         makeDefaultEditor = true;
+
       };
 
       vscode = {
@@ -30,6 +31,7 @@
             # Themes
             catppuccin.catppuccin-vsc
             thang-nm.catppuccin-perfect-icons
+            qufiwefefwoyn.kanagawa
 
             # Language support
             golang.go
@@ -42,6 +44,8 @@
             redhat.ansible
             redhat.vscode-yaml
             tamasfe.even-better-toml
+            ms-vscode.powershell
+            puppet.puppet-vscode
 
             # Formatters
             esbenp.prettier-vscode
@@ -61,46 +65,72 @@
             luisfontes19.vscode-swissknife
             ms-kubernetes-tools.vscode-kubernetes-tools
             shipitsmarter.sops-edit
+            gitlab.gitlab-workflow
+            github.copilot
+            oderwat.indent-rainbow
+            johnpapa.vscode-peacock
+            aaron-bond.better-comments
           ];
       };
     };
 
-    # security = {
-    #   ssh = {
-    #     enable = true;
-    #     matchBlocks = {
-    #       "nas3.mcbadass.local" = {
-    #         port = 22;
-    #         user = "taylor";
-    #         forwardAgent = true;
-    #       };
-    #       "tback.mcbadass.local" = {
-    #         port = 22;
-    #         user = "taylor";
-    #         forwardAgent = true;
-    #       };
-    #     };
-    #   };
-    # };
+    security = {
+      ssh = {
+        enable = true;
+        matchBlocks = {
+          "nas3.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+          "tback.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+          "bitbucket.davita.com" = {
+            forwardAgent = true;
+            user = "git";
+            port = 22;
+            identityFile = "~/.ssh/mac-bitbucket";
+          };
+          "github.com" = {
+            user = "git";
+            port = 22;
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+          "nas-vm.mcbadass.local" = {
+            port = 22;
+            user = "root";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+        };
+      };
+    };
 
-    # shell = {
-    #   atuin = {
-    #     enable = true;
-    #     package = pkgs.unstable.atuin;
-    #     flags = [
-    #       "--disable-up-arrow"
-    #     ];
-    #     settings = {
-    #       sync_address = "https://atuin.t-vo.us";
-    #       key_path = config.sops.secrets.atuin_key.path;
-    #       auto_sync = true;
-    #       sync_frequency = "1m";
-    #       search_mode = "fuzzy";
-    #       sync = {
-    #         records = true;
-    #       };
-    #     };
-    #   };
-    # };
+    shell = {
+      fish.enable = true;
+
+    };
+    shell = {
+      gcloud = {
+        enable = true;
+      };
+      go-task.enable = true;
+    };
+    themes = {
+      catppuccin = {
+        enable = true;
+        flavor = "macchiato";
+      };
+    };
   };
 }

@@ -32,6 +32,8 @@
     # For installing homebrew
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
+    mac-app-util.url = "github:hraban/mac-app-util";
+
     # sops-nix
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -86,6 +88,11 @@
     nix-inspect = {
       url = "github:bluskript/nix-inspect";
     };
+
+    # Rust toolchain overlay
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+    };
   };
 
   outputs = {
@@ -104,6 +111,8 @@
     vscode-server,
     nixos-generators,
     disko,
+    rust-overlay,
+    mac-app-util,
     ... } @inputs:
     let
       supportedSystems = [
@@ -129,6 +138,7 @@
       inherit overlays;
 
       packages = forAllSystems (
+
         system: let
           pkgs = legacyPackages.${system};
         in
@@ -159,58 +169,14 @@
             (attr: inputs.self.darwinConfigurations.${attr}.system);
         in
           nixos // darwin;
+
+        iso = nixos-generators.nixosGenerate {
+        system = "x86_64-linux";
+        format = "install-iso";
+        modules = [
+          sops-nix.nixosModules.sops
+          ./hosts/bootstrap/default.nix
+        ];
+      };
     };
-      # TODO: Old Config
-      # mkNixos = modules: nixpkgs.lib.nixosSystem {
-      #   inherit modules;
-      #   specialArgs = { inherit inputs outputs; };
-      # };
-
-    # TODO: Old config
-    # in
-    # {
-    #   packages.x86_64-linux = {
-    #     bootstrap = nixos-generators.nixosGenerate {
-    #       system = "x86_64-linux";
-    #       format = "install-iso";
-    #       modules = [
-    #         sops-nix.nixosModules.sops
-    #         # { disko.devices.disk.disk1.device = "/dev/sda" }
-    #         ./nixos/hosts/bootstrap/configuration.nix
-    #       ];
-    #       # formatConfigs.virtualbox = {config, ...}: {
-    #       #   services.openssh.enable = true;
-    #       # }
-    #     };
-    #   };
-
-    # TODO: old config
-    #   packages.aarch64-linux = {
-    #     bootstrap = nixos-generators.nixosGenerate {
-    #       system = "aarch64-linux";
-    #       format = "sd-aarch64";
-    #       modules = [
-    #         sops-nix.nixosModules.sops
-    #         ./nixos/hosts/bootstrap/configuration.nix
-    #       ];
-    #     };
-    #   };
-
-    #   # Custom packages and modifications, exported as overlays
-    #   overlays = import ./nixos/overlays { inherit inputs; };
-
-    #   nixosConfigurations = {
-    #     # Metal
-    #     "nas" = mkNixos [disko.nixosModules.disko ./nixos/hosts/nas];
-
-    #     # VMs
-    #     "nas-vm" = mkNixos [disko.nixosModules.disko ./nixos/hosts/nas-vm];
-
-    #     # WSL
-    #     "wsl" = mkNixos [./nixos/hosts/wsl];
-
-    #     # Remote Pi
-    #     "remote-pi" = mkNixos [./nixos/hosts/remote-pi];
-    #   };
-    # };
 }

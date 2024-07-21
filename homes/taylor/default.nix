@@ -79,6 +79,7 @@
         enable = true;
         matchBlocks = {
           "nas3.mcbadass.local" = {
+            forwardAgent = true;
             port = 22;
             user = "taylor";
             extraOptions = {
@@ -91,9 +92,9 @@
             extraOptions = {
               "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
             };
+            forwardAgent = true;
           };
           "bitbucket.davita.com" = {
-            forwardAgent = true;
             user = "git";
             port = 22;
             identityFile = "~/.ssh/mac-bitbucket";
@@ -111,6 +112,7 @@
             extraOptions = {
               "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
             };
+            forwardAgent = true;
           };
         };
       };

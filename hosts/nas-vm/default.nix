@@ -143,8 +143,17 @@ in
               "samba-users"
             ];
           };
+          svc_scanner = {
+            isSystemUser = true;
+            group = "svc_scanner";
+            extraGroups = ifGroupsExist [
+              "samba-users"
+              "docs-rw"
+            ];
+          };
         };
         groups = {
+          svc_scanner = {};
           backup-rw = {
             gid = 65541;
             members = ["taylor"];

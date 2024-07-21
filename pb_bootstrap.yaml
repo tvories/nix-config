@@ -32,8 +32,8 @@
       no_log: true
 
   tasks:
-    # I don't want my user passwords in version control. This is the easiest way for me to 
-    # set them in code
+    # I don't want my user passwords in version control.
+    # This is the easiest way for me to set them in code
     - name: Set user passwords
       ansible.builtin.user:
         name: "{{ item.name }}"
@@ -52,6 +52,7 @@
       ansible.builtin.copy:
         content: "{{ lookup('community.general.onepassword', 'nixos', vault='k8s', field=ansible_hostname ~ '-age', errors='warn') | d(omit) }}"
         dest: /var/lib/sops-nix/key.txt
+        mode: '0600'
 
     - name: Register existing samba users
       ansible.builtin.shell: >

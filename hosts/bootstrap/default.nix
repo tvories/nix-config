@@ -18,6 +18,7 @@
 
   users.users.root.initialHashedPassword = lib.mkDefault "$y$j9T$EK87qu3hpgXBaikeMCV.t1$By.6pQ.stIgheZVJPIM/apdqw3uZAZhyz9CDbxxFeg5";
 
+
   services.openssh.enable = true;
 
   networking = {

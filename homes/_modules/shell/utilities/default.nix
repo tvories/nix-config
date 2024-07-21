@@ -21,7 +21,8 @@
         wget
         yq-go
         tree
-
+        vault
+        inetutils
       ];
   };
 }

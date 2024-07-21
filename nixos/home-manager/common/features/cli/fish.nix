@@ -36,6 +36,7 @@ in
       # other
       df = "df -h";
       du = "du -h";
+      tf = "terraform";
     };
 
     functions = {

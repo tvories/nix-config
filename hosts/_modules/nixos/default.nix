@@ -7,6 +7,7 @@
     ./users.nix
     ./filesystems
     ./services
+    ./packages
   ];
 
   documentation.nixos.enable = false;

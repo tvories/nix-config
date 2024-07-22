@@ -95,25 +95,27 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    nix-darwin,
-    nix-homebrew,
-    nix-inspect,
-    nixvim,
-    nix-vscode-extensions,
-    sops-nix,
-    nixpkgs-unstable,
-    nix-ld-vscode,
-    nixoswsl,
-    vscode-server,
-    nixos-generators,
-    disko,
-    rust-overlay,
-    mac-app-util,
-    ... } @inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      nix-darwin,
+      nix-homebrew,
+      nix-inspect,
+      nixvim,
+      nix-vscode-extensions,
+      sops-nix,
+      nixpkgs-unstable,
+      nix-ld-vscode,
+      nixoswsl,
+      vscode-server,
+      nixos-generators,
+      disko,
+      rust-overlay,
+      mac-app-util,
+      ...
+    }@inputs:
     let
       supportedSystems = [
         "x86_64-linux"
@@ -121,31 +123,32 @@
         "aarch64-linux"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      overlays = import ./overlays {inherit inputs;};
-      mkSystemLib = import ./lib/mkSystem.nix {inherit inputs overlays;};
+      overlays = import ./overlays { inherit inputs; };
+      mkSystemLib = import ./lib/mkSystem.nix { inherit inputs overlays; };
       flake-packages = self.packages;
 
       legacyPackages = forAllSystems (
-      system:
+        system:
         import nixpkgs {
           inherit system;
           overlays = builtins.attrValues overlays;
           config.allowUnfree = true;
         }
-    );
+      );
     in
     {
       inherit overlays;
 
       packages = forAllSystems (
 
-        system: let
+        system:
+        let
           pkgs = legacyPackages.${system};
         in
-          import ./pkgs {
-            inherit pkgs;
-            inherit inputs;
-          }
+        import ./pkgs {
+          inherit pkgs;
+          inherit inputs;
+        }
       );
 
       nixosConfigurations = {
@@ -161,16 +164,16 @@
       # Also used in ci to build targets generally.
       ciSystems =
         let
-          nixos = nixpkgs.lib.genAttrs
-            (builtins.attrNames inputs.self.nixosConfigurations)
-            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-          darwin = nixpkgs.lib.genAttrs
-            (builtins.attrNames inputs.self.darwinConfigurations)
-            (attr: inputs.self.darwinConfigurations.${attr}.system);
+          nixos = nixpkgs.lib.genAttrs (builtins.attrNames inputs.self.nixosConfigurations) (
+            attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel
+          );
+          darwin = nixpkgs.lib.genAttrs (builtins.attrNames inputs.self.darwinConfigurations) (
+            attr: inputs.self.darwinConfigurations.${attr}.system
+          );
         in
-          nixos // darwin;
+        nixos // darwin;
 
-        iso = nixos-generators.nixosGenerate {
+      iso = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "install-iso";
         modules = [

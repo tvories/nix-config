@@ -1,11 +1,13 @@
 # nixos specific packages for every system.
-{ pkgs, flake-packages, ... }: {
+{ pkgs, flake-packages, ... }:
+{
   config = {
-    home.packages = with pkgs;
-      with flake-packages.${pkgs.system}; [
+    environment.systemPackages =
+      with pkgs;
+      with flake-packages.${pkgs.system};
+      [
         byobu
         ncdu
       ];
   };
-  }
 }

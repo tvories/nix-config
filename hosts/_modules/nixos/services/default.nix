@@ -1,6 +1,4 @@
-{
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./bind
@@ -19,5 +17,6 @@
     ./samba
     ./smartd
     ./smartctl-exporter
+    ./msmtp
   ];
 }

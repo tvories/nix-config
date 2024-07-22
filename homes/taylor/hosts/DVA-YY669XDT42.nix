@@ -18,9 +18,7 @@
       atuin = {
         enable = true;
         package = pkgs.unstable.atuin;
-        flags = [
-          "--disable-up-arrow"
-        ];
+        flags = [ "--disable-up-arrow" ];
         settings = {
           sync_address = "https://atuin.t-vo.us";
           # key_path = config.sops.secrets.atuin_work_key.path;

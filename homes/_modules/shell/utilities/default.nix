@@ -1,7 +1,10 @@
-{ pkgs, flake-packages, ... }: {
+{ pkgs, flake-packages, ... }:
+{
   config = {
-    home.packages = with pkgs;
-      with flake-packages.${pkgs.system}; [
+    home.packages =
+      with pkgs;
+      with flake-packages.${pkgs.system};
+      [
         any-nix-shell
         binutils
         coreutils

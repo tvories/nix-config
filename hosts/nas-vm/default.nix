@@ -10,109 +10,126 @@ let
 in
 {
   imports = [
-      # Host-specific
-      ./hardware-configuration.nix
-      ./disk-config.nix
-      # ./secrets.nix
+    # Host-specific
+    ./hardware-configuration.nix
+    ./disk-config.nix
+    # ./secrets.nix
 
-      #TODO: Old config
-      # ./zfs.nix
+    #TODO: Old config
+    # ./zfs.nix
 
-      # # Common imports
-      # ../common/nixos
-      # ../common/nixos/users/taylor
-      # ../common/nixos/users/tadmin
-      # ../common/nixos/users/kate
-      # ../common/nixos/users/service_accounts
-      # ../common/optional/fish.nix
-      # ../common/optional/k3s-server.nix
-      # ../common/optional/nfs-server.nix
-      # ../common/optional/samba-server.nix
-      # ../common/optional/zfs.nix
-      # ../common/optional/monitoring.nix
-      # ../common/optional/chrony.nix
-      # # ../common/optional/smartd.nix #! Does not work on a VM
+    # # Common imports
+    # ../common/nixos
+    # ../common/nixos/users/taylor
+    # ../common/nixos/users/tadmin
+    # ../common/nixos/users/kate
+    # ../common/nixos/users/service_accounts
+    # ../common/optional/fish.nix
+    # ../common/optional/k3s-server.nix
+    # ../common/optional/nfs-server.nix
+    # ../common/optional/samba-server.nix
+    # ../common/optional/zfs.nix
+    # ../common/optional/monitoring.nix
+    # ../common/optional/chrony.nix
+    # # ../common/optional/smartd.nix #! Does not work on a VM
 
-      # # Secrets
+    # # Secrets
   ];
 
   config = {
-  # ! Virtualbox Config
-  networking = {
-    hostName = "nas-vm";
-    hostId = "8023d2b9";
-    domain = "mcbadass.local";
-    dhcpcd.enable = false;
-    interfaces.enp0s3 = {
-      ipv4.addresses = [{
-        address = "192.168.1.230";
-        prefixLength = 24;
-      }];
-      mtu = 9000;
+    # ! Virtualbox Config
+    networking = {
+      hostName = "nas-vm";
+      hostId = "8023d2b9";
+      domain = "mcbadass.local";
+      dhcpcd.enable = false;
+      interfaces.enp0s3 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.1.230";
+            prefixLength = 24;
+          }
+        ];
+        mtu = 9000;
+      };
+      vlans = {
+        vlan20 = {
+          id = 20;
+          interface = "enp0s3";
+        };
+        vlan80 = {
+          id = 80;
+          interface = "enp0s3";
+        };
+      };
+      interfaces.vlan20 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.20.230";
+            prefixLength = 24;
+          }
+        ];
+        mtu = 9000;
+      };
+      interfaces.vlan80 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.80.230";
+            prefixLength = 24;
+          }
+        ];
+        mtu = 9000;
+      };
+      defaultGateway = "192.168.1.1";
+      nameservers = [
+        "192.168.1.240"
+        "192.168.1.241"
+      ];
     };
-    vlans = {
-      vlan20 = { id=20; interface="enp0s3"; };
-      vlan80 = { id=80; interface="enp0s3"; };
+    users.users.taylor = {
+      uid = 1000;
+      name = "taylor";
+      home = "/home/taylor";
+      group = "taylor";
+      shell = pkgs.fish;
+      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (
+        builtins.readFile ../../homes/taylor/config/ssh/ssh.pub
+      );
+      initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
+      isNormalUser = true;
+      extraGroups =
+        [
+          "wheel"
+          "users"
+        ]
+        ++ ifGroupsExist [
+          "network"
+          "samba-users"
+        ];
     };
-    interfaces.vlan20 = {
-      ipv4.addresses = [{
-        address = "192.168.20.230";
-        prefixLength = 24;
-      }];
-      mtu = 9000;
+    users.groups.taylor = {
+      gid = 1000;
     };
-    interfaces.vlan80 = {
-      ipv4.addresses = [{
-        address = "192.168.80.230";
-        prefixLength = 24;
-      }];
-      mtu = 9000;
-    };
-    defaultGateway = "192.168.1.1";
-    nameservers = ["192.168.1.240" "192.168.1.241"];
-  };
-  users.users.taylor = {
-    uid = 1000;
-    name = "taylor";
-    home = "/home/taylor";
-    group = "taylor";
-    shell = pkgs.fish;
-    openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/taylor/config/ssh/ssh.pub);
-    initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "users"
-    ]
-    ++ ifGroupsExist [
-      "network"
-      "samba-users"
-    ];
-  };
-  users.groups.taylor = {
-    gid = 1000;
-  };
 
-  system.activationScripts.postActivation.text = ''
+    system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
     '';
 
-  modules = {
-    filesystems.zfs = {
-      enable = true;
-      mountPoolsAtBoot = [
-        "ook"
-      ];
-    };
+    modules = {
+      filesystems.zfs = {
+        enable = true;
+        mountPoolsAtBoot = [ "ook" ];
+      };
 
-    services = {
-      nfs.enable = true;
-      node-exporter.enable = true;
+      services = {
+        nfs.enable = true;
+        node-exporter.enable = true;
 
-      openssh.enable = true;
+        openssh.enable = true;
+        msmtp.enable = true;
 
-      samba = {
+        samba = {
           enable = true;
           shares = {
             Media = {
@@ -139,9 +156,7 @@ in
         additionalUsers = {
           kate = {
             isNormalUser = true;
-            extraGroups = ifGroupsExist [
-              "samba-users"
-            ];
+            extraGroups = ifGroupsExist [ "samba-users" ];
           };
           svc_scanner = {
             isSystemUser = true;
@@ -153,24 +168,22 @@ in
           };
         };
         groups = {
-          svc_scanner = {};
+          svc_scanner = { };
           backup-rw = {
             gid = 65541;
-            members = ["taylor"];
+            members = [ "taylor" ];
           };
           admins = {
             gid = 991;
-            members = [
-              "taylor"
-            ];
+            members = [ "taylor" ];
           };
           docs-rw = {
             gid = 65543;
-            members = ["taylor"];
+            members = [ "taylor" ];
           };
           media-rw = {
             gid = 65539;
-            members = ["taylor"];
+            members = [ "taylor" ];
           };
         };
       };

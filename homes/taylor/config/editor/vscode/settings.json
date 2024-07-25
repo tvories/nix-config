@@ -11,12 +11,11 @@
     "editor.defaultFormatter": "jnoortheen.nix-ide"
   },
   "[terraform]": {
-    "editor": {
-      "defaultFormatter": "hashicorp.terraform",
-      "editor.insertSpaces": true,
-      "editor.formatOnSave": true
-    },
-    "languageServer.path": "/run/current-system/sw/bin/terraform-ls"
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true,
+    "editor.insertSpaces": true,
+    "editor.formatOnSaveMode": "file",
+    "languageserver.path": "/run/current-system/sw/bin/terraform-ls"
   },
   "ansible": {
     "python": {

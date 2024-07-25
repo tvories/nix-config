@@ -24,10 +24,12 @@
 
       vscode = {
         userSettings = lib.importJSON ./config/editor/vscode/settings.json;
-        extensions = let
-          inherit (inputs.nix-vscode-extensions.extensions.${pkgs.system}) vscode-marketplace;
-        in
-          with vscode-marketplace; [
+        extensions =
+          let
+            inherit (inputs.nix-vscode-extensions.extensions.${pkgs.system}) vscode-marketplace;
+          in
+          with vscode-marketplace;
+          [
             # Themes
             catppuccin.catppuccin-vsc
             thang-nm.catppuccin-perfect-icons
@@ -46,6 +48,7 @@
             tamasfe.even-better-toml
             ms-vscode.powershell
             puppet.puppet-vscode
+            ms-azuretools.vscode-docker
 
             # Formatters
             esbenp.prettier-vscode
@@ -108,7 +111,7 @@
           };
           "nas-vm.mcbadass.local" = {
             port = 22;
-            user = "root";
+            user = "taylor";
             extraOptions = {
               "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
             };

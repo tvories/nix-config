@@ -16,7 +16,9 @@
       name = "tvories";
       home = "/Users/tvories";
       shell = pkgs.fish;
-      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (builtins.readFile ../../homes/taylor/config/ssh/ssh.pub);
+      openssh.authorizedKeys.keys = lib.strings.splitString "\n" (
+        builtins.readFile ../../homes/taylor/config/ssh/ssh.pub
+      );
     };
 
     system.activationScripts.postActivation.text = ''
@@ -27,10 +29,8 @@
     #TODO: install homebrew somehow?
 
     homebrew = {
-      taps = [
-      ];
-      brews = [
-      ];
+      taps = [ ];
+      brews = [ ];
       casks = [
         # "discord"
         "google-chrome"
@@ -58,7 +58,7 @@
         platform-vault-sea = "export VAULT_ADDR=https://platform-vault-sea.davita.com; export VAULT_TOKEN=(vault login -token-only -method ldap)";
         gcp-vault = "export VAULT_ADDR=https://vault.gcp.davita.com; export VAULT_TOKEN=(vault login -token-only -method oidc)";
 
-        adsearch= "ldapsearch -o ldif-wrap=no -H ldaps://den3ha.adldap.davita.corp -b dc=davita,dc=corp -D $USER@davita.corp -W";
+        adsearch = "ldapsearch -o ldif-wrap=no -H ldaps://den3ha.adldap.davita.corp -b dc=davita,dc=corp -D $USER@davita.corp -W";
       };
     };
     # Dock
@@ -91,7 +91,7 @@
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";
-        exes = ["morpheus"];
+        exes = [ "morpheus" ];
         gemdir = ./.;
       })
     ];

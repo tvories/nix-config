@@ -125,7 +125,7 @@ in
       services = {
         nfs.enable = true;
         node-exporter.enable = true;
-
+        zfs-exporter.enable = true;
         openssh.enable = true;
         msmtp.enable = true;
 

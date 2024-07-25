@@ -18,5 +18,6 @@
     ./smartd
     ./smartctl-exporter
     ./msmtp
+    ./zfs-exporter
   ];
 }

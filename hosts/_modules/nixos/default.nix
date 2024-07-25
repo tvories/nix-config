@@ -27,6 +27,16 @@
     }
   ];
 
+  modules = {
+    services = {
+      chrony = {
+        enable = true;
+      };
+      msmtp.enable = true;
+    };
+  };
+  networking.timeServers = [ "192.168.1.1" ];
+
   system = {
     stateVersion = "24.05";
   };

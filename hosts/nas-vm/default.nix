@@ -39,6 +39,7 @@ in
   config = {
     # ! Virtualbox Config
     networking = {
+      firewall.enable = false;
       hostName = "nas-vm";
       hostId = "8023d2b9";
       domain = "mcbadass.local";

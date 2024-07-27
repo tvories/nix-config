@@ -151,6 +151,15 @@ in
         # * Note: doesn't work on a VM
         # smartd.enable = true;
         # smartctl-exporter.enable = true;
+        k3s = {
+          enable = true;
+          extraFlags = [
+            "--tls-san"
+            "nas.mcbadass.local"
+            "--flannel-backend=vxlan"
+            "--disable-network-policy"
+          ];
+        };
       };
 
       users = {

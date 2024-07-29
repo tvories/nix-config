@@ -32,17 +32,31 @@
     networking = {
       hostName = "deskmonster";
     };
+    boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
+    wsl = {
+      enable = true;
+      defaultUser = "taylor";
+      extraBin = with pkgs; [
+        { src = "${coreutils}/bin/uname"; }
+        { src = "${coreutils}/bin/dirname"; }
+        { src = "${coreutils}/bin/readlink"; }
+      ];
+    };
+    programs.nix-ld.enable = true;
+    services.vscode-server.enable = true;
+    system.stateVersion = "24.05";
+    sops.age.keyFile = "/home/taylor/.config/sops/age/keys.txt";
+
+    # Tadmin user
+    users.users.taylor = {
+      isNormalUser = true;
+      shell = pkgs.fish;
+      # packages = [ pkgs.home-manager ];
+    };
   };
 
-  wsl = {
-    enable = true;
-    defaultUser = "tadmin";
-    extraBin = with pkgs; [
-      { src = "${coreutils}/bin/uname"; }
-      { src = "${coreutils}/bin/dirname"; }
-      { src = "${coreutils}/bin/readlink"; }
-    ];
-  };
+  
   # nixpkgs.config.permittedInsecurePackages = [ "vault-1.14.10" ];
   # environment.systemPackages = [
   #   pkgs.wget
@@ -64,19 +78,9 @@
   #   options = [ "nfsvers=4.2" ];
   # };
 
-  programs.nix-ld.enable = true;
-  services.vscode-server.enable = true;
-  system.stateVersion = "24.05";
-  sops.age.keyFile = "/home/tadmin/.config/sops/age/keys.txt";
-
-  # Tadmin user
-  users.users.tadmin = {
-    isNormalUser = true;
-    shell = pkgs.fish;
-    # packages = [ pkgs.home-manager ];
-  };
+  
 
   # home-manager.users.tadmin = import ../../home-manager/tadmin_${config.networking.hostName}.nix;
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  
 }

@@ -17,7 +17,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.prometheus.exporters.smartctl = {
+    services.prometheus.exporters.zfs = {
       enable = true;
       inherit (cfg) port;
     };

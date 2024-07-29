@@ -19,5 +19,6 @@ nixpkgs.mkShell {
     nixpkgs.ansible
     nixpkgs.python3
     nixpkgs.ansible-lint
+    nixpkgs.go-task
   ];
 }

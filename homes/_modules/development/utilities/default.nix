@@ -12,6 +12,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       cue
+      _1password
       nixd
       nil
       nixfmt-rfc-style

@@ -36,6 +36,7 @@
 
     wsl = {
       enable = true;
+      interop.register = true;
       defaultUser = "taylor";
       extraBin = with pkgs; [
         { src = "${coreutils}/bin/uname"; }
@@ -54,6 +55,18 @@
       shell = pkgs.fish;
       # packages = [ pkgs.home-manager ];
     };
+
+    environment.systemPackages = [
+      # pkgs.wget
+      # pkgs.google-cloud-sdk
+      pkgs.powershell
+      # pkgs._1password
+      # pkgs.google-cloud-sdk
+      pkgs.sops
+      # pkgs.nfs-utils
+      # pkgs.nil
+      # pkgs.binfmt
+    ];
   };
 
   

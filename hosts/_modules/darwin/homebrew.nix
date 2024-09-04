@@ -1,5 +1,4 @@
-_:
-{
+_: {
   homebrew = {
     enable = true;
     onActivation = {
@@ -11,10 +10,8 @@ _:
       brewfile = true; # Run brew bundle from anywhere
       lockfiles = false; # Don't save lockfile (since running from anywhere)
     };
-    taps = [
-    ];
-    brews = [
-    ];
+    taps = [ ];
+    brews = [ ];
     casks = [
       "1password"
       "gifox"
@@ -26,7 +23,6 @@ _:
       "raycast"
       "shottr"
       "firefox"
-      "1password-cli"
       "scroll-reverser"
     ];
     masApps = {

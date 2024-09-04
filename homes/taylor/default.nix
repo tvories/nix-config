@@ -34,6 +34,7 @@
             catppuccin.catppuccin-vsc
             thang-nm.catppuccin-perfect-icons
             qufiwefefwoyn.kanagawa
+            azemoh.one-monokai
 
             # Language support
             golang.go

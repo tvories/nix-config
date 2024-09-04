@@ -1,10 +1,4 @@
-{
-  inputs,
-  config,
-  pkgs,
-  hostname,
-  ...
-}:
+{ inputs, pkgs, ... }:
 {
   imports = [
     inputs.vscode-server.nixosModules.default
@@ -57,43 +51,8 @@
     };
 
     environment.systemPackages = [
-      # pkgs.wget
-      # pkgs.google-cloud-sdk
       pkgs.powershell
-      # pkgs._1password
-      # pkgs.google-cloud-sdk
       pkgs.sops
-      # pkgs.nfs-utils
-      # pkgs.nil
-      # pkgs.binfmt
     ];
   };
-
-  
-  # nixpkgs.config.permittedInsecurePackages = [ "vault-1.14.10" ];
-  # environment.systemPackages = [
-  #   pkgs.wget
-  #   pkgs.google-cloud-sdk
-  #   pkgs.powershell
-  #   pkgs._1password
-  #   pkgs.google-cloud-sdk
-  #   pkgs.sops
-  #   pkgs.nfs-utils
-  #   pkgs.nil
-  #   # pkgs.binfmt
-  # ];
-
-  # WSL screams if you try to enable rpcbind. disabling and using nfsv4 appears to solve the issue
-  # services.rpcbind.enable = lib.mkForce false;
-  # fileSystems."/mnt/nfs/nas3" = {
-  #   device = "192.168.1.24:/ook";
-  #   fsType = "nfs";
-  #   options = [ "nfsvers=4.2" ];
-  # };
-
-  
-
-  # home-manager.users.tadmin = import ../../home-manager/tadmin_${config.networking.hostName}.nix;
-
-  
 }

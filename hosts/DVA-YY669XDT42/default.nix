@@ -42,6 +42,7 @@
         "transmit"
         "nextcloud"
         "apache-directory-studio"
+        "vlc"
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
@@ -88,6 +89,7 @@
       pkgs.drawio
       pkgs.terraform-ls
       pkgs.jdk
+      pkgs.bruno
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

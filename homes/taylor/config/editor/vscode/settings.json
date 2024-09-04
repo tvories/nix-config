@@ -123,7 +123,7 @@
     "titleBarStyle": "custom"
   },
   "workbench": {
-    "colorTheme": "Kanagawa",
+    "colorTheme": "One Monokai",
     "iconTheme": "catppuccin-perfect-macchiato",
     "sideBar": {
       "location": "left"

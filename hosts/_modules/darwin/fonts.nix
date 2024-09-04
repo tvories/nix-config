@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   fonts = {
     packages = with pkgs; [
@@ -9,7 +6,13 @@
       font-awesome
       monaspace
       atkinson-hyperlegible
-      nerdfonts
+      # nerdfonts
+      (nerdfonts.override {
+        fonts = [
+          "JetBrainsMono"
+          "DroidSansMono"
+        ];
+      })
     ];
   };
 }

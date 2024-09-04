@@ -50,9 +50,39 @@
       # packages = [ pkgs.home-manager ];
     };
 
-    environment.systemPackages = [
-      pkgs.powershell
-      pkgs.sops
+    environment.systemPackages = with pkgs; [
+      # wget
+      # google-cloud-sdk
+      powershell
+      # _1password
+      # google-cloud-sdk
+      sops
+      # python3
+      openssl
+      nfs-utils
+      # nil
+      # binfmt
+      # libgcc
+      # gnumake
+      # gcc
+      # libiconv
+      # zlib
+      # patch
+      # bzip2
+      # readline
+      # sqlite
+      # openssl
+      # libffi
+      # xz
+      # tk
+      # util-linux
+      # gdbm
+      # libnsl
+      # libuuid
+      # libtirpc # libnsl replacement on some systems
+      # ncurses # for terminal handling
+      # expat # for XML parsing
+      libxcrypt
     ];
   };
 }

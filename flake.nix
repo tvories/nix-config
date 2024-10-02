@@ -154,6 +154,7 @@
       nixosConfigurations = {
         nas-vm = mkSystemLib.mkNixosSystem "x86_64-linux" "nas-vm" flake-packages;
         wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
+        tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
       };
 
       darwinConfigurations = {
@@ -176,6 +177,14 @@
       iso = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
         format = "install-iso";
+        modules = [
+          sops-nix.nixosModules.sops
+          ./hosts/bootstrap/default.nix
+        ];
+      };
+      sd = nixos-generators.nixosGenerate {
+        system = "aarch64-linux";
+        format = "sd-aarch64";
         modules = [
           sops-nix.nixosModules.sops
           ./hosts/bootstrap/default.nix

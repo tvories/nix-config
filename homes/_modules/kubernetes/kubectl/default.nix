@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 let
@@ -14,6 +15,10 @@ in
           k = "kubectl";
         };
       };
+      home.packages = [
+        pkgs.kubecolor
+        pkgs.kubectl
+      ];
     })
   ];
 }

@@ -14,9 +14,10 @@
 
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2+7PUnROyy7dALYGxsQSN16hz4iblHXtFJ6dHCUIBW"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBXOmGW1wS1RTxisFeY7Nyh3/fuaa7ZKcjNcFx7KPMBe nixos-root"
   ];
 
-  users.users.root.initialHashedPassword = lib.mkDefault "$y$j9T$EK87qu3hpgXBaikeMCV.t1$By.6pQ.stIgheZVJPIM/apdqw3uZAZhyz9CDbxxFeg5";
+  users.users.root.initialHashedPassword = lib.mkDefault "$y$j9T$B5Wm.Bh/FKXks/Z4o3oVS.$iGAioB7P/DigRR6EeEXoepY9rEZLfwZyEKfOv6AvSx8";
 
 
   services.openssh.enable = true;

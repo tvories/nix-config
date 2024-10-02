@@ -36,6 +36,49 @@
         email = "taylor.vories@davita.com";
       };
     };
+    security = {
+      ssh = {
+        enable = true;
+        matchBlocks = {
+          "nas3.mcbadass.local" = {
+            forwardAgent = true;
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+          "tback.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+            forwardAgent = true;
+          };
+          "bitbucket.davita.com" = {
+            user = "git";
+            port = 22;
+            identityFile = "~/.ssh/mac-bitbucket";
+          };
+          "github.com" = {
+            user = "git";
+            port = 22;
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+          };
+          "nas-vm.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+            forwardAgent = true;
+          };
+        };
+      };
+    };
     kubernetes.enable = true;
     security.gnugpg.enable = true;
     shell = {

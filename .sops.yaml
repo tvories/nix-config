@@ -2,6 +2,7 @@
 keys:
   - &host_nas_vm age1n582w08ffdd24aqrm5m4np4werlzlwc8cuwlr29ucjugx8v90fwqj9krjr
   - &work_mac age19049f7rnde3tjnl5vgnvhwhgmcxhzfx46jq8h5x7tncz8a2ulgmq3jug5v
+  - &tback age1dudvg69mjlqzslatvltra007tddu4wpgnnh0pyh7j4v2l9wstpvspc3dgw
 creation_rules:
   - path_regex: .*\.sops\.ya?ml$
     key_groups:
@@ -14,3 +15,4 @@ creation_rules:
           - *host_nas_vm
           - age16wgxz0mlmah67jv9r38wvwadh0htjyxuvafsqzseqraaqam5w5ysrzl669
           - *work_mac
+          - *tback

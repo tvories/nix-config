@@ -31,6 +31,18 @@
       };
     };
     kubernetes.enable = true;
+    security = {
+      ssh = {
+        enable = true;
+        matchBlocks = {
+          "tback.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            identityFile = "/home/taylor/nixos-taylor";
+          };
+        };
+      };
+    };
     # security.gnugpg.enable = true;
     shell = {
       mise = {

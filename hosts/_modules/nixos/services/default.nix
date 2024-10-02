@@ -14,6 +14,7 @@
     ./onepassword-connect
     ./openssh
     ./podman
+    ./restic-server
     ./samba
     ./smartd
     ./smartctl-exporter

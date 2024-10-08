@@ -121,6 +121,7 @@
         "x86_64-linux"
         "aarch64-darwin"
         "aarch64-linux"
+        "x86_64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
       overlays = import ./overlays { inherit inputs; };
@@ -159,6 +160,7 @@
 
       darwinConfigurations = {
         DVA-YY669XDT42 = mkSystemLib.mkDarwinSystem "aarch64-darwin" "DVA-YY669XDT42" flake-packages;
+        DVA-C02CQ7GCMD6T = mkSystemLib.mkDarwinSystem "x86_64-darwin" "DVA-C02CQ7GCMD6T" flake-packages;
       };
 
       # Convenience output that aggregates the outputs for home, nixos.

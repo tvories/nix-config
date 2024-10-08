@@ -8,7 +8,6 @@ let
   nixpkgsUnstable = import nixtarUnstable { };
 in
 nixpkgs.mkShell {
-  programs.zsh.enable = true;
   packages = [
     nixpkgs.nil
     nixpkgs.git

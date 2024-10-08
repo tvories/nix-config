@@ -19,6 +19,5 @@ nixpkgs.mkShell {
     nixpkgs.python3
     nixpkgs.ansible-lint
     nixpkgs.go-task
-    nixpkgs.darwin-rebuild
   ];
 }

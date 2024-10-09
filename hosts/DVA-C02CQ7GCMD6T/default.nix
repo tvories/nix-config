@@ -43,6 +43,7 @@
         "nextcloud"
         "apache-directory-studio"
         "vlc"
+        "rustdesk"
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
@@ -90,7 +91,6 @@
       pkgs.terraform-ls
       pkgs.jdk
       pkgs.bruno
-      pkgs.rustdesk
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

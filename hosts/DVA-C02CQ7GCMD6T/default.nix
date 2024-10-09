@@ -90,6 +90,7 @@
       pkgs.terraform-ls
       pkgs.jdk
       pkgs.bruno
+      pkgs.rustdesk
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

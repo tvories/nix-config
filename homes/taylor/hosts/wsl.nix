@@ -39,6 +39,19 @@
             port = 22;
             user = "taylor";
             identityFile = "/home/taylor/nixos-taylor";
+            checkHostIP = false;
+          };
+          "nas-vm.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            identityFile = "/home/taylor/nixos-taylor";
+            checkHostIP = false;
+          };
+          "192.168.1.97" = {
+            port = 22;
+            user = "root";
+            identityFile = "/home/taylor/nixos-root";
+            checkHostIP = false;
           };
         };
       };

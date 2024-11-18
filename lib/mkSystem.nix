@@ -1,10 +1,7 @@
+{ inputs, overlays, ... }:
 {
-  inputs,
-  overlays,
-  ...
-}:
-{
-  mkNixosSystem = system: hostname: flake-packages:
+  mkNixosSystem =
+    system: hostname: flake-packages:
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       pkgs = import inputs.nixpkgs {
@@ -37,6 +34,7 @@
               inherit inputs hostname flake-packages;
             };
             users.taylor = ../. + "/homes/taylor";
+            backupFileExtension = "hm-backup";
           };
         }
         ../hosts/_modules/common
@@ -48,7 +46,8 @@
       };
     };
 
-  mkDarwinSystem = system: hostname: flake-packages:
+  mkDarwinSystem =
+    system: hostname: flake-packages:
     inputs.nix-darwin.lib.darwinSystem {
       inherit system;
       pkgs = import inputs.nixpkgs {

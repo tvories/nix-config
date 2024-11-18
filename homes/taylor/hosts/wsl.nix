@@ -53,6 +53,12 @@
             identityFile = "/home/taylor/nixos-root";
             checkHostIP = false;
           };
+          "nas3.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            identityFile = "/home/taylor/nixos-taylor";
+            checkHostIP = false;
+          };
         };
       };
     };

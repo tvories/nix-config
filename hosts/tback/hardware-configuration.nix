@@ -8,13 +8,22 @@
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  boot.initrd.availableKernelModules = [
-    "xhci_pci"
-    "usbhid"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    initrd.kernelModules = [ ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "usbhid"
+    ];
+    kernelModules = [ ];
+    extraModulePackages = [ ];
+    loader = {
+      grub.enable = false;
+      # Enables the generation of /boot/extlinux/extlinux.conf
+      generic-extlinux-compatible.enable = true;
+      timeout = 2;
+    };
+  };
+
   # boot.initrd.supportedFilesystems = [ "zfs" ];
   # boot.supportedFilesystems = [ "zfs" ];
 
@@ -26,7 +35,6 @@
   # };
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   # boot.loader.generic-extlinux-compatible.enable = true;
 

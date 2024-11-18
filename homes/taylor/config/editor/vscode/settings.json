@@ -73,11 +73,13 @@
   },
   "nix": {
     "enableLanguageServer": true,
-    "serverPath": "nil",
+    "serverPath": "nixd",
     "serverSettings": {
-      "nil": {
+      "nixd": {
         "formatting": {
-          "command": ["nixfmt"]
+          "command": [
+            "nixfmt"
+          ]
         }
       }
     }

@@ -12,6 +12,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       cue
+      alejandra
       _1password
       nixd
       nil

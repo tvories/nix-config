@@ -114,6 +114,7 @@
       disko,
       rust-overlay,
       mac-app-util,
+      nixos-hardware,
       ...
     }@inputs:
     let
@@ -154,6 +155,7 @@
 
       nixosConfigurations = {
         nas-vm = mkSystemLib.mkNixosSystem "x86_64-linux" "nas-vm" flake-packages;
+        nas3 = mkSystemLib.mkNixosSystem "x86_64-linux" "nas3" flake-packages;
         wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
         tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
       };

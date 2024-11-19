@@ -1,0 +1,31 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>truxnell/renovate-config",
+    "github>truxnell/renovate-config:automerge-github-actions",
+    "github>tvories/nix-config//.github/renovate/autoMerge.json5",
+  ],
+  gitAuthor: "tvories-tbot <tvories-tbot@users.noreply.github.com>",
+  ignoreTests: "true",
+
+  // https://docs.renovatebot.com/modules/manager/nix/
+  nix: {
+    enabled: "true",
+  },
+
+  lockFileMaintenance: {
+    enabled: "true",
+    automerge: "true",
+    schedule: ["before 4am on Sunday"],
+  },
+
+  regexManagers: [
+    {
+      fileMatch: ["(^|/)nixos/.*\\.nix$", "(^|/)flyio/.*\\.toml$"],
+      matchStrings: [
+        'image *= *"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?"',
+      ],
+      datasourceTemplate: "docker",
+    },
+  ],
+}

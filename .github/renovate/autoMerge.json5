@@ -1,0 +1,41 @@
+{
+  packageRules: [
+    {
+      // automerge minor, patch, digest
+      matchDatasources: ["docker"],
+      automerge: "true",
+      automergeType: "branch",
+      schedule: ["before 4am on Sunday"],
+      matchUpdateTypes: ["minor", "patch", "digest"],
+      matchPackageNames: [
+        "ghcr.io/twin/gatus",
+        "vaultwarden/server",
+        "sissbruecker/linkding",
+        "ghcr.io/autobrr/autobrr",
+        "gotenberg/gotenberg",
+      ],
+    },
+    // automerge patch and digest
+    {
+      matchDatasources: ["docker"],
+      automerge: "true",
+      automergeType: "branch",
+      schedule: ["before 4am on Sunday"],
+      matchUpdateTypes: ["patch", "digest"],
+      matchPackageNames: [
+        "ghcr.io/gethomepage/homepage",
+        "garethgeorge/backrest",
+        "ghcr.io/buroa/qbtools",
+        "ghcr.io/dgtlmoon/changedetection.io",
+        "ghcr.io/amruthpillai/reactive-resume",
+      ],
+    },
+    {
+      // automerge all digests
+      matchDatasources: ["docker"],
+      automerge: "true",
+      automergeType: "branch",
+      matchUpdateTypes: ["digest"],
+    },
+  ],
+}

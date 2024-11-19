@@ -1,13 +1,11 @@
 let
   fetchTarball = builtins.fetchTarball;
-  nixtar = fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/nixos-24.05.tar.gz";
-  };
+  nixtar = fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/nixos-24.05.tar.gz"; };
   nixtarUnstable = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
   };
-  nixpkgs = import nixtar {};
-  nixpkgsUnstable = import nixtarUnstable {};
+  nixpkgs = import nixtar { };
+  nixpkgsUnstable = import nixtarUnstable { };
 in
 nixpkgs.mkShell {
   packages = [
@@ -19,5 +17,6 @@ nixpkgs.mkShell {
     nixpkgs.ansible
     nixpkgs.python3
     nixpkgs.ansible-lint
+    nixpkgs.go-task
   ];
 }

@@ -1,4 +1,10 @@
-{ inputs, outputs, config, sops-nix, ... }: {
+{
+  inputs,
+  outputs,
+  config,
+  ...
+}:
+{
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
@@ -8,15 +14,15 @@
     # ./openssh.nix
     # ./systemd-initrd.nix
     # ./secrets.nix
-  ] ++ (builtins.attrValues {});
+  ] ++ (builtins.attrValues { });
 
-  home-manager.extraSpecialArgs = { inherit inputs outputs; };
+  home-manager.extraSpecialArgs = {
+    inherit inputs outputs;
+  };
 
   nixpkgs = {
     # Add overlays here
-    overlays = [
-      outputs.overlays.unstable-packages
-    ];
+    overlays = [ outputs.overlays.unstable-packages ];
     # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages

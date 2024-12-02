@@ -125,6 +125,20 @@ in
     users.groups.taylor = {
       gid = 1000;
     };
+    # security.sudo.extraRules = [
+    #   {
+    #     users = [ "taylor" ];
+    #     commands = [
+    #       {
+    #         command = "ALL";
+    #         options = [
+    #           "SETENV"
+    #           "NOPASSWD"
+    #         ];
+    #       }
+    #     ];
+    #   }
+    # ];
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor

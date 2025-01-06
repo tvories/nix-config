@@ -1,32 +1,42 @@
-{ inputs, outputs, config, pkgs, lib, home-manager, vscode-server, nixoswsl, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  vscode-server,
+  nixoswsl,
+  ...
+}:
 
 {
   imports = [
-      inputs.vscode-server.nixosModules.default
-      inputs.nixoswsl.nixosModules.wsl
-      # Host-specific hardware
-      ./hardware-configuration.nix
+    inputs.vscode-server.nixosModules.default
+    inputs.nixoswsl.nixosModules.wsl
+    # Host-specific hardware
+    ./hardware-configuration.nix
 
-  #     # Common imports
+    #     # Common imports
     ../common/nixos
-  #     ../common/nixos/users/taylor
+    #     ../common/nixos/users/taylor
     # ../common/nixos/users/tadmin
     ../common/optional/fish.nix
-  #     ../common/optional/k3s-server.nix
-  #     ../common/optional/nfs-server.nix
-  #     # ../common/optional/virtualbox.nix
-  #     ../common/optional/samba-server.nix
-  #     ../common/optional/zfs.nix
-  #     ../common/optional/monitoring.nix
+    #     ../common/optional/k3s-server.nix
+    #     ../common/optional/nfs-server.nix
+    #     # ../common/optional/virtualbox.nix
+    #     ../common/optional/samba-server.nix
+    #     ../common/optional/zfs.nix
+    #     ../common/optional/monitoring.nix
 
-  #     # Secrets
+    #     # Secrets
 
-  ]++ (builtins.attrValues {});
+  ] ++ (builtins.attrValues { });
   environment.systemPackages = [
     pkgs.wget
     pkgs.google-cloud-sdk
     pkgs.powershell
-    pkgs._1password
+    pkgs._1password-cli
     pkgs.google-cloud-sdk
     pkgs.sops
     pkgs.nfs-utils

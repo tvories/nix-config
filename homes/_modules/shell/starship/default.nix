@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   config = {
     programs.starship = {
@@ -22,7 +19,7 @@
           symbols.Macos = "";
           symbols.Debian = "\uf306";
           symbols.NixOS = "";
-          style  = "bg:blue fg:base";
+          style = "bg:blue fg:base";
           format = "[ $symbol ]($style)";
         };
 
@@ -59,25 +56,25 @@
         kubernetes = {
           disabled = false;
           symbol = "󱃾 ";
-          style  = "bg:green fg:base";
+          style = "bg:green fg:base";
           format = "[ $symbol$context \\($namespace\\) [](fg:green bg:base)]($style)";
         };
 
         python = {
           symbol = " ";
-          style  = "bg:flamingo fg:base";
+          style = "bg:flamingo fg:base";
           format = "[ $symbol$pyenv_prefix($version )(\\($virtualenv\\)) [](fg:flamingo bg:base)]($style)";
         };
 
         golang = {
           symbol = " ";
-          style  = "bg:flamingo fg:base";
+          style = "bg:flamingo fg:base";
           format = "[ $symbol($version) [](fg:flamingo bg:base)]($style)";
         };
 
         terraform = {
           symbol = "󱁢 ";
-          style  = "bg:flamingo fg:base";
+          style = "bg:flamingo fg:base";
           format = "[ $symbol$version [](fg:flamingo bg:base)]($style)";
         };
 

@@ -13,7 +13,7 @@ in
     home.packages = with pkgs; [
       cue
       alejandra
-      _1password
+      _1password-cli
       nixd
       nil
       nixfmt-rfc-style

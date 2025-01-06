@@ -30,7 +30,7 @@
 
     homebrew = {
       taps = [ ];
-      brews = [ ];
+      brews = [ "helm" ];
       casks = [
         # "discord"
         "google-chrome"
@@ -44,6 +44,8 @@
         "apache-directory-studio"
         "vlc"
         "rustdesk"
+        "headlamp"
+        "middleclick"
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
@@ -91,6 +93,8 @@
       pkgs.terraform-ls
       pkgs.jdk
       pkgs.bruno
+      pkgs.ripgrep
+      pkgs.d2
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

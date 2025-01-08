@@ -35,7 +35,10 @@
       msmtp.enable = true;
     };
   };
-  networking.timeServers = [ "192.168.1.1" ];
+  networking.timeServers = [
+    "192.168.1.1"
+    "us.pool.ntp.org"
+  ];
 
   system = {
     stateVersion = "24.11";

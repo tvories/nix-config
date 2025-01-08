@@ -13,8 +13,8 @@ in
     # Host-specific
     # <nixos-hardware/raspberry-pi/4>
     ./hardware-configuration.nix
-    # ./wireguard.nix
-    # ./restic-server.nix
+    ./wireguard.nix
+    ./restic-server.nix
     # ./auto-reboot.nix
 
     # Common imports

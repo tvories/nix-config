@@ -14,7 +14,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "usage-cli";
-  version = "0.3.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "jdx";
@@ -23,9 +23,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zjQjFrNaFgpCCuwogbNTNMHKzDDzwRNmzUMMOREzZSk=";
   };
 
-  cargoHash = "sha256-/T3tl20qnLrsIhL1LCwnlJOd+tJdX9WZ514u47WdwsA=";
+  cargoHash = "sha256-1x3OziIzAZHwLAEBE5yhyvI6L0k2moxLfBlcDcXzfi8=";
 
-  buildInputs = lib.optionals isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   meta = {
     homepage = "https://usage.jdx.dev";

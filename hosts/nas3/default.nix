@@ -7,7 +7,6 @@
 }:
 let
   ifGroupsExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
-  cfg = config.modules.services.samba;
 in
 {
   imports = [
@@ -33,14 +32,6 @@ in
     # ../common/optional/smartd.nix
     # ../common/optional/chrony.nix
   ];
-
-  options.modules.services.samba = {
-    enable = lib.mkEnableOption "samba";
-    settings = lib.mkOption {
-      type = lib.types.attrs;
-      default = { };
-    };
-  };
 
   config = {
     networking = {
@@ -201,7 +192,7 @@ in
               "read only" = "no";
               "guest ok" = "no";
             };
-          } // cfg.settings;
+          };
         };
         smartd.enable = true;
         smartctl-exporter.enable = true;

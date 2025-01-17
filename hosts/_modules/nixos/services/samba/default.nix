@@ -10,7 +10,7 @@ in
 {
   options.modules.services.samba = {
     enable = lib.mkEnableOption "samba";
-    shares = lib.mkOption {
+    settings = lib.mkOption {
       type = lib.types.attrs;
       default = { };
     };
@@ -53,7 +53,7 @@ in
           "veto files" = "/._*/.DS_Store/";
           "delete veto files" = "yes";
         };
-      };
+      } // cfg.settings;
     };
   };
 }

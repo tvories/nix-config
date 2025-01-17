@@ -34,7 +34,5 @@ in
         "/etc/ssh/authorized_keys.d/%u"
       ];
     };
-    # Passwordless sudo when SSH'ing with keys
-    security.pam.enableSSHAgentAuth = true;
   };
 }

@@ -7,6 +7,7 @@
 }:
 let
   ifGroupsExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
+  cfg = config.modules.services.samba;
 in
 {
   imports = [
@@ -159,7 +160,7 @@ in
 
         samba = {
           enable = true;
-          shares = {
+          settings = {
             Media = {
               path = "/ook/Media";
               "read only" = "no";
@@ -192,7 +193,7 @@ in
               "read only" = "no";
               "guest ok" = "no";
             };
-          };
+          } // cfg.settings;
         };
         smartd.enable = true;
         smartctl-exporter.enable = true;

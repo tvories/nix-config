@@ -43,6 +43,11 @@
     # system.stateVersion = "24.05";
     sops.age.keyFile = "/home/taylor/.config/sops/age/keys.txt";
 
+    # reduce journal size
+    services.journald.extraConfig = ''
+      SystemMaxUse=5G
+    '';
+
     # Tadmin user
     users.users.taylor = {
       isNormalUser = true;

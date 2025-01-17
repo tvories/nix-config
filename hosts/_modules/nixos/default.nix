@@ -10,6 +10,7 @@
   ];
 
   documentation.nixos.enable = false;
+  documentation.man.generateCaches = false; # Speeds up build time. Man caches take forever to build: https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365
 
   # Increase open file limit for sudoers
   security.pam.loginLimits = [

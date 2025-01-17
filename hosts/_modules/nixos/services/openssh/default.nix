@@ -15,10 +15,10 @@ in
     services.openssh = {
       enable = true;
       # Don't allow home-directory authorized_keys
-      authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
+      authorizedKeysFiles = lib.mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
       settings = {
         # Harden
-        PasswordAuthentication = false;
+        PasswordAuthentication = true;
         PermitRootLogin = "no";
         # Automatically remove stale sockets
         StreamLocalBindUnlink = "yes";
@@ -34,5 +34,7 @@ in
         "/etc/ssh/authorized_keys.d/%u"
       ];
     };
+    # Passwordless sudo when SSH'ing with keys
+    security.pam.enableSSHAgentAuth = true;
   };
 }

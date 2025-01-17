@@ -34,6 +34,14 @@ in
     # ../common/optional/chrony.nix
   ];
 
+  options.modules.services.samba = {
+    enable = lib.mkEnableOption "samba";
+    settings = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+    };
+  };
+
   config = {
     networking = {
       firewall.enable = false;

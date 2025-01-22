@@ -1,10 +1,16 @@
-{ config, pkgs, lib, home-manager, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  ...
+}:
 
 {
-  imports = [];
+  imports = [ ];
 
   # Automated backups and cleanup
-  
+
   # Photos
   systemd.services."restic-backup-photos" = {
     description = "Restic backup service Photos";

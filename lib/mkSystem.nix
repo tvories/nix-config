@@ -22,6 +22,7 @@
         inputs.home-manager.nixosModules.home-manager
         inputs.sops-nix.nixosModules.sops
         inputs.disko.nixosModules.disko
+        #TODO: how to enable this for rpi builds only? # inputs.nixos-hardware.nixosModules.raspberry-pi-4
         {
           home-manager = {
             useUserPackages = true;

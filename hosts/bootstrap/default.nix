@@ -1,10 +1,17 @@
 # This configuration lets me use an iso file to bring up a system with an ssh key
 #
 
-{ config, pkgs, lib, home-manager, sops-nix, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  sops-nix,
+  ...
+}:
 
 {
-  imports = [  ];
+  imports = [ ];
 
   boot.loader.grub = {
     efiSupport = true;
@@ -19,7 +26,6 @@
 
   users.users.root.initialHashedPassword = lib.mkDefault "$y$j9T$B5Wm.Bh/FKXks/Z4o3oVS.$iGAioB7P/DigRR6EeEXoepY9rEZLfwZyEKfOv6AvSx8";
 
-
   services.openssh.enable = true;
 
   networking = {
@@ -31,5 +37,5 @@
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }

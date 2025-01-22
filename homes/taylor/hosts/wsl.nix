@@ -38,14 +38,14 @@
           "tback.mcbadass.local" = {
             port = 22;
             user = "taylor";
-            identityFile = "/home/taylor/nixos-taylor";
+            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
             checkHostIP = false;
             forwardAgent = true;
           };
           "nas-vm.mcbadass.local" = {
             port = 22;
             user = "taylor";
-            identityFile = "/home/taylor/nixos-taylor";
+            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
             checkHostIP = false;
             forwardAgent = true;
           };
@@ -59,7 +59,7 @@
           "nas3.mcbadass.local" = {
             port = 22;
             user = "taylor";
-            identityFile = "/home/taylor/nixos-taylor";
+            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
             checkHostIP = false;
             forwardAgent = true;
           };

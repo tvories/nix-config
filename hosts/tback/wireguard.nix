@@ -1,4 +1,5 @@
-{ config, ... }: {
+{ config, ... }:
+{
 
   imports = [ ];
 
@@ -49,14 +50,17 @@
 
   networking.wireguard.interfaces = {
     wg0 = {
-      ips = [ "10.0.55.7/24"];
+      ips = [ "10.0.55.7/24" ];
       listenPort = 51820;
       privateKeyFile = config.sops.secrets.wg-private-key.path;
-      
+
       peers = [
         {
           publicKey = "a6Z4poPL/ew8AyMhj05JAgwQW+5Unsp4feGhrIalzkQ=";
-          allowedIPs = ["0.0.0.0/0"];
+          allowedIPs = [
+            "192.168.0.0/16"
+            "10.0.55.0/24"
+          ];
           # endpoint = "${config.sops.templates.wg-endpoint.path}";
           endpoint = "vpn.t-vo.us:51820";
           persistentKeepalive = 25;

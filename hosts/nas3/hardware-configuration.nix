@@ -24,6 +24,16 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+    };
+    grub = {
+      enable = true;
+      efiSupport = true;
+      devices = [ "nodev" ];
+    };
+  };
 
   # fileSystems."/" =
   #   { device = "/dev/disk/by-uuid/698ecee5-5706-4877-ad9d-ea78f4f8de91";

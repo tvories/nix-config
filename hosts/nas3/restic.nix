@@ -9,6 +9,10 @@
 {
   imports = [ ];
 
+  environment.systemPackages = with pkgs; [
+    restic
+  ];
+
   # Automated backups and cleanup
 
   # Photos

@@ -2,6 +2,9 @@
 {
   mkNixosSystem =
     system: hostname: flake-packages:
+    let
+      isRpi = system == "aarch64-linux";
+    in
     inputs.nixpkgs.lib.nixosSystem {
       inherit system;
       pkgs = import inputs.nixpkgs {
@@ -22,6 +25,7 @@
         inputs.home-manager.nixosModules.home-manager
         inputs.sops-nix.nixosModules.sops
         inputs.disko.nixosModules.disko
+        (if isRpi then inputs.nixos-hardware.nixosModules.raspberry-pi-4 else { })
         #TODO: how to enable this for rpi builds only? # inputs.nixos-hardware.nixosModules.raspberry-pi-4
         {
           home-manager = {

@@ -6,18 +6,19 @@
 }:
 
 let
+  # Define sources and destinations
   backupConfig = [
     {
       name = "photos";
       source = "/ook/Photos";
       tag = "nas3-photos";
-      timer = "1:00:00";
+      timer = "00:00:00";
     }
     {
       name = "documents";
       source = "/ook/Documents";
       tag = "nas3-documents";
-      timer = "0:00:00";
+      timer = "1:00:00";
     }
     {
       name = "k8s";
@@ -55,36 +56,44 @@ let
 
 in
 {
-  # Create systemd services and timers for each backup config
+  # Create systemd services and timers for each endpoint and backup config
   systemd.services = lib.mkMerge (
-    map (config: {
-      "restic-backup-${config.name}" = {
-        description = "Restic backup service ${config.name}";
-        script = lib.concatStringsSep "\n" (
-          map (endpoint: ''
-            source /home/taylor/restic/.restic-env;
-            ${pkgs.restic}/bin/restic backup --cacert ${endpoint.cert} -q ${config.source} --tag ${config.tag} -r ${endpoint.base}/${config.name};
-            ${pkgs.restic}/bin/restic forget --cacert ${endpoint.cert} -q --prune --keep-hourly 24 --keep-daily 7 -r ${endpoint.base}/${config.name}
-          '') resticEndpoints
-        );
-        serviceConfig = {
-          Type = "oneshot";
-          User = "root";
-        };
-      };
-    }) backupConfig
+    lib.flatten (
+      map (
+        endpoint:
+        map (config: {
+          "restic-backup-${endpoint.name}-${config.name}" = {
+            description = "Restic backup service ${endpoint.name} ${config.name}";
+            script = ''
+              source /home/taylor/restic/.restic-env;
+              ${pkgs.restic}/bin/restic backup --cacert ${endpoint.cert} -q ${config.source} --tag ${config.tag} -r ${endpoint.base}/${config.name};
+              ${pkgs.restic}/bin/restic forget --cacert ${endpoint.cert} -q --prune --keep-hourly 24 --keep-daily 7 -r ${endpoint.base}/${config.name}
+            '';
+            serviceConfig = {
+              Type = "oneshot";
+              User = "root";
+            };
+          };
+        }) backupConfig
+      ) resticEndpoints
+    )
   );
 
   systemd.timers = lib.mkMerge (
-    map (config: {
-      "restic-backup-${config.name}" = {
-        description = "Restic backup timer ${config.name}";
-        timerConfig = {
-          OnCalendar = config.timer;
-          Persistent = true;
-        };
-        wantedBy = [ "timers.target" ];
-      };
-    }) backupConfig
+    lib.flatten (
+      map (
+        endpoint:
+        map (config: {
+          "restic-backup-${endpoint.name}-${config.name}" = {
+            description = "Restic backup timer ${endpoint.name} ${config.name}";
+            timerConfig = {
+              OnCalendar = config.timer;
+              Persistent = true;
+            };
+            wantedBy = [ "timers.target" ];
+          };
+        }) backupConfig
+      ) resticEndpoints
+    )
   );
 }

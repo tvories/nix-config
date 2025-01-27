@@ -20,5 +20,6 @@
     ./smartctl-exporter
     ./msmtp
     ./zfs-exporter
+    ./docker
   ];
 }

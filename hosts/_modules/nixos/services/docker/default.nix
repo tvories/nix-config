@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.modules.services.podman;
+  cfg = config.modules.services.docker;
 in
 {
   options.modules.services.docker = {

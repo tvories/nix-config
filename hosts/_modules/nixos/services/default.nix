@@ -21,5 +21,6 @@
     ./msmtp
     ./zfs-exporter
     ./docker
+    ./traefik
   ];
 }

@@ -4,6 +4,7 @@ keys:
   - &work_mac age19049f7rnde3tjnl5vgnvhwhgmcxhzfx46jq8h5x7tncz8a2ulgmq3jug5v
   - &tback age1jvkfpdgegrr3p9v8s4vnld6hxd3qulfcwrn68uwav7m24hcnf5rqt28ah5
   - &nas3 age1fgvfcaptjl6f2dfr70v5kfarmlms6e89eqdg7eyxqj5k4w9zr5zs53wgxs
+  - &enderpi age1knasht7gxt7jh565k5x5qpe29cxkjcanglfajye6azvq3vdl6grsqrzfmv
 creation_rules:
   - path_regex: .*\.sops\.ya?ml$
     key_groups:
@@ -18,3 +19,4 @@ creation_rules:
           - *work_mac
           - *tback
           - *nas3
+          - *enderpi

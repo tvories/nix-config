@@ -33,7 +33,7 @@ in
   ];
 
   config = {
-   
+
     console.enable = true;
     nix.settings.trusted-users = [
       "root"
@@ -47,6 +47,9 @@ in
       # wireless.enable  = true;
       networkmanager.enable = true;
     };
+
+    powerManagement.cpuFreqGovernor = "ondemand";
+    hardware.enableRedistributableFirmware = true;
 
     users.users.taylor = {
       uid = 1000;

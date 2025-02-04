@@ -42,6 +42,13 @@
             checkHostIP = false;
             forwardAgent = true;
           };
+          "enderpi.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
+            checkHostIP = false;
+            forwardAgent = true;
+          };
           "nas-vm.mcbadass.local" = {
             port = 22;
             user = "taylor";
@@ -50,6 +57,13 @@
             forwardAgent = true;
           };
           "192.168.1.97" = {
+            port = 22;
+            user = "root";
+            identityFile = "/home/taylor/nixos-root";
+            checkHostIP = false;
+            forwardAgent = true;
+          };
+          "192.168.1.128" = {
             port = 22;
             user = "root";
             identityFile = "/home/taylor/nixos-root";

@@ -14,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "usage-cli";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     rev = "v${version}";
-    hash = "sha256-zjQjFrNaFgpCCuwogbNTNMHKzDDzwRNmzUMMOREzZSk=";
+    hash = "sha256-bS8wMtmD7UPctP+8yDm8KylLIPzPuk6dt9ilWQzFvY0=";
   };
 
-  cargoHash = "sha256-1x3OziIzAZHwLAEBE5yhyvI6L0k2moxLfBlcDcXzfi8=";
+  cargoHash = "sha256-oR4zO/7ZobJlIJ8dx54hpuMOsP9WOLvY2ZVr8z7ikAA=";
 
   buildInputs = lib.optionals isDarwin [
     Security

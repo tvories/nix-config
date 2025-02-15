@@ -76,6 +76,22 @@
             };
             forwardAgent = true;
           };
+          "enderpi.mcbadass.local" = {
+            port = 22;
+            user = "taylor";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+            forwardAgent = true;
+          };
+          "192.168.20.107" = {
+            port = 22;
+            user = "tvories";
+            extraOptions = {
+              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            };
+            forwardAgent = true;
+          };
         };
       };
     };

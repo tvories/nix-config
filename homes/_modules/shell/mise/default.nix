@@ -26,7 +26,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [
       cfg.package
-      flake-packages.${pkgs.system}.usage
+      # flake-packages.${pkgs.system}.usage
     ];
 
     xdg.configFile = {

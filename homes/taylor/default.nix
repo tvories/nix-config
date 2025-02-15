@@ -74,6 +74,7 @@
             oderwat.indent-rainbow
             johnpapa.vscode-peacock
             aaron-bond.better-comments
+            takumii.markdowntable
           ];
       };
     };

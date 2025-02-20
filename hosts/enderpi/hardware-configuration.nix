@@ -13,41 +13,60 @@
     initrd.kernelModules = [ ];
     initrd.availableKernelModules = [
       "xhci_pci"
+      "ahci"
+      "mpt3sas"
+      "nvme"
       "usbhid"
-      # "pcie-brcmstb"
-      # "reset-raspberrypi"
+      "usb_storage"
+      "sd_mod"
+      "sr_mod"
     ];
-    kernelModules = [ ];
+    # supportedFilesystems = [ "xfs" ];
+    kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
     loader = {
-      grub.enable = false;
-      # Enables the generation of /boot/extlinux/extlinux.conf
-      generic-extlinux-compatible.enable = true;
-      timeout = 2;
+      efi = {
+        canTouchEfiVariables = true;
+      };
+      grub = {
+        enable = true;
+        efiSupport = true;
+        devices = [ "nodev" ];
+      };
     };
   };
 
   # boot.initrd.supportedFilesystems = [ "zfs" ];
   # boot.supportedFilesystems = [ "zfs" ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   # boot.loader.raspberryPi = {
   #   enable = true;
-  #   version = 4;
+  #   version = 3;
+  #   firmwareConfig = ''
+  #     core_freq=250
+  #   '';
   # };
 
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   # Enables the generation of /boot/extlinux/extlinux.conf
   # boot.loader.generic-extlinux-compatible.enable = true;
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
-    fsType = "ext4";
-    options = [ "noatime" ];
-  };
+  # fileSystems."/" = {
+  #   device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+  #   fsType = "ext4";
+  #   options = [ "noatime" ];
+  # };
+
+  # fileSystems."/boot" = {
+  #   device = "/dev/disk/by-label/boot";
+  #   fsType = "vfat";
+  # };
 
   # swapDevices = [ ];
 
   # powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

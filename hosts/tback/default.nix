@@ -11,9 +11,8 @@ in
 {
   imports = [
     # Host-specific
-    # <nixos-hardware/raspberry-pi/4>
     ./hardware-configuration.nix
-    ./wireguard.nix
+    # ./wireguard.nix
     ./restic-server.nix
     # ./auto-reboot.nix
 
@@ -33,6 +32,42 @@ in
   ];
 
   config = {
+    hardware = {
+      raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+      raspberry-pi."4".bluetooth.enable = true;
+      bluetooth = {
+        enable = true;
+        # powerOnBoot = true;
+      };
+      deviceTree = {
+        enable = true;
+        filter = "bcm2711-rpi-4*.dtb";
+      };
+
+      deviceTree = {
+        overlays = [
+          {
+            name = "bluetooth-overlay";
+            dtsText = ''
+              /dts-v1/;
+              /plugin/;
+
+              / {
+                  compatible = "brcm,bcm2711";
+
+                  fragment@0 {
+                      target = <&uart0_pins>;
+                      __overlay__ {
+                              brcm,pins = <30 31 32 33>;
+                              brcm,pull = <2 0 0 2>;
+                      };
+                  };
+              };
+            '';
+          }
+        ];
+      };
+    };
     console.enable = false;
     nix.settings.trusted-users = [
       "root"
@@ -46,6 +81,18 @@ in
       dhcpcd.enable = true;
       # useNetworkd = true;
     };
+
+    # Disk mount for usb drive
+    fileSystems."/backup" = {
+      device = "/dev/disk/by-id/usb-WDC_WD12_0EDAZ-11F3RA_000000000024-0:0-part1";
+      fsType = "ext4";
+      options = [
+        "users"
+        "nofail"
+        "noatime"
+      ];
+    };
+
     users.users.taylor = {
       uid = 1000;
       name = "taylor";
@@ -65,33 +112,44 @@ in
         ++ ifGroupsExist [
           "network"
           "samba-users"
+          "backup-rw"
+          "docker"
         ];
     };
     users.groups.taylor = {
       gid = 1000;
     };
-    security.sudo.extraRules = [
-      {
-        users = [ "taylor" ];
-        commands = [
-          {
-            command = "ALL";
-            options = [
-              "SETENV"
-              "NOPASSWD"
-            ];
-          }
-        ];
-      }
-    ];
+    # security.sudo.extraRules = [
+    #   {
+    #     users = [ "taylor" ];
+    #     commands = [
+    #       {
+    #         command = "ALL";
+    #         options = [
+    #           "SETENV"
+    #           "NOPASSWD"
+    #         ];
+    #       }
+    #     ];
+    #   }
+    # ];
 
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
     '';
 
+    # systemd.services.btattach = {
+    #   before = [ "bluetooth.service" ];
+    #   after = [ "dev-ttyAMA0.device" ];
+    #   wantedBy = [ "multi-user.target" ];
+    #   serviceConfig = {
+    #     ExecStart = "${pkgs.bluez}/bin/btattach -B /dev/ttyAMA0 -P bcm -S 3000000";
+    #   };
+    # };
+
     environment.systemPackages = with pkgs; [
-      cryptsetup
+      # cryptsetup
       usbutils
       libraspberrypi
       raspberrypi-eeprom
@@ -100,22 +158,22 @@ in
     services.openssh.enable = true;
     modules = {
       services = {
-        nfs.enable = true;
         node-exporter.enable = true;
         smartctl-exporter.enable = true;
-        # openssh.enable = true;
-        # msmtp.enable = true;
+        msmtp.enable = true;
+        docker.enable = true;
+        traefik.enable = true;
 
-        restic-server = {
-          enable = true;
-          restic-path = "/backup/sda1/restic";
-          htpasswd-file = "/home/tback/restic-server/.htpasswd";
-          public-cert-file = "/home/tback/restic-server/public.cert";
-          private-key-file = "/home/tback/restic-server/private.key";
-          working-directory = "/home/tback/restic-server";
-          group = "65541"; # backup-rw
-          user = "tback";
-        };
+        # restic-server = {
+        #   enable = true;
+        #   restic-path = "/backup/sda1/restic";
+        #   htpasswd-file = "/home/tback/restic-server/.htpasswd";
+        #   public-cert-file = "/home/tback/restic-server/public.cert";
+        #   private-key-file = "/home/tback/restic-server/private.key";
+        #   working-directory = "/home/tback/restic-server";
+        #   group = "65541"; # backup-rw
+        #   user = "tback";
+        # };
       };
       users = {
         additionalUsers = {
@@ -152,42 +210,42 @@ in
       };
     };
 
-    sops.secrets.sda1-key = {
-      sopsFile = ./secret.sops.yaml;
-    };
+    # sops.secrets.sda1-key = {
+    #   sopsFile = ./secret.sops.yaml;
+    # };
     sops.secrets.tback-password = {
       sopsFile = ./secret.sops.yaml;
       neededForUsers = true;
     };
-    services.autofs = {
-      enable = true;
-      autoMaster = ''
-        /backup /etc/auto.luks --timeout=600
-      '';
-      debug = true;
-    };
-    environment.etc = {
-      # Creates auto.luks file
-      "auto.luks" = {
-        text = ''
-          #!/run/current-system/sw/bin/bash
-          device=$1
-          device_crypt=''${device}_autocrypt
+    # services.autofs = {
+    #   enable = true;
+    #   autoMaster = ''
+    #     /backup /etc/auto.luks --timeout=600
+    #   '';
+    #   debug = true;
+    # };
+    # environment.etc = {
+    #   # Creates auto.luks file
+    #   "auto.luks" = {
+    #     text = ''
+    #       #!/run/current-system/sw/bin/bash
+    #       device=$1
+    #       device_crypt=''${device}_autocrypt
 
-          mountopts="-fstype=ext4,defaults,noatime,nodiratime"
+    #       mountopts="-fstype=ext4,defaults,noatime,nodiratime"
 
-          # map the LUKS device, if not already done
-          /run/current-system/sw/bin/cryptsetup luksOpen /dev/''${device} ''${device_crypt} -d=/etc/.keys/''${device}.key 2>/dev/null
+    #       # map the LUKS device, if not already done
+    #       /run/current-system/sw/bin/cryptsetup luksOpen /dev/''${device} ''${device_crypt} -d=/etc/.keys/''${device}.key 2>/dev/null
 
-          echo $mountopts :/dev/mapper/''${device_crypt}
-        '';
-        mode = "0755";
-      };
-      ".keys/sda1.key" = {
-        source = config.sops.secrets.sda1-key.path;
-        mode = "0400";
-      };
-    };
+    #       echo $mountopts :/dev/mapper/''${device_crypt}
+    #     '';
+    #     mode = "0755";
+    #   };
+    #   ".keys/sda1.key" = {
+    #     source = config.sops.secrets.sda1-key.path;
+    #     mode = "0400";
+    #   };
+    # };
 
     # Restic server config
     sops.secrets.restic-server-htpasswd = {
@@ -206,31 +264,4 @@ in
       path = "/home/tback/restic-server/private.key";
     };
   };
-
-  # services.prometheus.exporters = {
-  #   node = {
-  #     enable = true;
-  #     enabledCollectors = [
-  #       "diskstats"
-  #       "filesystem"
-  #       "loadavg"
-  #       "meminfo"
-  #       "netdev"
-  #       "stat"
-  #       "time"
-  #       "uname"
-  #       "systemd"
-  #     ];
-  #   };
-  #   smartctl = {
-  #     enable = true;
-  #   };
-  # };
-
-  # may fix issues with network service failing during a nixos-rebuild
-  # systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
-  # systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
-
-  # system.stateVersion = "24.05";
-  # nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 }

@@ -16,7 +16,7 @@
         # Run klipper-genconf to generate this
         configFile = ./ender.cfg;
         # Serial port connected to the microcontroller
-        serial = "/dev/serial/by-id/usb-Klipper_stm32g0b1xx_510014000250414235363020-if00";
+        serial = "/dev/serial/by-id/usb-Klipper_stm32f103xe_33FFDC0530554D3512691543-if00";
       };
     };
     settings = {
@@ -24,19 +24,19 @@
       virtual_sdcard.path = "/var/lib/moonraker/gcodes";
       bltouch = {
         sensor_pin = "^PC14";
-        control_pin = "!PA1";
+        control_pin = "PA1";
         pin_move_time = "0.675";
-        stow_on_each_sample = false;
-        probe_with_touch_mode = true;
-        pin_up_touch_mode_reports_triggered  = true;
-        pin_up_reports_not_triggered = false;
-        speed = 3;
+        # stow_on_each_sample = false;
+        # probe_with_touch_mode = false;
+        # pin_up_touch_mode_reports_triggered = false;
+        pin_up_reports_not_triggered = true;
+        speed = 20;
         lift_speed = 200;
         x_offset = -55;
         y_offset = -13;
-        z_offset = 0;
-        samples = 3;
-        sample_retract_dist = 5.0;
+        z_offset = 1.999;
+        samples = 2;
+        sample_retract_dist = 3.0;
         samples_tolerance = 0.1;
         samples_tolerance_retries = 4;
       };
@@ -51,8 +51,8 @@
       bed_mesh = {
         speed = 120;
         horizontal_move_z = 5;
-        mesh_min = "10, 10";
-        mesh_max = "195, 220";
+        mesh_min = "15, 30";
+        mesh_max = "165, 205";
         probe_count = "5,5";
         algorithm = "bicubic";
       };
@@ -64,8 +64,8 @@
         microsteps = 16;
         rotation_distance = 40;
         endstop_pin = "^PC0";
-        position_endstop = -17;
-        position_min = -17;
+        position_endstop = 0;
+        position_min = -20;
         position_max = 235;
         homing_speed = 50;
       };
@@ -75,7 +75,7 @@
         tx_pin = "PC10";
         uart_address = 0;
         run_current = 0.580;
-        hold_current = 0.500;
+        # hold_current = 0.500;
         stealthchop_threshold = 999999;
       };
 
@@ -86,8 +86,8 @@
         microsteps = 16;
         rotation_distance = 40;
         endstop_pin = "^PC1";
-        position_endstop = -5;
-        position_min = -5;
+        position_endstop = 0;
+        position_min = -8;
         position_max = 235;
         homing_speed = 50;
       };
@@ -97,7 +97,7 @@
         tx_pin = "PC10";
         uart_address = 2;
         run_current = 0.580;
-        hold_current = 0.500;
+        # hold_current = 0.500;
         stealthchop_threshold = 999999;
       };
 
@@ -106,10 +106,13 @@
         dir_pin = "PC5";
         enable_pin = "!PB1";
         microsteps = 16;
-        rotation_distance = 4;
+        rotation_distance = 8;
         endstop_pin = "probe:z_virtual_endstop";
         position_max = 250;
-        position_min = -5;
+        position_min = -3;
+        homing_speed = 4;
+        second_homing_speed = 1;
+        homing_retract_dist = 2.0;
       };
 
       "tmc2209 stepper_z" = {
@@ -117,14 +120,14 @@
         tx_pin = "PC10";
         uart_address = 1;
         run_current = 0.580;
-        hold_current = 0.500;
+        # hold_current = 0.500;
         stealthchop_threshold = 999999;
       };
 
       extruder = {
         step_pin = "PB3";
         dir_pin = "!PB4";
-        enable_pin = "!PD1";
+        enable_pin = "!PD2";
         microsteps = 16;
         rotation_distance = 33.500;
         nozzle_diameter = 0.400;
@@ -137,7 +140,7 @@
         pid_Ki = 1.063;
         pid_Kd = 108.982;
         min_temp = 0;
-        max_temp = 250;
+        max_temp = 265;
       };
 
       "tmc2209 extruder" = {
@@ -145,14 +148,14 @@
         tx_pin = "PC10";
         uart_address = 3;
         run_current = 0.650;
-        hold_current = 0.500;
+        # hold_current = 0.500;
         stealthchop_threshold = 999999;
       };
 
       heater_bed = {
         heater_pin = "PC9";
         sensor_type = "ATC Semitec 104GT-2";
-        sensor_pin = "PC4";
+        sensor_pin = "PC3";
         control = "pid";
         pid_Kp = 54.027;
         pid_Ki = 0.770;
@@ -161,11 +164,11 @@
         max_temp = 130;
       };
 
-      "heater_fan controller_fan" = {
-        pin = "PB15";
-        heater = "heater_bed";
-        heater_temp = 45.0;
-      };
+      # "heater_fan controller_fan" = {
+      #   pin = "EXP1_8";
+      #   heater = "heater_bed";
+      #   heater_temp = 45.0;
+      # };
 
       "heater_fan nozzle_cooling_fan" = {
         pin = "PC7";
@@ -179,6 +182,13 @@
         sensor_type = "temperature_host";
         min_temp = 10;
         max_temp = 100;
+      };
+
+      "firmware_retraction" = {
+        retract_length = 1.0;
+        retract_speed = 40.0;
+        unretract_extra_length = 0.0;
+        unretract_speed = 40.0;
       };
 
       "gcode_macro PAUSE" = {
@@ -238,6 +248,44 @@
         RESUME_BASE {get_params}
         ";
       };
+      "gcode_macro START_PRINT" = {
+        gcode = "
+          {% set BED_TEMP = params.BED_TEMP|default(60)|float %}
+          {% set EXTRUDER_TEMP = params.EXTRUDER_TEMP|default(190)|float %}
+          # Start bed heating
+          M140 S{BED_TEMP}
+          # Use absolute coordinates
+          G90
+          # Reset the G-Code Z offset (adjust Z offset if needed)
+          SET_GCODE_OFFSET Z=0.0
+          # Home the printer
+          G28
+          # Move the nozzle near the bed
+          G1 Z5 F3000
+          # Move the nozzle very close to the bed
+          G1 Z0.15 F300
+          # Wait for bed to reach temperature
+          M190 S{BED_TEMP}
+          # Set and wait for nozzle to reach temperature
+          M109 S{EXTRUDER_TEMP}
+        ";
+      };
+
+      "gcode_macro END_PRINT" = {
+        gcode = "
+          # Turn off bed, extruder, and fan
+          M140 S0
+          M104 S0
+          M106 S0
+          # Move nozzle away from print while retracting
+          G91
+          G1 X-2 Y-2 E-3 F300
+          # Raise nozzle by 10mm
+          G1 Z10 F3000
+          G90
+          # Disable steppers
+          M84";
+      };
 
       "gcode_macro CANCEL_PRINT" = {
         description = "Cancel the actual running print";
@@ -247,9 +295,37 @@
         CANCEL_PRINT_BASE
         ";
       };
+      # "gcode_macro _CLIENT_VARIABLE" = {
+      #   variable_use_custom_pos = false; # use custom park coordinates for x,y [True/False]
+      #   variable_custom_park_x = 0.0; # custom x position; value must be within your defined min and max of X
+      #   variable_custom_park_y = 0.0; # custom y position; value must be within your defined min and max of Y
+      #   variable_custom_park_dz = 2.0; # custom dz value; the value in mm to lift the nozzle when move to park position
+      #   variable_retract = 1.0; # the value to retract while PAUSE
+      #   variable_cancel_retract = 5.0; # the value to retract while CANCEL_PRINT
+      #   variable_speed_retract = 35.0; # retract speed in mm/s
+      #   variable_unretract = 1.0; # the value to unretract while RESUME
+      #   variable_speed_unretract = 35.0; # unretract speed in mm/s
+      #   variable_speed_hop = 15.0; # z move speed in mm/s
+      #   variable_speed_move = 100.0; # move speed in mm/s
+      #   variable_park_at_cancel = false; # allow to move the toolhead to park while execute CANCEL_PRINT [True/False]
+      #   variable_park_at_cancel_x = null; # different park position during CANCEL_PRINT [None/Position as Float]; park_at_cancel must be True
+      #   variable_park_at_cancel_y = null; # different park position during CANCEL_PRINT [None/Position as Float]; park_at_cancel must be True
+      #   # !!! Caution [firmware_retraction] must be defined in the printer.cfg if you set use_fw_retract: True !!!
+      #   variable_use_fw_retract = false; # use fw_retraction instead of the manual version [True/False]
+      #   variable_idle_timeout = 0; # time in sec until idle_timeout kicks in. Value 0 means that no value will be set or restored
+      #   variable_runout_sensor = ""; # If a sensor is defined, it will be used to cancel the execution of RESUME in case no filament is detected.
+      #   # Specify the config name of the runout sensor e.g "filament_switch_sensor runout". Hint use the same as in your printer.cfg
+      #   # !!! Custom macros, please use with care and review the section of the corresponding macro.
+      #   # These macros are for simple operations like setting a status LED. Please make sure your macro does not interfere with the basic macro functions.
+      #   # Only single line commands are supported, please create a macro if you need more than one command.
+      #   variable_user_pause_macro = ""; # Everything inside the "" will be executed after the klipper base pause (PAUSE_BASE) function
+      #   variable_user_resume_macro = ""; # Everything inside the "" will be executed before the klipper base resume (RESUME_BASE) function
+      #   variable_user_cancel_macro = ""; # Everything inside the "" will be executed before the klipper base cancel (CANCEL_PRINT_BASE) function
+      #   gcode = "";
+      # };
 
       mcu = {
-        serial = "/dev/serial/by-id/usb-Klipper_stm32g0b1xx_510014000250414235363020-if00";
+        serial = "/dev/serial/by-id/usb-Klipper_stm32f103xe_33FFDC0530554D3512691543-if00";
       };
 
       printer = {
@@ -265,14 +341,11 @@
       };
 
       board_pins = {
-        aliases = ''
-          '
-                    # EXP1 header
-                    EXP1_1=PB5,  EXP1_3=PA9,   EXP1_5=PA10, EXP1_7=PB8, EXP1_9=<GND>,
-                    EXP1_2=PA15, EXP1_4=<RST>, EXP1_6=PB9,  EXP1_8=PD6, EXP1_10=<5V>
-        '';
+        aliases = "
+          EXP1_1=PB5,  EXP1_3=PA9,   EXP1_5=PA10, EXP1_7=PB8,  EXP1_9=<GND>,
+          EXP1_2=PA15, EXP1_4=<RST>, EXP1_6=PB9,  EXP1_8=PB15, EXP1_10=<5V>
+        ";
       };
-
       display = {
         lcd_type = "st7920";
         cs_pin = "EXP1_7";

@@ -158,7 +158,7 @@
         nas3 = mkSystemLib.mkNixosSystem "x86_64-linux" "nas3" flake-packages;
         wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
         tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
-        enderpi = mkSystemLib.mkNixosSystem "aarch64-linux" "enderpi" flake-packages;
+        enderpi = mkSystemLib.mkNixosSystem "x86_64-linux" "enderpi" flake-packages;
       };
 
       darwinConfigurations = {

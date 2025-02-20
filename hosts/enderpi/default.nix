@@ -11,6 +11,7 @@ in
 {
   imports = [
     # Host-specific
+    ./disk-config.nix
     ./hardware-configuration.nix
     ./3d-printing.nix
     # ./wireguard.nix
@@ -47,9 +48,6 @@ in
       # wireless.enable  = true;
       networkmanager.enable = true;
     };
-
-    powerManagement.cpuFreqGovernor = "ondemand";
-    hardware.enableRedistributableFirmware = true;
 
     users.users.taylor = {
       uid = 1000;
@@ -101,8 +99,8 @@ in
     environment.systemPackages = with pkgs; [
       # cryptsetup
       usbutils
-      libraspberrypi
-      raspberrypi-eeprom
+      # libraspberrypi
+      # raspberrypi-eeprom
     ];
 
     services.openssh.enable = true;
@@ -111,7 +109,20 @@ in
         node-exporter.enable = true;
         msmtp.enable = true;
         docker.enable = true;
+        smartd.enable = true;
+        smartctl-exporter.enable = true;
       };
+    };
+    boot.kernelParams = [
+      "i915.enable_guc=2"
+    ];
+
+    hardware.graphics = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-compute-runtime
+      ];
     };
   };
 }

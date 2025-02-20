@@ -63,6 +63,13 @@
             checkHostIP = false;
             forwardAgent = true;
           };
+          "192.168.1.101" = {
+            port = 22;
+            user = "root";
+            identityFile = "/home/taylor/nixos-root";
+            checkHostIP = false;
+            forwardAgent = true;
+          };
           "192.168.1.128" = {
             port = 22;
             user = "root";

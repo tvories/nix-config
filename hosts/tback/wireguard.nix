@@ -1,4 +1,29 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
+
+let
+  # Define the IP address to test connectivity to
+  testIP = "10.0.55.1";
+  # Define the service name
+  wireguardService = "wireguard-wg0.service";
+
+  # Script to test connectivity and restart the WireGuard service if it fails
+  connectivityCheckScript = pkgs.writeShellScriptBin "connectivity-check" ''
+    set -euo pipefail
+
+    # Test connectivity to the IP address
+    if ! ${pkgs.iputils}/bin/ping -c 1 -W 5 ${testIP} > /dev/null 2>&1; then
+      echo "Connectivity to ${testIP} failed. Restarting ${wireguardService}..."
+      systemctl restart ${wireguardService}
+    else
+      echo "Connectivity to ${testIP} is OK."
+    fi
+  '';
+in
+
 {
 
   imports = [ ];
@@ -66,6 +91,29 @@
           persistentKeepalive = 25;
         }
       ];
+    };
+  };
+  systemd.timers.wg-connectivity-check-timer = {
+    description = "Run the connectivity check every 5 minutes";
+    timerConfig = {
+      OnCalendar = "*:0/5"; # Run every 5 minutes
+      Persistent = true;
+      Unit = "wg-connectivity-check.service";
+    };
+    wantedBy = [ "timers.target" ];
+    partOf = [ "wg-connectivity-check.service" ];
+  };
+  # Create a systemd service to run the connectivity check periodically
+  systemd.services.wg-connectivity-check = {
+    description = "Check connectivity to ${testIP} and restart ${wireguardService} if it fails";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${connectivityCheckScript}/bin/connectivity-check";
+      # Restart = "on-failure";
+      # RestartSec = "5m"; # Retry every 5 minutes
     };
   };
 }

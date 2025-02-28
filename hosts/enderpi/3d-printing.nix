@@ -34,7 +34,7 @@
         lift_speed = 200;
         x_offset = -55;
         y_offset = -13;
-        z_offset = 1.999;
+        z_offset = 1.089;
         samples = 2;
         sample_retract_dist = 3.0;
         samples_tolerance = 0.1;
@@ -293,6 +293,33 @@
         gcode = "
         TURN_OFF_HEATERS
         CANCEL_PRINT_BASE
+        ";
+      };
+
+      "gcode_macro M600" = {
+        description = "Filament change";
+        gcode = "
+        {% set X = params.X|default(50)|float %}
+        {% set Y = params.Y|default(0)|float %}
+        {% set Z = params.Z|default(10)|float %}
+        SAVE_GCODE_STATE NAME=M600_state
+        PAUSE
+        _SOUND_ALARM
+        SET_IDLE_TIMEOUT TIMEOUT=28800
+        G91
+        G1 E-.8 F2700
+        G1 Z{Z}
+        G90
+        G1 X{X} Y{Y} F3000
+        G91
+        G1 E-50 F1000
+        RESTORE_GCODE_STATE NAME=M600_state
+        ";
+      };
+
+      "gcode_macro idle_timeout" = {
+        gcode = "
+        timeout: 28800
         ";
       };
       # "gcode_macro _CLIENT_VARIABLE" = {

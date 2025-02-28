@@ -37,7 +37,7 @@
     };
   };
   networking.timeServers = [
-    "192.168.1.1"
+    # "192.168.1.1"
     "0.us.pool.ntp.org"
     "1.us.pool.ntp.org"
     "2.us.pool.ntp.org"

@@ -24,10 +24,12 @@ in
       enable = true;
       # enableNTS = true;
       package = cfg.package;
-      # extraConfig = ''
-      #   allow all
-      #   bindaddress 0.0.0.0
-      # '';
+      extraConfig = ''
+        allow all
+        # bindaddress 0.0.0.0
+        # Allow larger time adjustments immediately after startup
+        makestep 1.0 3
+      '';
     };
   };
 }

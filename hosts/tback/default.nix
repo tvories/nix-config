@@ -12,9 +12,10 @@ in
   imports = [
     # Host-specific
     ./hardware-configuration.nix
-    # ./wireguard.nix
+    ./wireguard.nix
     ./restic-server.nix
     # ./auto-reboot.nix
+    ./uptime-kuma.nix
 
     # Common imports
     # ../common/nixos
@@ -68,7 +69,7 @@ in
         ];
       };
     };
-    console.enable = false;
+    console.enable = true;
     nix.settings.trusted-users = [
       "root"
       "@wheel"
@@ -119,20 +120,20 @@ in
     users.groups.taylor = {
       gid = 1000;
     };
-    # security.sudo.extraRules = [
-    #   {
-    #     users = [ "taylor" ];
-    #     commands = [
-    #       {
-    #         command = "ALL";
-    #         options = [
-    #           "SETENV"
-    #           "NOPASSWD"
-    #         ];
-    #       }
-    #     ];
-    #   }
-    # ];
+    security.sudo.extraRules = [
+      {
+        users = [ "taylor" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [
+              "SETENV"
+              "NOPASSWD"
+            ];
+          }
+        ];
+      }
+    ];
 
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
@@ -163,17 +164,6 @@ in
         msmtp.enable = true;
         docker.enable = true;
         traefik.enable = true;
-
-        # restic-server = {
-        #   enable = true;
-        #   restic-path = "/backup/sda1/restic";
-        #   htpasswd-file = "/home/tback/restic-server/.htpasswd";
-        #   public-cert-file = "/home/tback/restic-server/public.cert";
-        #   private-key-file = "/home/tback/restic-server/private.key";
-        #   working-directory = "/home/tback/restic-server";
-        #   group = "65541"; # backup-rw
-        #   user = "tback";
-        # };
       };
       users = {
         additionalUsers = {

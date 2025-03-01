@@ -1,3 +1,5 @@
+# Configuration for my Ender 3 klipper, mainsail, moonraker, and fluidd setup
+
 {
   config,
   pkgs,
@@ -34,7 +36,7 @@
         lift_speed = 200;
         x_offset = -55;
         y_offset = -13;
-        z_offset = 1.089;
+        z_offset = 1.470;
         samples = 2;
         sample_retract_dist = 3.0;
         samples_tolerance = 0.1;
@@ -55,6 +57,27 @@
         mesh_max = "165, 205";
         probe_count = "5,5";
         algorithm = "bicubic";
+      };
+
+      "bed_mesh default" = {
+        version = 1;
+        points = "
+          0.277500, 0.225000, 0.103750, -0.011250, -0.145000
+          0.236250, 0.195000, 0.085000, -0.025000, -0.133750
+          0.325000, 0.252500, 0.101250, -0.053750, -0.185000
+          0.262500, 0.198750, 0.081250, -0.055000, -0.167500
+          0.223750, 0.175000, 0.088750, -0.037500, -0.150000
+        ";
+        x_count = 5;
+        y_count = 5;
+        mesh_x_pps = 2;
+        mesh_y_pps = 2;
+        algo = "bicubic";
+        tension = 0.2;
+        min_x = 15.0;
+        max_x = 165.0;
+        min_y = 30.0;
+        max_y = 205.0;
       };
 
       stepper_x = {

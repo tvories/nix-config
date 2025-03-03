@@ -97,6 +97,7 @@
       pkgs.bruno
       pkgs.d2
       pkgs.vault
+      pkgs.lens
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

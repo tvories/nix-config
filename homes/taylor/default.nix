@@ -75,6 +75,7 @@
             johnpapa.vscode-peacock
             aaron-bond.better-comments
             takumii.markdowntable
+            adamhartford.vscode-base64
           ];
       };
     };

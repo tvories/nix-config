@@ -81,6 +81,12 @@ in
       domain = "mcbadass.local";
       dhcpcd.enable = true;
       # useNetworkd = true;
+      nameservers = [
+        "192.168.1.240"
+        "1.1.1.1"
+        "9.9.9.9"
+        "192.168.1.241"
+      ];
     };
 
     # Disk mount for usb drive

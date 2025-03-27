@@ -46,7 +46,7 @@ in
           websecure = {
             address = ":443";
             asDefault = true;
-            http.tls = { 
+            http.tls = {
               certResolver = "cloudflare";
               domains = [
                 {
@@ -74,7 +74,10 @@ in
               storage = "${config.services.traefik.dataDir}/acme.json";
               dnsChallenge = {
                 provider = "cloudflare";
-                resolvers = [ "1.1.1.1:53" "1.0.0.1:53" ];
+                resolvers = [
+                  "1.1.1.1:53"
+                  "1.0.0.1:53"
+                ];
               };
             };
           };
@@ -93,10 +96,25 @@ in
         http.routers = {
           api = {
             rule = "Host(`tback.t-vo.us`)";
-            entrypoints = ["websecure"];
-            middlewares = ["dashboard-auth"];
+            entrypoints = [ "websecure" ];
+            middlewares = [ "dashboard-auth" ];
             service = "api@internal";
             tls.certResolver = "cloudflare";
+          };
+          uptime-kuma = {
+            rule = "Host(`uptime-kuma.t-vo.us`)";
+            entrypoints = [ "websecure" ];
+            service = "uptime-kuma";
+            tls.certResolver = "cloudflare";
+          };
+        };
+        http.services = {
+          uptime-kuma = {
+            loadBalancer = {
+              servers = [
+                { url = "http://localhost:3001"; }
+              ];
+            };
           };
         };
       };

@@ -38,7 +38,7 @@
 
             # Language support
             golang.go
-            hashicorp.terraform
+            # hashicorp.terraform
             helm-ls.helm-ls
             jnoortheen.nix-ide
             mrmlnc.vscode-json5
@@ -59,8 +59,8 @@
             fnando.linter
 
             # Remote development
-            ms-vscode-remote.remote-containers
-            ms-vscode-remote.remote-ssh
+            # ms-vscode-remote.remote-containers
+            # ms-vscode-remote.remote-sshq
 
             # Other
             eamodio.gitlens
@@ -70,7 +70,7 @@
             ms-kubernetes-tools.vscode-kubernetes-tools
             shipitsmarter.sops-edit
             gitlab.gitlab-workflow
-            github.copilot
+            # github.copilot
             oderwat.indent-rainbow
             johnpapa.vscode-peacock
             aaron-bond.better-comments

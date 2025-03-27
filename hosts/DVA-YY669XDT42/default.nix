@@ -108,6 +108,7 @@
 
     nixpkgs.config = {
       ruby.package = pkgs.ruby;
+      allowUnfree = true;
     };
   };
 }

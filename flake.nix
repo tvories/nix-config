@@ -135,6 +135,7 @@
           inherit system;
           overlays = builtins.attrValues overlays;
           config.allowUnfree = true;
+          allowUnfreePredicate = _: true;
         }
       );
     in

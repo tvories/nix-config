@@ -34,6 +34,10 @@ in
   ];
 
   config = {
+    nix.settings.trusted-users = [
+      "root"
+      "@wheel"
+    ];
     networking = {
       firewall.enable = false;
       hostName = hostname;
@@ -96,11 +100,6 @@ in
         "192.168.1.241"
       ];
     };
-
-    nix.settings.trusted-users = [
-      "root"
-      "@wheel"
-    ];
     users.users.taylor = {
       uid = 1000;
       name = "taylor";

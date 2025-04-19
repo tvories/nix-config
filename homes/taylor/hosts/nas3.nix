@@ -6,7 +6,8 @@
 }:
 {
   modules = {
-    kubernetes.enalbe = true;
+    kubernetes.enable = true;
+    development.enable = true;
     shell = {
       git = {
         enable = true;

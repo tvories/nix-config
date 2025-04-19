@@ -11,5 +11,6 @@
       enable = true;
       username = "Taylor Vories";
       email = "taylor@tmtech.me";
+    };
   };
 }

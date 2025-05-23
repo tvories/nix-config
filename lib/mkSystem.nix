@@ -65,6 +65,12 @@
       modules = [
         {
           nixpkgs.hostPlatform = system;
+          # nixpkgs.overlays = [
+          #   (self: super: {
+          #     nodejs = super.nodejs_22;
+          #     nodejs-slim = super.nodejs_22-slim;
+          #   })
+          # ];
           _module.args = {
             inherit inputs flake-packages;
           };

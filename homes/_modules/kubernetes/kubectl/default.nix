@@ -12,7 +12,7 @@ in
     (lib.mkIf cfg.enable {
       programs.fish = {
         shellAliases = {
-          k = "kubectl";
+          k = "kubecolor";
         };
       };
       home.packages = [

@@ -98,6 +98,7 @@
       pkgs.d2
       pkgs.vault
       pkgs.lens
+      pkgs.discord
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

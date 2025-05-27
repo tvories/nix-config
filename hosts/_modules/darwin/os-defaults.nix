@@ -1,6 +1,5 @@
-_:
-{
-  security.pam.enableSudoTouchIdAuth = true;
+_: {
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   environment = {
     pathsToLink = [ "/Applications" ];

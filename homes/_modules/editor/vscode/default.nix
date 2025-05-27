@@ -8,10 +8,8 @@ let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
 
   cfg = config.modules.editor.vscode;
-  userDir = if isDarwin then
-    "Library/Application Support/Code/User"
-  else
-    "${config.xdg.configHome}/Code/User";
+  userDir =
+    if isDarwin then "Library/Application Support/Code/User" else "${config.xdg.configHome}/Code/User";
   configFilePath = "${userDir}/settings.json";
 
   pathsToMakeWritable = lib.flatten [
@@ -23,11 +21,11 @@ in
     enable = lib.mkEnableOption "vscode";
     extensions = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [];
+      default = [ ];
     };
     userSettings = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
     };
   };
 
@@ -38,8 +36,11 @@ in
         package = pkgs.unstable.vscode;
         mutableExtensionsDir = true;
 
-        inherit (cfg) extensions;
-        inherit (cfg) userSettings;
+        profiles.default = {
+          inherit (cfg) extensions;
+          inherit (cfg) userSettings;
+        };
+
       };
 
       home.file = lib.genAttrs pathsToMakeWritable (_: {

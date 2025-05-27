@@ -1,5 +1,4 @@
-_:
-{
+_: {
   nix.gc = {
     automatic = true;
 
@@ -10,5 +9,4 @@ _:
     };
   };
 
-  services.nix-daemon.enable = true;
 }

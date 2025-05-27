@@ -1,6 +1,7 @@
 {
   ...
-}: {
+}:
+{
   imports = [
     ./fonts.nix
     ./homebrew.nix
@@ -10,5 +11,6 @@
 
   system = {
     stateVersion = 4; # nix-darwin stateVersion
+    primaryUser = "tvories";
   };
 }

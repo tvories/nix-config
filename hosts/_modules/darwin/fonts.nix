@@ -7,12 +7,14 @@
       monaspace
       atkinson-hyperlegible
       # nerdfonts
-      (nerdfonts.override {
-        fonts = [
-          "JetBrainsMono"
-          "DroidSansMono"
-        ];
-      })
+      # (nerdfonts.override {
+      #   fonts = [
+      #     "JetBrainsMono"
+      #     "DroidSansMono"
+      #   ];
+      # })
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.droid-sans-mono
     ];
   };
 }

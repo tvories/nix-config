@@ -76,7 +76,7 @@
             };
             forwardAgent = true;
           };
-          "enderpi.mcbadass.local" = {
+          "homebox.mcbadass.local" = {
             port = 22;
             user = "taylor";
             extraOptions = {

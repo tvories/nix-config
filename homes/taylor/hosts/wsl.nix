@@ -42,7 +42,7 @@
             checkHostIP = false;
             forwardAgent = true;
           };
-          "enderpi.mcbadass.local" = {
+          "homebox.mcbadass.local" = {
             port = 22;
             user = "taylor";
             identityFile = "/home/taylor/.ssh/taylor-1pw-key";

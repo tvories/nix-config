@@ -13,7 +13,7 @@ in
     # Host-specific
     ./disk-config.nix
     ./hardware-configuration.nix
-    ./3d-printing.nix
+    # ./3d-printing.nix
     # ./wireguard.nix
     # ./restic-server.nix
     # ./auto-reboot.nix
@@ -60,18 +60,17 @@ in
       );
       initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
       isNormalUser = true;
-      extraGroups =
-        [
-          "wheel"
-          "users"
-          "networkmanager"
-        ]
-        ++ ifGroupsExist [
-          "network"
-          "samba-users"
-          "backup-rw"
-          "docker"
-        ];
+      extraGroups = [
+        "wheel"
+        "users"
+        "networkmanager"
+      ]
+      ++ ifGroupsExist [
+        "network"
+        "samba-users"
+        "backup-rw"
+        "docker"
+      ];
     };
     users.groups.taylor = {
       gid = 1000;

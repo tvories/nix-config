@@ -217,6 +217,7 @@ in
             extraGroups = ifGroupsExist [
               "samba-users"
               "docs-rw"
+              "docker"
             ];
           };
         };

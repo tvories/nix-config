@@ -15,6 +15,7 @@ in
     ./disk-config.nix
     ./zfs.nix
     ./restic.nix
+    ./zerobyte.nix
 
     #TODO: Old config
     # Common imports

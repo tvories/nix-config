@@ -111,15 +111,14 @@ in
       );
       initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
       isNormalUser = true;
-      extraGroups =
-        [
-          "wheel"
-          "users"
-        ]
-        ++ ifGroupsExist [
-          "network"
-          "samba-users"
-        ];
+      extraGroups = [
+        "wheel"
+        "users"
+      ]
+      ++ ifGroupsExist [
+        "network"
+        "samba-users"
+      ];
     };
     users.groups.taylor = {
       gid = 1000;
@@ -155,6 +154,7 @@ in
         zfs-exporter.enable = true;
         openssh.enable = true;
         msmtp.enable = true;
+        docker.enable = true;
 
         samba = {
           enable = true;

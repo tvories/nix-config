@@ -118,6 +118,7 @@ in
       ++ ifGroupsExist [
         "network"
         "samba-users"
+        "docker"
       ];
     };
     users.groups.taylor = {
@@ -217,7 +218,6 @@ in
             extraGroups = ifGroupsExist [
               "samba-users"
               "docs-rw"
-              "docker"
             ];
           };
         };

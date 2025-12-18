@@ -39,7 +39,14 @@
       ];
     };
     programs.nix-ld.enable = true;
-    services.vscode-server.enable = true;
+    services.vscode-server = {
+      enable = true;
+      enableFHS = true;
+      extraRuntimeDependencies = with pkgs; [
+        libsecret
+      ];
+    };
+
     # system.stateVersion = "24.05";
     sops.age.keyFile = "/home/taylor/.config/sops/age/keys.txt";
 

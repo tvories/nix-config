@@ -9,7 +9,7 @@
         binutils
         coreutils
         curl
-        du-dust
+        dust
         envsubst
         findutils
         fish

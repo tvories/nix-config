@@ -11,7 +11,7 @@
     editor = {
       vscode = {
         enable = true;
-        userSettings = lib.importJSON ../config/editor/vscode/settings.json;
+        # userSettings = lib.importJSON ../config/editor/vscode/settings.json;
       };
     };
     shell = {

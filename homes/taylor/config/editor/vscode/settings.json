@@ -47,30 +47,6 @@
     "confirmDelete": false,
     "confirmDragAndDrop": false
   },
-  "files": {
-    "associations": {},
-    "autoSave": "onFocusChange",
-    "eol": "\n",
-    "insertFinalNewline": true,
-    "trimFinalNewlines": true,
-    "trimTrailingWhitespace": true
-  },
-  "git": {
-    "autofetch": true,
-    "confirmSync": false
-  },
-  "linter": {
-    "linters": {
-      "yamllint": {
-        "configFiles": [
-          ".yamllint.yml",
-          ".yamllint.yaml",
-          ".yamllint",
-          ".ci/yamllint/.yamllint.yaml"
-        ]
-      }
-    }
-  },
   "nix": {
     "enableLanguageServer": true,
     "serverPath": "nixd",

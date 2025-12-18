@@ -23,7 +23,7 @@
       };
 
       vscode = {
-        userSettings = lib.importJSON ./config/editor/vscode/settings.json;
+        # userSettings = lib.importJSON ./config/editor/vscode/settings.json;
         extensions =
           let
             inherit (inputs.nix-vscode-extensions.extensions.${pkgs.system}) vscode-marketplace;
@@ -76,6 +76,8 @@
             aaron-bond.better-comments
             takumii.markdowntable
             adamhartford.vscode-base64
+            dart-code.flutter
+            dart-code.dart-code
           ];
       };
     };

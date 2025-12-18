@@ -88,6 +88,7 @@
       pkgs.pdk
       pkgs.puppet-lint
       pkgs.ruby
+      pkgs.sqlite
 
       pkgs.powershell
       pkgs.openldap
@@ -99,6 +100,8 @@
       pkgs.vault
       pkgs.lens
       pkgs.discord
+      pkgs.jetbrains.goland
+      pkgs.windsurf
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

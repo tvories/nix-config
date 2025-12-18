@@ -21,7 +21,7 @@ in
       pre-commit
       shellcheck
       shfmt
-      yamllint
+      # yamllint
       unstable.helm-ls
       unstable.minio-client
       inputs.nix-inspect.packages.${pkgs.system}.default

@@ -12,7 +12,7 @@
       zerobyte = {
         image = "ghcr.io/nicotsx/zerobyte:v0.19";
         ports = [ "4096:4096" ];
-        restart = "unless-stopped";
+        autoStart = "true";
         environment = [
           "TZ=America/Denver"
         ];

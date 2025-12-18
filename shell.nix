@@ -1,6 +1,6 @@
 let
   fetchTarball = builtins.fetchTarball;
-  nixtar = fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/nixos-25.05.tar.gz"; };
+  nixtar = fetchTarball { url = "https://github.com/NixOS/nixpkgs/archive/nixos-25.11.tar.gz"; };
   nixtarUnstable = fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
   };

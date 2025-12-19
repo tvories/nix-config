@@ -157,6 +157,26 @@ in
         openssh.enable = true;
         msmtp.enable = true;
         docker.enable = true;
+        traefik = {
+          enable = true;
+          domain = "t-vo.us";
+          sans = [
+            "*.t-vo.us"
+            "nas3.t-vo.us"
+          ];
+          dashboardHost = "nas3.t-vo.us";
+          routers = {
+            zerobyte = {
+              rule = "Host(`zerobyte.t-vo.us`)";
+              service = "zerobyte";
+            };
+          };
+          services = {
+            zerobyte = {
+              url = "http://localhost:4096";
+            };
+          };
+        };
 
         samba = {
           enable = true;

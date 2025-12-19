@@ -10,6 +10,85 @@ in
 {
   options.modules.services.traefik = {
     enable = lib.mkEnableOption "traefik";
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      description = "Main domain for SSL certificate";
+      example = "t-vo.us";
+    };
+
+    sans = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [];
+      description = "Subject Alternative Names for SSL certificate";
+      example = ["*.t-vo.us" "uptime-kuma.t-vo.us"];
+    };
+
+    dashboardHost = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Hostname for traefik dashboard (null to disable)";
+      example = "tback.t-vo.us";
+    };
+
+    routers = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule {
+        options = {
+          rule = lib.mkOption {
+            type = lib.types.str;
+            description = "Router rule (e.g., Host(`subdomain.t-vo.us`))";
+          };
+          service = lib.mkOption {
+            type = lib.types.str;
+            description = "Service name to route to";
+          };
+          middlewares = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [];
+            description = "List of middleware names to apply";
+          };
+          entrypoints = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = ["websecure"];
+            description = "Entry points for this router";
+          };
+          tls = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Enable TLS for this router";
+          };
+        };
+      });
+      default = {};
+      description = "HTTP routers configuration";
+    };
+
+    services = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule {
+        options = {
+          url = lib.mkOption {
+            type = lib.types.str;
+            description = "Backend service URL";
+            example = "http://localhost:8080";
+          };
+        };
+      });
+      default = {};
+      description = "HTTP services configuration";
+    };
+
+    middlewares = lib.mkOption {
+      type = lib.types.attrsOf lib.types.attrs;
+      default = {};
+      description = "HTTP middlewares configuration";
+      example = {
+        auth = {
+          basicAuth = {
+            usersFile = "/path/to/users";
+          };
+        };
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -50,11 +129,8 @@ in
               certResolver = "cloudflare";
               domains = [
                 {
-                  main = "t-vo.us";
-                  sans = [
-                    "*.t-vo.us"
-                    "tback.t-vo.us"
-                  ];
+                  main = cfg.domain;
+                  sans = cfg.sans;
                 }
               ];
             };
@@ -70,7 +146,6 @@ in
         certificatesResolvers = {
           cloudflare = {
             acme = {
-              # email = "***";
               storage = "${config.services.traefik.dataDir}/acme.json";
               dnsChallenge = {
                 provider = "cloudflare";
@@ -83,40 +158,44 @@ in
           };
         };
         api.dashboard = true;
-        # api.insecure = true;
       };
       dynamicConfigOptions = {
-        http.middlewares = {
-          dashboard-auth = {
-            basicAuth = {
-              usersFile = "${config.sops.secrets.traefik-auth-file.path}";
+        http.middlewares = lib.mkMerge [
+          {
+            dashboard-auth = {
+              basicAuth = {
+                usersFile = "${config.sops.secrets.traefik-auth-file.path}";
+              };
             };
-          };
-        };
-        http.routers = {
-          api = {
-            rule = "Host(`tback.t-vo.us`)";
-            entrypoints = [ "websecure" ];
-            middlewares = [ "dashboard-auth" ];
-            service = "api@internal";
-            tls.certResolver = "cloudflare";
-          };
-          uptime-kuma = {
-            rule = "Host(`uptime-kuma.t-vo.us`)";
-            entrypoints = [ "websecure" ];
-            service = "uptime-kuma";
-            tls.certResolver = "cloudflare";
-          };
-        };
-        http.services = {
-          uptime-kuma = {
-            loadBalancer = {
-              servers = [
-                { url = "http://localhost:3001"; }
-              ];
+          }
+          cfg.middlewares
+        ];
+        http.routers = lib.mkMerge [
+          (lib.optionalAttrs (cfg.dashboardHost != null) {
+            api = {
+              rule = "Host(`${cfg.dashboardHost}`)";
+              entrypoints = [ "websecure" ];
+              middlewares = [ "dashboard-auth" ];
+              service = "api@internal";
+              tls.certResolver = "cloudflare";
             };
+          })
+          (lib.mapAttrs (name: routerCfg: {
+            rule = routerCfg.rule;
+            entrypoints = routerCfg.entrypoints;
+            service = routerCfg.service;
+            middlewares = routerCfg.middlewares;
+          } // lib.optionalAttrs routerCfg.tls {
+            tls.certResolver = "cloudflare";
+          }) cfg.routers)
+        ];
+        http.services = lib.mapAttrs (name: serviceCfg: {
+          loadBalancer = {
+            servers = [
+              { url = serviceCfg.url; }
+            ];
           };
-        };
+        }) cfg.services;
       };
     };
   };

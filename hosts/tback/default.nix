@@ -169,7 +169,26 @@ in
         smartctl-exporter.enable = true;
         msmtp.enable = true;
         docker.enable = true;
-        traefik.enable = true;
+        traefik = {
+          enable = true;
+          domain = "t-vo.us";
+          sans = [
+            "*.t-vo.us"
+            "tback.t-vo.us"
+          ];
+          dashboardHost = "tback.t-vo.us";
+          routers = {
+            uptime-kuma = {
+              rule = "Host(`uptime-kuma.t-vo.us`)";
+              service = "uptime-kuma";
+            };
+          };
+          services = {
+            uptime-kuma = {
+              url = "http://localhost:3001";
+            };
+          };
+        };
       };
       users = {
         additionalUsers = {

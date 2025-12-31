@@ -23,7 +23,7 @@
     RUSTFS_ROOT_PASSWORD=${config.sops.placeholder.rustfs-root-password}
   '';
 
-  config.virtualisation.oci-containers = {
+  virtualisation.oci-containers = {
     backend = "docker";
     containers = {
       rustfs = {

@@ -172,11 +172,11 @@ in
               service = "zerobyte";
             };
             rustfs-api = {
-              rule = "Host(`s3.t-vo.us`)";
+              rule = "Host(`s3.nas.t-vo.us`)";
               service = "rustfs-api";
             };
             rustfs-console = {
-              rule = "Host(`minio.t-vo.us`)";
+              rule = "Host(`minio.nas.t-vo.us`)";
               service = "rustfs-console";
             };
           };

@@ -30,6 +30,7 @@
     RUSTFS_ACCESS_KEY=${config.sops.placeholder.RUSTFS_ACCESS_KEY}
     RUSTFS_SECRET_KEY=${config.sops.placeholder.RUSTFS_SECRET_KEY}
     RUSTFS_VOLUMES=/data
+    RUSTFS_CONSOLE_ENABLE=true
   '';
 
   virtualisation.oci-containers = {

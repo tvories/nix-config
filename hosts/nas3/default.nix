@@ -16,6 +16,7 @@ in
     ./zfs.nix
     ./restic.nix
     ./zerobyte.nix
+    ./rustfs.nix
 
     #TODO: Old config
     # Common imports
@@ -170,10 +171,24 @@ in
               rule = "Host(`zerobyte.t-vo.us`)";
               service = "zerobyte";
             };
+            rustfs-api = {
+              rule = "Host(`s3.t-vo.us`)";
+              service = "rustfs-api";
+            };
+            rustfs-console = {
+              rule = "Host(`minio.t-vo.us`)";
+              service = "rustfs-console";
+            };
           };
           services = {
             zerobyte = {
               url = "http://localhost:4096";
+            };
+            rustfs-api = {
+              url = "http://localhost:9000";
+            };
+            rustfs-console = {
+              url = "http://localhost:9001";
             };
           };
         };
@@ -217,15 +232,16 @@ in
         };
         smartd.enable = true;
         smartctl-exporter.enable = true;
-        k3s = {
-          enable = true;
-          extraFlags = [
-            "--tls-san"
-            "nas.mcbadass.local"
-            "--flannel-backend=vxlan"
-            "--disable-network-policy"
-          ];
-        };
+        # k3s disabled in favor of native services with traefik
+        # k3s = {
+        #   enable = true;
+        #   extraFlags = [
+        #     "--tls-san"
+        #     "nas.mcbadass.local"
+        #     "--flannel-backend=vxlan"
+        #     "--disable-network-policy"
+        #   ];
+        # };
       };
       users = {
         additionalUsers = {

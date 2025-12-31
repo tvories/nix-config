@@ -84,9 +84,6 @@
 
     shell = {
       fish.enable = true;
-
-    };
-    shell = {
       gcloud = {
         enable = true;
       };

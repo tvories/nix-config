@@ -6,36 +6,38 @@
 }:
 
 {
-  config.virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-      zerobyte = {
-        image = "ghcr.io/nicotsx/zerobyte:v0.20";
-        ports = [ "4096:4096" ];
-        autoStart = true;
-        environment = {
-          TZ = "America/Denver";
+  config = {
+    virtualisation.oci-containers = {
+      backend = "docker";
+      containers = {
+        zerobyte = {
+          image = "ghcr.io/nicotsx/zerobyte:v0.20";
+          ports = [ "4096:4096" ];
+          autoStart = true;
+          environment = {
+            TZ = "America/Denver";
+          };
+          volumes = [
+            "/etc/localtime:/etc/localtime:ro"
+            "/var/lib/zerobyte:/var/lib/zerobyte"
+            "/ook/minio:/mydata/minio"
+            "/ook/Photos:/mydata/Photos"
+            "/ook/Documents:/mydata/Documents"
+            "/ook/k8s:/mydata/k8s"
+            "/ook/Backup:/mydata/Backup"
+          ];
         };
-        volumes = [
-          "/etc/localtime:/etc/localtime:ro"
-          "/var/lib/zerobyte:/var/lib/zerobyte"
-          "/ook/minio:/mydata/minio"
-          "/ook/Photos:/mydata/Photos"
-          "/ook/Documents:/mydata/Documents"
-          "/ook/k8s:/mydata/k8s"
-          "/ook/Backup:/mydata/Backup"
-        ];
       };
     };
-  };
 
-  # Traefik configuration for zerobyte
-  modules.services.traefik.routers.zerobyte = {
-    rule = "Host(`zerobyte.t-vo.us`)";
-    service = "zerobyte";
-  };
+    # Traefik configuration for zerobyte
+    modules.services.traefik.routers.zerobyte = {
+      rule = "Host(`zerobyte.t-vo.us`)";
+      service = "zerobyte";
+    };
 
-  modules.services.traefik.services.zerobyte = {
-    url = "http://localhost:4096";
+    modules.services.traefik.services.zerobyte = {
+      url = "http://localhost:4096";
+    };
   };
 }

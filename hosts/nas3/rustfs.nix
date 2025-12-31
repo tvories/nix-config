@@ -43,12 +43,6 @@
           "9001:9001"  # Console/Web UI
         ];
         autoStart = true;
-        cmd = [
-          "server"
-          "/data"
-          "--console-address"
-          ":9001"
-        ];
         environmentFiles = [
           config.sops.templates."rustfs.env".path
         ];

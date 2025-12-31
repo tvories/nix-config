@@ -16,6 +16,12 @@
   sops.secrets.rustfs-root-password = {
     sopsFile = ./secrets.sops.yaml;
   };
+  sops.secrets.RUSTFS_ACCESS_KEY = {
+    sopsFile = ./secrets.sops.yaml;
+  };
+  sops.secrets.RUSTFS_SECRET_KEY = {
+    sopsFile = ./secrets.sops.yaml;
+  };
 
   # Create environment file with secrets
   sops.templates."rustfs.env".content = ''

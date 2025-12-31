@@ -8,6 +8,21 @@
 {
   # RustFS S3-compatible object storage
   # Based on: https://github.com/rustfs/rustfs
+
+  # Configure sops secrets
+  sops.secrets.rustfs-root-user = {
+    sopsFile = ./secrets.sops.yaml;
+  };
+  sops.secrets.rustfs-root-password = {
+    sopsFile = ./secrets.sops.yaml;
+  };
+
+  # Create environment file with secrets
+  sops.templates."rustfs.env".content = ''
+    RUSTFS_ROOT_USER=${config.sops.placeholder.rustfs-root-user}
+    RUSTFS_ROOT_PASSWORD=${config.sops.placeholder.rustfs-root-password}
+  '';
+
   config.virtualisation.oci-containers = {
     backend = "docker";
     containers = {
@@ -24,11 +39,9 @@
           "--console-address"
           ":9001"
         ];
-        environment = {
-          # RustFS root credentials
-          RUSTFS_ROOT_USER = "tadmin";
-          RUSTFS_ROOT_PASSWORD = "changeme123";  # TODO: Move to sops secrets
-        };
+        environmentFiles = [
+          config.sops.templates."rustfs.env".path
+        ];
         volumes = [
           "/ook/minio:/data"
         ];

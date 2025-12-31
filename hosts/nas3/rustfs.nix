@@ -52,4 +52,23 @@
       };
     };
   };
+
+  # Traefik configuration for rustfs
+  modules.services.traefik.routers.rustfs-api = {
+    rule = "Host(`s3.nas.t-vo.us`)";
+    service = "rustfs-api";
+  };
+
+  modules.services.traefik.routers.rustfs-console = {
+    rule = "Host(`minio.nas.t-vo.us`)";
+    service = "rustfs-console";
+  };
+
+  modules.services.traefik.services.rustfs-api = {
+    url = "http://localhost:9000";
+  };
+
+  modules.services.traefik.services.rustfs-console = {
+    url = "http://localhost:9001";
+  };
 }

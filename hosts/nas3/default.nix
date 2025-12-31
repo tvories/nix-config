@@ -166,31 +166,9 @@ in
             "nas3.t-vo.us"
           ];
           dashboardHost = "nas3.t-vo.us";
-          routers = {
-            zerobyte = {
-              rule = "Host(`zerobyte.t-vo.us`)";
-              service = "zerobyte";
-            };
-            rustfs-api = {
-              rule = "Host(`s3.nas.t-vo.us`)";
-              service = "rustfs-api";
-            };
-            rustfs-console = {
-              rule = "Host(`minio.nas.t-vo.us`)";
-              service = "rustfs-console";
-            };
-          };
-          services = {
-            zerobyte = {
-              url = "http://localhost:4096";
-            };
-            rustfs-api = {
-              url = "http://localhost:9000";
-            };
-            rustfs-console = {
-              url = "http://localhost:9001";
-            };
-          };
+          # Routers and services are defined in their respective service modules:
+          # - zerobyte.nix
+          # - rustfs.nix
         };
 
         samba = {

@@ -10,7 +10,7 @@
     backend = "docker";
     containers = {
       zerobyte = {
-        image = "ghcr.io/nicotsx/zerobyte:v0.19";
+        image = "ghcr.io/nicotsx/zerobyte:v0.20";
         ports = [ "4096:4096" ];
         autoStart = true;
         environment = {
@@ -27,5 +27,15 @@
         ];
       };
     };
+  };
+
+  # Traefik configuration for zerobyte
+  modules.services.traefik.routers.zerobyte = {
+    rule = "Host(`zerobyte.t-vo.us`)";
+    service = "zerobyte";
+  };
+
+  modules.services.traefik.services.zerobyte = {
+    url = "http://localhost:4096";
   };
 }

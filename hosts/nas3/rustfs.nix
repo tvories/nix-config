@@ -21,9 +21,12 @@
   sops.templates."rustfs.env".content = ''
     RUSTFS_ROOT_USER=${config.sops.placeholder.rustfs-root-user}
     RUSTFS_ROOT_PASSWORD=${config.sops.placeholder.rustfs-root-password}
+    RUSTFS_ACCESS_KEY=${config.sops.placeholder.RUSTFS_ACCESS_KEY}
+    RUSTFS_SECRET_KEY=${config.sops.placeholder.RUSTFS_SECRET_KEY}
+    RUSTFS_VOLUMES=/data
   '';
 
-  virtualisation.oci-containers = {
+  config.virtualisation.oci-containers = {
     backend = "docker";
     containers = {
       rustfs = {
@@ -47,5 +50,4 @@
         ];
       };
     };
-  };
 }

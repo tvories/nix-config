@@ -6,19 +6,23 @@
 }:
 
 {
-  # config.virtualisation.oci-containers = {
-  #   backend = "docker";
-  #   containers = {
-  #     uptime-kuma = {
-  #       image = "louislam/uptime-kuma:1.23.16-alpine";
-  #       ports = [ "3001:3001" ];
-  #     };
-  #   };
-  # };
-  services.uptime-kuma = {
-    enable = true;
-    settings = {
-      PORT = "3001";
+  # Uptime Kuma monitoring service
+  config = {
+    services.uptime-kuma = {
+      enable = true;
+      settings = {
+        PORT = "3001";
+      };
+    };
+
+    # Traefik configuration for uptime-kuma
+    modules.services.traefik.routers.uptime-kuma = {
+      rule = "Host(`uptime-kuma.t-vo.us`)";
+      service = "uptime-kuma";
+    };
+
+    modules.services.traefik.services.uptime-kuma = {
+      url = "http://localhost:3001";
     };
   };
 }

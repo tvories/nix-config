@@ -177,17 +177,8 @@ in
             "tback.t-vo.us"
           ];
           dashboardHost = "tback.t-vo.us";
-          routers = {
-            uptime-kuma = {
-              rule = "Host(`uptime-kuma.t-vo.us`)";
-              service = "uptime-kuma";
-            };
-          };
-          services = {
-            uptime-kuma = {
-              url = "http://localhost:3001";
-            };
-          };
+          # Routers and services are defined in their respective service modules:
+          # - uptime-kuma.nix
         };
       };
       users = {

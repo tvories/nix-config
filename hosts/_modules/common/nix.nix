@@ -48,7 +48,8 @@
     # garbage collection
     gc = {
       automatic = true;
-      options = "--delete-older-than 2d";
+      dates = "weekly";
+      options = "--delete-older-than 7d";
     };
   };
 }

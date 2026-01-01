@@ -41,7 +41,7 @@ in
       "@wheel"
     ];
     networking = {
-      firewall.enable = false;
+      firewall.enable = true;  # Enabled for Technitium (ports configured by module)
       hostName = hostname;
       domain = "mcbadass.local";
       dhcpcd.enable = true;
@@ -110,6 +110,12 @@ in
         docker.enable = true;
         smartd.enable = true;
         smartctl-exporter.enable = true;
+        technitium = {
+          enable = true;
+          domain = "dns.mcbadass.local";
+          enableDhcp = true;
+          openFirewall = true;
+        };
       };
     };
     boot.kernelParams = [

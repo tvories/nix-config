@@ -22,5 +22,6 @@
     ./zfs-exporter
     ./docker
     ./traefik
+    ./technitium
   ];
 }

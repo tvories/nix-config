@@ -110,11 +110,24 @@ in
         docker.enable = true;
         smartd.enable = true;
         smartctl-exporter.enable = true;
+        traefik = {
+          enable = true;
+          domain = "t-vo.us";
+          sans = [
+            "*.t-vo.us"
+            "homebox.t-vo.us"
+          ];
+          dashboardHost = "homebox.t-vo.us";
+        };
         technitium = {
           enable = true;
           domain = "dns.mcbadass.local";
           enableDhcp = true;
           openFirewall = true;
+          traefik = {
+            enable = true;
+            host = "tdns.t-vo.us";
+          };
         };
       };
     };

@@ -59,6 +59,21 @@ in
       default = true;
       description = "Open firewall ports for DNS, DHCP, and web interface";
     };
+
+    traefik = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable Traefik routing for Technitium web interface";
+      };
+
+      host = lib.mkOption {
+        type = lib.types.str;
+        default = "tdns.${cfg.domain}";
+        description = "Hostname for Traefik routing";
+        example = "tdns.t-vo.us";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -104,6 +119,18 @@ in
       ] ++ lib.optionals cfg.enableDhcp [
         cfg.dhcpPort
       ];
+    };
+
+    # Traefik configuration
+    modules.services.traefik = lib.mkIf cfg.traefik.enable {
+      routers.technitium = {
+        rule = "Host(`${cfg.traefik.host}`)";
+        service = "technitium";
+      };
+
+      services.technitium = {
+        url = "http://localhost:${toString cfg.webPort}";
+      };
     };
   };
 }

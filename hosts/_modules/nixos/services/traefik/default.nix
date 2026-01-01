@@ -198,5 +198,13 @@ in
         }) cfg.services;
       };
     };
+
+    # Open firewall ports for Traefik
+    networking.firewall = {
+      allowedTCPPorts = [
+        80   # HTTP
+        443  # HTTPS
+      ];
+    };
   };
 }

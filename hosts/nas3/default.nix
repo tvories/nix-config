@@ -14,7 +14,7 @@ in
     ./hardware-configuration.nix
     ./disk-config.nix
     ./zfs.nix
-    ./restic.nix
+    # ./restic.nix
     ./zerobyte.nix
     ./rustfs.nix
 

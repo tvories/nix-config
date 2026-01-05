@@ -48,7 +48,7 @@
             config.sops.templates."rustfs.env".path
           ];
           volumes = [
-            "/ook/minio:/data"
+            "/ook/rustfs:/data"
           ];
         };
       };

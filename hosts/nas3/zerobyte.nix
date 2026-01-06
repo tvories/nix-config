@@ -25,6 +25,7 @@
             "/ook/Documents:/mydata/Documents"
             "/ook/k8s:/mydata/k8s"
             "/ook/Backup:/mydata/Backup"
+            "/ook/rustfs:/mydata/rustfs"
           ];
         };
       };

@@ -44,9 +44,57 @@ in
       firewall.enable = true;  # Enabled for Technitium (ports configured by module)
       hostName = hostname;
       domain = "mcbadass.local";
-      dhcpcd.enable = true;
-      # wireless.enable  = true;
-      networkmanager.enable = true;
+      dhcpcd.enable = false;
+      interfaces.enp2s0 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.1.43";
+            prefixLength = 24;
+          }
+          {
+            address = "192.168.1.243";
+            prefixLength = 24;
+          }
+          # To be uncommented when it's time to ditch AD DNS
+          # {
+          #   address = "192.168.1.240";
+          #   prefixLength = 24;
+          # }
+        ];
+      };
+      vlans = {
+        # Main Network
+        vlan20 = {
+          id = 20;
+          interface = "enp2s0";
+        };
+        # IOT Network
+        vlan50 = {
+          id = 50;
+          interface = "enp2s0";
+        };
+      };
+      interfaces.vlan20 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.20.243";
+            prefixLength = 24;
+          }
+        ];
+      };
+      interfaces.vlan50 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.50.243";
+            prefixLength = 24;
+          }
+        ];
+      };
+      defaultGateway = "192.168.1.1";
+      nameservers = [
+        "192.168.1.243"  # Self (after Technitium is running)
+        "1.1.1.1"        # Fallback
+      ];
     };
 
     users.users.taylor = {
@@ -63,7 +111,6 @@ in
       extraGroups = [
         "wheel"
         "users"
-        "networkmanager"
       ]
       ++ ifGroupsExist [
         "network"

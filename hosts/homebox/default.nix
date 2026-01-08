@@ -145,6 +145,7 @@ in
     environment.systemPackages = with pkgs; [
       # cryptsetup
       usbutils
+      dnsutils
       # libraspberrypi
       # raspberrypi-eeprom
     ];

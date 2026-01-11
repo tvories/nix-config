@@ -55,11 +55,10 @@ in
             address = "192.168.1.243";
             prefixLength = 24;
           }
-          # To be uncommented when it's time to ditch AD DNS
-          # {
-          #   address = "192.168.1.240";
-          #   prefixLength = 24;
-          # }
+          {
+            address = "192.168.1.240";
+            prefixLength = 24;
+          }
         ];
       };
       vlans = {
@@ -92,7 +91,7 @@ in
       };
       defaultGateway = "192.168.1.1";
       nameservers = [
-        "192.168.1.243"  # Self (after Technitium is running)
+        "192.168.1.243"  # Self
         "1.1.1.1"        # Fallback
       ];
     };

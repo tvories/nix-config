@@ -61,34 +61,34 @@ in
           }
         ];
       };
-      vlans = {
-        # Main Network
-        vlan20 = {
-          id = 20;
-          interface = "enp2s0";
-        };
-        # IOT Network
-        vlan50 = {
-          id = 50;
-          interface = "enp2s0";
-        };
-      };
-      interfaces.vlan20 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.20.243";
-            prefixLength = 24;
-          }
-        ];
-      };
-      interfaces.vlan50 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.50.243";
-            prefixLength = 24;
-          }
-        ];
-      };
+      # vlans = {
+      #   # Main Network
+      #   vlan20 = {
+      #     id = 20;
+      #     interface = "enp2s0";
+      #   };
+      #   # IOT Network
+      #   vlan50 = {
+      #     id = 50;
+      #     interface = "enp2s0";
+      #   };
+      # };
+      # interfaces.vlan20 = {
+      #   ipv4.addresses = [
+      #     {
+      #       address = "192.168.20.243";
+      #       prefixLength = 24;
+      #     }
+      #   ];
+      # };
+      # interfaces.vlan50 = {
+      #   ipv4.addresses = [
+      #     {
+      #       address = "192.168.50.243";
+      #       prefixLength = 24;
+      #     }
+      #   ];
+      # };
       defaultGateway = "192.168.1.1";
       nameservers = [
         "192.168.1.243"  # Self
@@ -168,13 +168,14 @@ in
         };
         technitium = {
           enable = true;
-          domain = "tdns.mcbadass.local";
+          domain = "dns.mcbadass.local";
           enableDhcp = true;
           openFirewall = true;
           traefik = {
             enable = true;
             host = "tdns.t-vo.us";
           };
+          image = "technitium/dns-server:14.3.0";
         };
       };
     };

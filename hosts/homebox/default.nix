@@ -179,7 +179,7 @@ in
         };
         # Traefik configuration for zerobyte
         traefik.routers.dns-cluster = {
-          rule = "Host(`dns1.dns-cluster.t-vo.us`)";
+          rule = "Host(`dns.dns-cluster.t-vo.us`)";
           service = "dns-cluster";
         };
 

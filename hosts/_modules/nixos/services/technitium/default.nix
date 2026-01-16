@@ -35,6 +35,12 @@ in
       description = "Port for DHCP service";
     };
 
+    clusterPort = lib.mkOption {
+      type = lib.types.port;
+      default = 53443;
+      description = "Port for cluster service";
+    };
+
     enableDhcp = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -69,9 +75,9 @@ in
 
       host = lib.mkOption {
         type = lib.types.str;
-        default = "tdns.${cfg.domain}";
+        default = "dns.${cfg.domain}";
         description = "Hostname for Traefik routing";
-        example = "tdns.t-vo.us";
+        example = "dns.t-vo.us";
       };
     };
   };
@@ -86,6 +92,7 @@ in
             "${toString cfg.webPort}:5380"
             "${toString cfg.dnsPort}:53/tcp"
             "${toString cfg.dnsPort}:53/udp"
+            "${toString cfg.clusterPort}:53443/udp"
           ] ++ lib.optionals cfg.enableDhcp [
             "${toString cfg.dhcpPort}:67/udp"
           ];
@@ -113,6 +120,7 @@ in
       allowedTCPPorts = [
         cfg.dnsPort
         cfg.webPort
+        cfg.clusterPort
       ];
       allowedUDPPorts = [
         cfg.dnsPort

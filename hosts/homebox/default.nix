@@ -168,7 +168,7 @@ in
         };
         technitium = {
           enable = true;
-          domain = "dns.mcbadass.local";
+          domain = "tdns.mcbadass.local";
           enableDhcp = true;
           openFirewall = true;
           traefik = {

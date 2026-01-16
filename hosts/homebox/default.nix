@@ -178,12 +178,12 @@ in
           image = "technitium/dns-server:14.3.0";
         };
         # Traefik configuration for zerobyte
-        modules.services.traefik.routers.dns-cluster = {
+        traefik.routers.dns-cluster = {
           rule = "Host(`dns1.dns-cluster.t-vo.us`)";
           service = "dns-cluster";
         };
 
-        modules.services.traefik.services.dns-cluster = {
+        traefik.services.dns-cluster = {
           url = "http://localhost:53443";
         };
       };

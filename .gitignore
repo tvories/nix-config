@@ -5,3 +5,5 @@ Thumbs.db
 result
 .bundle
 vendor
+.venv/
+.vscode

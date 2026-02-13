@@ -48,7 +48,9 @@
     # garbage collection
     gc = {
       automatic = true;
-      dates = "weekly";
+      interval = {
+        Day = 7;
+      };
       options = "--delete-older-than 7d";
     };
   };

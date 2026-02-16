@@ -22,10 +22,12 @@ in
   config = lib.mkIf cfg.enable {
     modules.services.podman.enable = true;
 
-    system.activationScripts.makeOnePasswordConnectDataDir = lib.stringAfter [ "var" ] ''
-      mkdir -p "${cfg.dataDir}"
-      chown -R 999:999 ${cfg.dataDir}
-    '';
+    stdenv.hostPlatform.system.activationScripts.makeOnePasswordConnectDataDir =
+      lib.stringAfter [ "var" ]
+        ''
+          mkdir -p "${cfg.dataDir}"
+          chown -R 999:999 ${cfg.dataDir}
+        '';
 
     virtualisation.oci-containers.containers = {
       onepassword-connect-api = {

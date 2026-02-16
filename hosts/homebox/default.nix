@@ -41,7 +41,7 @@ in
       "@wheel"
     ];
     networking = {
-      firewall.enable = true;  # Enabled for Technitium (ports configured by module)
+      firewall.enable = true; # Enabled for Technitium (ports configured by module)
       hostName = hostname;
       domain = "mcbadass.local";
       dhcpcd.enable = false;
@@ -91,8 +91,8 @@ in
       # };
       defaultGateway = "192.168.1.1";
       nameservers = [
-        "192.168.1.243"  # Self
-        "1.1.1.1"        # Fallback
+        "192.168.1.243" # Self
+        "1.1.1.1" # Fallback
       ];
     };
 
@@ -136,7 +136,7 @@ in
       }
     ];
 
-    system.activationScripts.postActivation.text = ''
+    stdenv.hostPlatform.system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
     '';

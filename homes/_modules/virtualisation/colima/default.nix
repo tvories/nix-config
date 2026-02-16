@@ -24,14 +24,16 @@ in
           };
           ProgramArguments = lib.mkMerge [
             [
-            "${package}/bin/colima"
-            "start"
-            "--foreground"
+              "${package}/bin/colima"
+              "start"
+              "--foreground"
             ]
 
-            (lib.mkIf (pkgs.system == "aarch64-darwin") [
-              "--arch" "aarch64"
-              "--vm-type" "vz"
+            (lib.mkIf (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") [
+              "--arch"
+              "aarch64"
+              "--vm-type"
+              "vz"
               "--vz-rosetta"
             ])
           ];

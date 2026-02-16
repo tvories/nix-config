@@ -111,17 +111,16 @@ in
       );
       initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
       isNormalUser = true;
-      extraGroups =
-        [
-          "wheel"
-          "users"
-        ]
-        ++ ifGroupsExist [
-          "network"
-          "samba-users"
-          "backup-rw"
-          "docker"
-        ];
+      extraGroups = [
+        "wheel"
+        "users"
+      ]
+      ++ ifGroupsExist [
+        "network"
+        "samba-users"
+        "backup-rw"
+        "docker"
+      ];
     };
     users.groups.taylor = {
       gid = 1000;
@@ -141,7 +140,7 @@ in
       }
     ];
 
-    system.activationScripts.postActivation.text = ''
+    stdenv.hostPlatform.system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
     '';

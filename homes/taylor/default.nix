@@ -17,7 +17,7 @@
     editor = {
       nvim = {
         enable = true;
-        package = flake-packages.${pkgs.system}.nvim;
+        package = flake-packages.${pkgs.stdenv.hostPlatform.system}.nvim;
         makeDefaultEditor = true;
 
       };
@@ -26,7 +26,9 @@
         # userSettings = lib.importJSON ./config/editor/vscode/settings.json;
         extensions =
           let
-            inherit (inputs.nix-vscode-extensions.extensions.${pkgs.system}) vscode-marketplace;
+            inherit (inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system})
+              vscode-marketplace
+              ;
           in
           with vscode-marketplace;
           [

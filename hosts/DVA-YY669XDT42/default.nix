@@ -6,12 +6,6 @@
 }:
 {
   config = {
-    # networking = {
-    #   computerName = "Bernd's MacBook";
-    #   hostName = hostname;
-    #   localHostName = hostname;
-    # };
-
     users.users.tvories = {
       name = "tvories";
       home = "/Users/tvories";
@@ -20,6 +14,7 @@
         builtins.readFile ../../homes/taylor/config/ssh/ssh.pub
       );
     };
+    ids.gids.nixbld = 350;
 
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells

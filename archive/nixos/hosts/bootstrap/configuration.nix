@@ -1,10 +1,17 @@
 # This configuration lets me use an iso file to bring up a system with an ssh key
-# 
-
-{ config, pkgs, lib, home-manager, sops-nix, ... }:
+#
 
 {
-  imports = [  ];
+  config,
+  pkgs,
+  lib,
+  home-manager,
+  sops-nix,
+  ...
+}:
+
+{
+  imports = [ ];
 
   boot.loader.grub = {
     efiSupport = true;
@@ -29,5 +36,5 @@
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  system.stateVersion = "24.05";
+  stdenv.hostPlatform.system.stateVersion = "25.11";
 }

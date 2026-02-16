@@ -4,7 +4,7 @@
   config = {
     environment.systemPackages =
       with pkgs;
-      with flake-packages.${pkgs.system};
+      with flake-packages.${pkgs.stdenv.hostPlatform.system};
       [
         byobu
         ncdu

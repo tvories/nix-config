@@ -6,7 +6,6 @@
       isRpi = system == "aarch64-linux";
     in
     inputs.nixpkgs.lib.nixosSystem {
-      inherit system;
       pkgs = import inputs.nixpkgs {
         inherit system;
         overlays = builtins.attrValues overlays;
@@ -53,7 +52,6 @@
   mkDarwinSystem =
     system: hostname: flake-packages:
     inputs.nix-darwin.lib.darwinSystem {
-      inherit system;
       pkgs = import inputs.nixpkgs {
         inherit system;
         overlays = builtins.attrValues overlays;
@@ -84,7 +82,7 @@
             sharedModules = [
               inputs.mac-app-util.homeManagerModules.default
               inputs.sops-nix.homeManagerModules.sops
-              inputs.nixvim.homeManagerModules.nixvim
+              inputs.nixvim.homeModules.nixvim
               inputs.catppuccin.homeManagerModules.catppuccin
             ];
             extraSpecialArgs = {

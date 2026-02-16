@@ -25,6 +25,13 @@
         hash = "sha256-aL7b/q9z99hr4qfZm8+9QJPYKfUncIk5Ga4XTAsjV8o=";
       };
     });
+    vscode = prev.vscode.overrideAttrs (old: {
+      installPhase = "whoami\n" + old.installPhase;
+    });
+    # Do the same for windsurf if it's still failing
+    windsurf = prev.windsurf.overrideAttrs (old: {
+      installPhase = "whoami\n" + old.installPhase;
+    });
   };
 
   # The unstable nixpkgs set (declared in the flake inputs) will

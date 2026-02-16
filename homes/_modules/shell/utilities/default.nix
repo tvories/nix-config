@@ -3,7 +3,7 @@
   config = {
     home.packages =
       with pkgs;
-      with flake-packages.${pkgs.system};
+      with flake-packages.${pkgs.stdenv.hostPlatform.system};
       [
         any-nix-shell
         binutils

@@ -21,10 +21,14 @@ in
 
     programs.ssh = {
       enable = true;
-      inherit (cfg) matchBlocks;
+      enableDefaultConfig = true;
 
-      controlMaster = "auto";
-      controlPath = "~/.ssh/control/%C";
+      matchBlocks = cfg.matchBlocks // {
+        "*" = {
+          controlMaster = "auto";
+          controlPath = "~/.ssh/control/%C";
+        };
+      };
 
       includes = [
         "config.d/*"

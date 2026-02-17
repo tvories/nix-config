@@ -7,16 +7,30 @@
 
 {
   config = {
+    # Configure sops secret for zerobyte
+    sops.secrets.zerobyte-app-secret = {
+      sopsFile = ./secrets.sops.yaml;
+    };
+
+    # Create environment file with secrets
+    sops.templates."zerobyte.env".content = ''
+      APP_SECRET=${config.sops.placeholder.zerobyte-app-secret}
+    '';
+
     virtualisation.oci-containers = {
       backend = "docker";
       containers = {
         zerobyte = {
-          image = "ghcr.io/nicotsx/zerobyte:v0.28.1";
+          image = "ghcr.io/nicotsx/zerobyte:v0.28.2";
           ports = [ "4096:4096" ];
           autoStart = true;
           environment = {
             TZ = "America/Denver";
+            BASE_URL = "https://zerobyte.t-vo.us";
           };
+          environmentFiles = [
+            config.sops.templates."zerobyte.env".path
+          ];
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
             "/var/lib/zerobyte:/var/lib/zerobyte"

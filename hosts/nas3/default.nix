@@ -47,8 +47,8 @@ in
       "@wheel"
     ];
 
-    # Allow SSH to accept NIX_REMOTE environment variable
-    services.openssh.settings.AcceptEnv = "NIX_REMOTE";
+    # Set NIX_REMOTE for all SSH sessions (server-side)
+    services.openssh.settings.SetEnv = "NIX_REMOTE=daemon";
     networking = {
       firewall.enable = false;
       hostName = hostname;

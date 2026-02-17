@@ -16,7 +16,7 @@ in
     ./zfs.nix
     # ./restic.nix
     ./zerobyte.nix
-    ./minio.nix
+    # ./minio.nix
     ./rustfs.nix
 
     #TODO: Old config

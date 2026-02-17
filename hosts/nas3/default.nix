@@ -37,18 +37,13 @@ in
   ];
 
   config = {
-    # Ensure the daemon is always used for nix operations
-    environment.variables.NIX_REMOTE = "daemon";
+    # Set NIX_REMOTE for all SSH sessions to fix remote nix-copy-closure
+    services.openssh.settings.SetEnv = "NIX_REMOTE=daemon";
 
-    # Explicitly trust taylor for nix operations
     nix.settings.trusted-users = [
       "root"
-      "taylor"
       "@wheel"
     ];
-
-    # Set NIX_REMOTE for all SSH sessions (server-side)
-    services.openssh.settings.SetEnv = "NIX_REMOTE=daemon";
     networking = {
       firewall.enable = false;
       hostName = hostname;
@@ -135,20 +130,20 @@ in
     users.groups.taylor = {
       gid = 1000;
     };
-    security.sudo.extraRules = [
-      {
-        users = [ "taylor" ];
-        commands = [
-          {
-            command = "ALL";
-            options = [
-              "SETENV"
-              "NOPASSWD"
-            ];
-          }
-        ];
-      }
-    ];
+    # security.sudo.extraRules = [
+    #   {
+    #     users = [ "taylor" ];
+    #     commands = [
+    #       {
+    #         command = "ALL";
+    #         options = [
+    #           "SETENV"
+    #           "NOPASSWD"
+    #         ];
+    #       }
+    #     ];
+    #   }
+    # ];
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor

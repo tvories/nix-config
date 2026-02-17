@@ -11,7 +11,7 @@
       backend = "docker";
       containers = {
         zerobyte = {
-          image = "ghcr.io/nicotsx/zerobyte:v0.22.0";
+          image = "ghcr.io/nicotsx/zerobyte:v0.28.1";
           ports = [ "4096:4096" ];
           autoStart = true;
           environment = {

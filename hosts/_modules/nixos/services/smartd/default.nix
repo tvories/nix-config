@@ -21,7 +21,7 @@ in
         '';
         notifications = {
           mail = {
-            enable = false;
+            enable = true;
           };
           wall.enable = false;
         };

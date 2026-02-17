@@ -38,10 +38,10 @@
       backend = "docker";
       containers = {
         rustfs = {
-          image = "rustfs/rustfs:1.0.0-alpha.78";
+          image = "rustfs/rustfs:1.0.0-alpha.83";
           ports = [
-            "9000:9000"  # S3 API
-            "9001:9001"  # Console/Web UI
+            "9000:9000" # S3 API
+            "9001:9001" # Console/Web UI
           ];
           autoStart = true;
           environmentFiles = [

@@ -3,7 +3,5 @@ _: {
   boot.loader.grub.configurationLimit = 10;
   boot.loader.systemd-boot.configurationLimit = 10;
 
-  nix.gc = {
-    dates = "weekly";
-  };
+  # GC settings are in common/nix.nix
 }

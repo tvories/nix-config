@@ -1,8 +1,12 @@
 {
   inputs,
   lib,
+  pkgs,
   ...
 }:
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+in
 {
   nix = {
     settings = {
@@ -48,10 +52,23 @@
     # garbage collection
     gc = {
       automatic = true;
-      interval = {
-        Day = 7;
-      };
       options = "--delete-older-than 7d";
-    };
+    }
+    // (
+      if isDarwin then
+        {
+          # nix-darwin uses launchd interval
+          interval = {
+            Weekday = 0;
+            Hour = 2;
+            Minute = 0;
+          };
+        }
+      else
+        {
+          # NixOS uses systemd dates
+          dates = "weekly";
+        }
+    );
   };
 }

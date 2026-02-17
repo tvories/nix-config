@@ -1,12 +1,3 @@
 _: {
-  nix.gc = {
-    automatic = true;
-
-    interval = {
-      Weekday = 0;
-      Hour = 2;
-      Minute = 0;
-    };
-  };
-
+  # GC settings are in common/nix.nix
 }

@@ -13,12 +13,13 @@ in
     # Host-specific
     ./hardware-configuration.nix
     ./disk-config.nix
-    # ./secrets.nix
+    # ./zfs.nix
+    # ./zerobyte.nix
+    # ./minio.nix
+    # ./rustfs.nix
 
     #TODO: Old config
-    # ./zfs.nix
-
-    # # Common imports
+    # Common imports
     # ../common/nixos
     # ../common/nixos/users/taylor
     # ../common/nixos/users/tadmin
@@ -30,14 +31,15 @@ in
     # ../common/optional/samba-server.nix
     # ../common/optional/zfs.nix
     # ../common/optional/monitoring.nix
+    # ../common/optional/smartd.nix
     # ../common/optional/chrony.nix
-    # # ../common/optional/smartd.nix #! Does not work on a VM
-
-    # # Secrets
   ];
 
   config = {
-    # ! Virtualbox Config
+    nix.settings.trusted-users = [
+      "root"
+      "@wheel"
+    ];
     networking = {
       firewall.enable = false;
       hostName = hostname;
@@ -58,6 +60,10 @@ in
           id = 20;
           interface = "enp0s3";
         };
+        vlan60 = {
+          id = 60;
+          interface = "enp0s3";
+        };
         vlan80 = {
           id = 80;
           interface = "enp0s3";
@@ -67,6 +73,15 @@ in
         ipv4.addresses = [
           {
             address = "192.168.20.230";
+            prefixLength = 24;
+          }
+        ];
+        mtu = 9000;
+      };
+      interfaces.vlan60 = {
+        ipv4.addresses = [
+          {
+            address = "192.168.60.230";
             prefixLength = 24;
           }
         ];
@@ -98,20 +113,33 @@ in
       );
       initialHashedPassword = "$y$j9T$hbT0Eeox2XSgwlFIaxEmh.$PBtYZ0w1M9.rGbKBYz8MEo.59Sv3gFwJdxS4BI7G7S5";
       isNormalUser = true;
-      extraGroups =
-        [
-          "wheel"
-          "users"
-        ]
-        ++ ifGroupsExist [
-          "network"
-          "samba-users"
-        ];
+      extraGroups = [
+        "wheel"
+        "users"
+      ]
+      ++ ifGroupsExist [
+        "network"
+        "samba-users"
+        "docker"
+      ];
     };
     users.groups.taylor = {
       gid = 1000;
     };
-
+    # security.sudo.extraRules = [
+    #   {
+    #     users = [ "taylor" ];
+    #     commands = [
+    #       {
+    #         command = "ALL";
+    #         options = [
+    #           "SETENV"
+    #           "NOPASSWD"
+    #         ];
+    #       }
+    #     ];
+    #   }
+    # ];
     system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
@@ -129,37 +157,70 @@ in
         zfs-exporter.enable = true;
         openssh.enable = true;
         msmtp.enable = true;
+        docker.enable = true;
+        # traefik = {
+        #   enable = true;
+        #   domain = "t-vo.us";
+        #   sans = [
+        #     "*.t-vo.us"
+        #     "nas-vm.t-vo.us"
+        #   ];
+        #   dashboardHost = "nas-vm.t-vo.us";
+        #   # Routers and services are defined in their respective service modules:
+        #   # - zerobyte.nix
+        #   # - rustfs.nix
+        # };
 
         samba = {
           enable = true;
-          shares = {
+          settings = {
             Media = {
               path = "/ook/Media";
-              browseable = "yes";
               "read only" = "no";
               "guest ok" = "yes";
             };
-            Timey = {
-              path = "/ook/Timey";
+            TimeMachineWork = {
+              path = "/ook/TimeMachine/work";
               "read only" = "no";
               "fruit:aapl" = "yes";
               "fruit:time machine" = "yes";
+              comment = "Work Macbook Time Machine";
+            };
+            Backup = {
+              path = "/ook/Backup";
+              "read only" = "no";
+              "guest ok" = "no";
+            };
+            Documents = {
+              path = "/ook/Documents";
+              "read only" = "no";
+              "guest ok" = "no";
+            };
+            paperless_inbox = {
+              path = "/ook/k8s/paperless/consume";
+              "read only" = "no";
+              "guest ok" = "no";
+            };
+            Photos = {
+              path = "/ook/Photos";
+              "read only" = "no";
+              "guest ok" = "no";
             };
           };
         };
-
         # * Note: doesn't work on a VM
         # smartd.enable = true;
         # smartctl-exporter.enable = true;
-        k3s = {
-          enable = true;
-          extraFlags = [
-            "--tls-san"
-            "nas.mcbadass.local"
-            "--flannel-backend=vxlan"
-            "--disable-network-policy"
-          ];
-        };
+        # k3s disabled in favor of native services with traefik
+        # k3s = {
+        #   enable = true;
+        #   extraFlags = [
+        #     "--tls-san"
+        #     "nas.mcbadass.local"
+        #     "--flannel-backend=vxlan"
+        #     "--disable-network-policy"
+        #   ];
+        # };
       };
 
       users = {
@@ -199,52 +260,44 @@ in
       };
     };
     # boot.loader = {
-    #   systemd-boot.enable = true;
     #   efi.canTouchEfiVariables = true;
+    #   systemd-boot.enable = true;
     # };
   };
 
+  # # Group config
+  # users.groups = {
+  #   backup-rw = {
+  #     gid = 65541;
+  #     members = ["taylor"];
+  #   };
+  #   docs-rw = {
+  #     gid = 65543;
+  #     members = ["taylor"];
+  #   };
+  #   media-rw = {
+  #     gid = 65539;
+  #     members = ["taylor"];
+  #   };
+  # };
+
   # # ZFS config
   # boot.zfs = {
-  #   devNodes = "/dev/disk/by-path";
+  #   devNodes = "/dev/disk/by-id";
   #   extraPools = [
   #     "ook"
   #   ];
   # };
 
-  # # Samba config
-  # services.samba.shares = {
-  #   Media = {
-  #     path = "/ook/Media";
-  #     browseable = "yes";
-  #     "read only" = "no";
-  #     "guest ok" = "yes";
-  #   };
-  #   Timey = {
-  #     path = "/ook/Timey";
-  #     browseable = "yes";
-  #     "read only" = "no";
-  #     "write list" = "taylor";
-  #     "fruit:time machine" = "yes";
-  #     "fruit:time machine max size" = "1050G";
-  #     comment = "Time Machine Test";
-  #     "create mask" = "0600";
-  #     "directory mask" = "0700";
-  #     "case sensitive" = "true";
-  #     "default case" = "lower";
-  #     "preserve case" = "no";
-  #   };
-  # };
-
-  # may fix issues with network service failing during a nixos-rebuild
+  # # may fix issues with network service failing during a nixos-rebuild
   # systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   # systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It's perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # # This value determines the NixOS release from which the default
+  # # settings for stateful data, like file locations and database versions
+  # # on your system were taken. It's perfectly fine and recommended to leave
+  # # this value at the release version of the first install of this system.
+  # # Before changing this value read the documentation for this option
+  # # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   # system.stateVersion = "24.05"; # Did you read the comment?
 }

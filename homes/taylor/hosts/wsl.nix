@@ -84,6 +84,14 @@
             checkHostIP = false;
             forwardAgent = true;
           };
+          "192.168.1.230" = {
+            # nas-vm ip
+            port = 22;
+            user = "root";
+            identityFile = "/home/taylor/.ssh/nixos-root";
+            checkHostIP = false;
+            forwardAgent = true;
+          };
         };
       };
     };

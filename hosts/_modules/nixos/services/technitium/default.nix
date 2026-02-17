@@ -92,8 +92,9 @@ in
             "${toString cfg.webPort}:5380"
             "${toString cfg.dnsPort}:53/tcp"
             "${toString cfg.dnsPort}:53/udp"
-            "${toString cfg.clusterPort}:53443/udp"
-          ] ++ lib.optionals cfg.enableDhcp [
+            "${toString cfg.clusterPort}:53443/tcp"
+          ]
+          ++ lib.optionals cfg.enableDhcp [
             "${toString cfg.dhcpPort}:67/udp"
           ];
           autoStart = true;
@@ -104,7 +105,7 @@ in
             "${cfg.dataDir}:/etc/dns"
           ];
           extraOptions = lib.optionals cfg.enableDhcp [
-            "--network=host"  # Required for DHCP to work properly
+            "--network=host" # Required for DHCP to work properly
           ];
         };
       };
@@ -124,7 +125,8 @@ in
       ];
       allowedUDPPorts = [
         cfg.dnsPort
-      ] ++ lib.optionals cfg.enableDhcp [
+      ]
+      ++ lib.optionals cfg.enableDhcp [
         cfg.dhcpPort
       ];
     };

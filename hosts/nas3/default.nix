@@ -37,10 +37,18 @@ in
   ];
 
   config = {
+    # Ensure the daemon is always used for nix operations
+    environment.variables.NIX_REMOTE = "daemon";
+
+    # Explicitly trust taylor for nix operations
     nix.settings.trusted-users = [
       "root"
+      "taylor"
       "@wheel"
     ];
+
+    # Allow SSH to accept NIX_REMOTE environment variable
+    services.openssh.settings.AcceptEnv = "NIX_REMOTE";
     networking = {
       firewall.enable = false;
       hostName = hostname;

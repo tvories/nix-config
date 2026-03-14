@@ -33,7 +33,7 @@ in
     (lib.mkIf cfg.enable {
       programs.vscode = {
         enable = true;
-        package = pkgs.unstable.vscode;
+        package = pkgs.unstable.vscode.override { commandLineArgs = "--no-sandbox"; };
         mutableExtensionsDir = true;
 
         profiles.default = {

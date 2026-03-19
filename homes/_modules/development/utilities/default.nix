@@ -24,7 +24,7 @@ in
       # yamllint
       unstable.helm-ls
       unstable.minio-client
-      inputs.nix-inspect.packages.${pkgs.stdenv.hostPlatform.system}.default
+      nix-inspect
     ];
   };
 }

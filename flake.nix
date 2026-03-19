@@ -84,11 +84,6 @@
       url = "github:catppuccin/nix/v1.0.1";
     };
 
-    # Nix Inspect
-    nix-inspect = {
-      url = "github:bluskript/nix-inspect";
-    };
-
     # Rust toolchain overlay
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -102,7 +97,6 @@
       home-manager,
       nix-darwin,
       nix-homebrew,
-      nix-inspect,
       nixvim,
       nix-vscode-extensions,
       sops-nix,

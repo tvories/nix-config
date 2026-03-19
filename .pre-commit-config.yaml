@@ -34,5 +34,6 @@ repos:
     rev: v1.1
     hooks:
       - id: sops-encryption
+        exclude: \.json5$
         # Uncomment to exclude all markdown files from encryption
         # exclude: *.\.md

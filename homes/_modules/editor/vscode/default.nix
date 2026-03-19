@@ -23,10 +23,10 @@ in
       type = lib.types.listOf lib.types.package;
       default = [ ];
     };
-    # userSettings = lib.mkOption {
-    #   type = lib.types.attrs;
-    #   default = { };
-    # };
+    userSettings = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+    };
   };
 
   config = lib.mkMerge [
@@ -38,7 +38,7 @@ in
 
         profiles.default = {
           inherit (cfg) extensions;
-          # inherit (cfg) userSettings;
+          inherit (cfg) userSettings;
         };
 
       };

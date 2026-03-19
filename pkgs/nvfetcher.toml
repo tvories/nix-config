@@ -1,0 +1,7 @@
+[shcopy]
+src.github = "aymanbagabas/shcopy"
+fetch.github = "aymanbagabas/shcopy"
+
+[usage-cli]
+src.github = "jdx/usage"
+fetch.github = "jdx/usage"

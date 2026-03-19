@@ -1,0 +1,32 @@
+# Mirrors local pre-commit hooks in CI to catch issues when hooks are skipped.
+# Covers: yamllint, trailing-whitespace, end-of-file-fixer, gitleaks, sops-encryption, etc.
+# Nix-specific linting (statix, deadnix, flake-check) is handled by nix-lint.yaml.
+
+name: Pre-commit Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pre-commit:
+    name: Pre-commit hooks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run pre-commit hooks
+        uses: pre-commit/action@v3.0.1

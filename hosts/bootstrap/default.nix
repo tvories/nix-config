@@ -37,5 +37,5 @@
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
   systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
 
-  stdenv.hostPlatform.system.stateVersion = "25.11";
+  system.stateVersion = "25.11";
 }

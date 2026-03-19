@@ -1,31 +1,98 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
-    "github>truxnell/renovate-config",
-    "github>truxnell/renovate-config:automerge-github-actions",
+    "config:recommended",
     "github>tvories/nix-config//.github/renovate/autoMerge.json5",
   ],
   gitAuthor: "tvories-tbot <tvories-tbot@users.noreply.github.com>",
-  ignoreTests: "true",
 
-  // https://docs.renovatebot.com/modules/manager/nix/
+  // flake.lock is managed by the update-flake-lock.yml workflow, not renovate
   nix: {
-    enabled: "true",
+    enabled: false,
   },
 
   lockFileMaintenance: {
-    enabled: "true",
-    automerge: "true",
+    enabled: true,
+    automerge: true,
     schedule: ["before 4am on Sunday"],
   },
 
-  regexManagers: [
+  prConcurrentLimit: 5,
+  branchConcurrentLimit: 10,
+
+  labels: ["dependencies"],
+
+  packageRules: [
     {
-      fileMatch: ["(^|/)nixos/.*\\.nix$", "(^|/)flyio/.*\\.toml$"],
+      // Skip pinning for 'latest' tags — intentionally floating
+      matchDatasources: ["docker"],
+      matchCurrentVersion: "/^latest$/",
+      pinDigests: false,
+    },
+    {
+      // Docker images: pin digests, semantic commits, separate minor/patch
+      matchDatasources: ["docker"],
+      pinDigests: true,
+      separateMinorPatch: true,
+      semanticCommits: "enabled",
+      commitMessagePrefix: "feat(containers):",
+      commitMessageTopic: "{{depName}}",
+      commitMessageExtra: "{{#if newVersion}}to {{newVersion}}{{else}}digest to {{newDigestShort}}{{/if}}",
+      labels: ["dependencies", "containers"],
+    },
+    {
+      // GitHub releases/tags: semantic commits
+      matchDatasources: ["github-releases", "github-tags"],
+      pinDigests: false,
+      semanticCommits: "enabled",
+      commitMessagePrefix: "feat(deps):",
+      commitMessageTopic: "{{depName}}",
+      commitMessageExtra: "to {{newVersion}}",
+      labels: ["dependencies", "nix"],
+    },
+    {
+      // GitHub Actions: automerge
+      matchManagers: ["github-actions"],
+      automerge: true,
+      automergeType: "pr",
+      labels: ["dependencies", "github-actions"],
+    },
+  ],
+
+  customManagers: [
+    {
+      // Docker images in nix files with explicit registry (ghcr.io, docker.io, lscr.io, quay.io)
+      customType: "regex",
+      description: "Docker images in nix files (with registry prefix)",
+      managerFilePatterns: ["/\\.nix$/"],
       matchStrings: [
-        'image *= *"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?"',
+        'image\\s*=\\s*"(?<depName>(?:ghcr\\.io|docker\\.io|lscr\\.io|quay\\.io)[/][a-z0-9._-]+/[a-z0-9._-]+):(?<currentValue>[\\w.-]+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?";?',
       ],
       datasourceTemplate: "docker",
+    },
+    {
+      // Docker images in nix files — Docker Hub shorthand (org/repo:tag, no registry prefix)
+      customType: "regex",
+      description: "Docker images in nix files (Docker Hub shorthand org/repo:tag)",
+      managerFilePatterns: ["/\\.nix$/"],
+      matchStrings: [
+        'image\\s*=\\s*"(?<depName>[a-z0-9_-]+/[a-z0-9._-]+):(?<currentValue>[\\w.-]+)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?";?',
+      ],
+      datasourceTemplate: "docker",
+    },
+    {
+      // Dependencies with renovate comment markers
+      // Usage: # renovate: depName=owner/repo datasource=docker
+      //        image = "X.Y.Z";
+      customType: "regex",
+      description: "Dependencies with renovate comment markers",
+      managerFilePatterns: ["/\\.nix$/"],
+      matchStrings: [
+        '(?m):?^[ \\t]*?# ?renovate: depName=(?<depName>\\S+)( datasource=(?<datasource>\\S+))?( versioning=(?<versioning>\\S+))?( extractVersion=(?<extractVersion>\\S+))?\\n[ \\t ]*?\\S+ = "?(?<currentValue>[^" ]+?)"?;?$',
+      ],
+      datasourceTemplate: "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}",
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+      extractVersionTemplate: "{{#if extractVersion}}{{{extractVersion}}}{{else}}^(?<version>.*)${{/if}}",
     },
   ],
 }

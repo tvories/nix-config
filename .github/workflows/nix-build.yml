@@ -1,0 +1,176 @@
+name: Build Nix systems
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      # Only trigger on actual Nix changes, NOT workflow changes
+      - "**/*.nix"
+      - "flake.lock"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Determine which hosts need to be built based on changed files
+  # NOTE: Darwin hosts (DVA-YY669XDT42, DVA-C02CQ7GCMD6T) are not built in CI
+  # because GitHub Actions lacks free macOS ARM runners. Breakage from flake
+  # updates won't be caught until a local build.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            global:
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'lib/**'
+              - 'hosts/_modules/**'
+              - 'homes/_modules/**'
+              - 'homes/taylor/default.nix'
+              - 'homes/taylor/secrets/**'
+              - 'overlays/**'
+              - 'pkgs/**'
+            nas3:
+              - 'hosts/nas3/**'
+              - 'homes/taylor/hosts/nas3.nix'
+            nas-vm:
+              - 'hosts/nas-vm/**'
+              - 'homes/taylor/hosts/nas-vm.nix'
+            homebox:
+              - 'hosts/homebox/**'
+              - 'homes/taylor/hosts/homebox.nix'
+            tback:
+              - 'hosts/tback/**'
+              - 'homes/taylor/hosts/tback.nix'
+            wsl:
+              - 'hosts/wsl/**'
+              - 'homes/taylor/hosts/wsl.nix'
+
+      - name: Build matrix from changed paths
+        id: set-matrix
+        env:
+          GLOBAL: ${{ steps.filter.outputs.global }}
+          NAS3: ${{ steps.filter.outputs.nas3 }}
+          NAS_VM: ${{ steps.filter.outputs.nas-vm }}
+          HOMEBOX: ${{ steps.filter.outputs.homebox }}
+          TBACK: ${{ steps.filter.outputs.tback }}
+          WSL: ${{ steps.filter.outputs.wsl }}
+        run: |
+          MATRIX="["
+          add_system() {
+            local system=$1 os=$2
+            if [[ "$MATRIX" != "[" ]]; then MATRIX+=","; fi
+            MATRIX+="{\"system\":\"$system\",\"os\":\"$os\"}"
+          }
+
+          [[ "$GLOBAL" == "true" || "$NAS3"    == "true" ]] && add_system "nas3"    "ubuntu-latest"
+          [[ "$GLOBAL" == "true" || "$NAS_VM"  == "true" ]] && add_system "nas-vm"  "ubuntu-latest"
+          [[ "$GLOBAL" == "true" || "$HOMEBOX" == "true" ]] && add_system "homebox" "ubuntu-latest"
+          [[ "$GLOBAL" == "true" || "$TBACK"   == "true" ]] && add_system "tback"   "ubuntu-24.04-arm"
+          [[ "$GLOBAL" == "true" || "$WSL"     == "true" ]] && add_system "wsl"     "ubuntu-latest"
+
+          MATRIX+="]"
+          echo "Building systems: $MATRIX"
+          echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+
+  nix-build:
+    needs: changes
+    if: ${{ needs.changes.outputs.matrix != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.changes.outputs.matrix) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Maximize disk space for large NixOS builds (~115GB with cleave)
+      - name: Maximize build space
+        uses: wimpysworld/nothing-but-nix@main
+        if: contains(matrix.os, 'ubuntu')
+        with:
+          hatchet-protocol: cleave
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Flake health check
+        uses: DeterminateSystems/flake-checker-action@main
+        continue-on-error: true
+
+      - name: Nix flake check
+        run: nix flake check --no-build
+
+      - name: Garbage collect build dependencies
+        run: nix-collect-garbage
+
+      - name: Build ${{ matrix.system }} system
+        run: |
+          set -o pipefail
+          nix build \
+            ".#ciSystems.${{ matrix.system }}" \
+            --fallback \
+            -v \
+            --log-format raw \
+             > >(tee stdout.log) 2> >(tee /tmp/nix-build-err.log >&2)
+
+      - name: Output build failure
+        if: failure()
+        run: |
+          if [ -f /tmp/nix-build-err.log ]; then
+            drv=$(grep "For full logs, run" /tmp/nix-build-err.log | grep -oE "/nix/store/.*\.drv" || true)
+            if [ -n "$drv" ]; then
+              nix log "$drv"
+              echo "$drv"
+            else
+              echo "Build error log:"
+              cat /tmp/nix-build-err.log
+            fi
+          else
+            echo "No build error log found — failure occurred before build step"
+          fi
+          exit 1
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-report-${{ matrix.system }}
+          path: |
+            stdout.log
+            /tmp/nix-build-err.log
+          if-no-files-found: ignore
+
+  nix-build-success:
+    if: ${{ always() }}
+    needs:
+      - changes
+      - nix-build
+    name: Nix Build Successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if any builds were needed
+        if: ${{ needs.changes.outputs.matrix == '[]' }}
+        run: |
+          echo "✅ No hosts affected by this change — skipping builds"
+          exit 0
+
+      - name: Check matrix status
+        if: ${{ needs.changes.outputs.matrix != '[]' && (contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')) }}
+        run: exit 1

@@ -22,7 +22,7 @@ in
   config = lib.mkIf cfg.enable {
     modules.services.podman.enable = true;
 
-    stdenv.hostPlatform.system.activationScripts.makeOnePasswordConnectDataDir =
+    system.activationScripts.makeOnePasswordConnectDataDir =
       lib.stringAfter [ "var" ]
         ''
           mkdir -p "${cfg.dataDir}"

@@ -127,7 +127,7 @@ in
       gid = 1000;
     };
 
-    stdenv.hostPlatform.system.activationScripts.postActivation.text = ''
+    system.activationScripts.postActivation.text = ''
       # Must match what is in /etc/shells
       chsh -s /run/current-system/sw/bin/fish taylor
     '';

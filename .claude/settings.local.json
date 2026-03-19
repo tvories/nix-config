@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(cat:*)",
+      "Bash(diff:*)",
+      "Bash(awk:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(nix flake check:*)",
+      "Bash(nix eval:*)",
+      "Bash(nix log:*)",
+      "Bash(dig:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:search.nixos.org)",
+      "WebFetch(domain:nixos.org)",
+      "WebFetch(domain:home-manager.dev)"
+    ],
+    "deny": [
+      "Bash(rm:*)"
+    ]
+  }
+}

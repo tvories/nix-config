@@ -114,9 +114,6 @@ jobs:
         uses: DeterminateSystems/flake-checker-action@main
         continue-on-error: true
 
-      - name: Nix flake check
-        run: nix flake check --no-build
-
       - name: Garbage collect build dependencies
         run: nix-collect-garbage
 

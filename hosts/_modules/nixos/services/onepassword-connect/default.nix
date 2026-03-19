@@ -31,7 +31,7 @@ in
 
     virtualisation.oci-containers.containers = {
       onepassword-connect-api = {
-        image = "docker.io/1password/connect-api:1.7.2";
+        image = "docker.io/1password/connect-api:1.8.2";
         autoStart = true;
         ports = [ "8080:8080" ];
         volumes = [

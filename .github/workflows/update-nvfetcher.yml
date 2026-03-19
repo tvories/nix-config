@@ -1,0 +1,69 @@
+name: Update nvfetcher sources
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # Weekly on Sunday at midnight UTC
+
+concurrency:
+  group: update-nvfetcher
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-nvfetcher:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.TVORIES_APP_ID }}
+          private-key: ${{ secrets.TVORIES_APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      - name: Run nvfetcher
+        run: |
+          nix run nixpkgs#nvfetcher -- \
+            -c pkgs/nvfetcher.toml \
+            -o pkgs/_sources
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          commit-message: "chore(deps): Update nvfetcher sources"
+          branch: "renovate/nvfetcher-sources"
+          delete-branch: true
+          title: "chore(deps): Update nvfetcher sources"
+          labels: |
+            dependencies
+            automated
+          body: |
+            Automated weekly update of nvfetcher-pinned package sources.
+
+            ### Changed packages
+            ```
+            ${{ steps.changes.outputs.diff }}
+            ```

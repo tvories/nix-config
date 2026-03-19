@@ -1,0 +1,39 @@
+---
+name: Schedule - Renovate Helm Releases
+
+env:
+  RENOVATE_AUTODISCOVER: true
+  RENOVATE_AUTODISCOVER_FILTER: "${{ github.repository }}"
+
+on: # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  renovate-helm-releases:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Create pull request for renovatebot helm-release annotations
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: renovate-annotations
+          delete-branch: true
+          title: "chore(deps): update renovate annotations"
+          signoff: false
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit-message: "chore(deps): update renovate annotations"
+          body: |
+            Update HelmReleases inorder for Renovate to pick up new versions of Helm charts
+          labels: renovate/annotations

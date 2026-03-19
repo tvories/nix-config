@@ -103,4 +103,8 @@
       };
     };
   };
+
+  home.sessionVariables = {
+    NIX_SSH = "ssh.exe";
+  };
 }

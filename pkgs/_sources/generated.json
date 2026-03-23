@@ -1,0 +1,44 @@
+{
+    "shcopy": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "shcopy",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "aymanbagabas",
+            "repo": "shcopy",
+            "rev": "v0.1.5",
+            "sha256": "sha256-MKlW8HrkXCYCOeO38F0S4c8mVbsG/VcZ+oGFC70amqQ=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "v0.1.5"
+    },
+    "usage-cli": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "usage-cli",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "deepClone": false,
+            "fetchSubmodules": false,
+            "leaveDotGit": false,
+            "name": null,
+            "owner": "jdx",
+            "repo": "usage",
+            "rev": "v3.0.0",
+            "sha256": "sha256-KC3fIfFnXn5K1E1CyHLADaEesXFilCrIe9MYOH/fkrI=",
+            "sparseCheckout": [],
+            "type": "github"
+        },
+        "version": "v3.0.0"
+    }
+}

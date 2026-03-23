@@ -114,6 +114,12 @@ jobs:
         uses: DeterminateSystems/flake-checker-action@main
         continue-on-error: true
 
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v15
+        with:
+          name: tvories
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
       - name: Garbage collect build dependencies
         run: nix-collect-garbage
 

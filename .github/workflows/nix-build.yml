@@ -115,7 +115,7 @@ jobs:
         continue-on-error: true
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v15
+        uses: cachix/cachix-action@v17
         with:
           name: tvories
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}

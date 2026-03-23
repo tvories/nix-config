@@ -5,14 +5,13 @@
 name: Pre-commit Checks
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

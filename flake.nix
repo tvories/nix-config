@@ -171,6 +171,7 @@
         wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
         tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
         homebox = mkSystemLib.mkNixosSystem "x86_64-linux" "homebox" flake-packages;
+        utm-arm = mkSystemLib.mkNixosSystem "aarch64-linux" "utm-arm" flake-packages;
       };
 
       darwinConfigurations = {
@@ -205,6 +206,35 @@
         modules = [
           sops-nix.nixosModules.sops
           ./hosts/bootstrap/default.nix
+        ];
+      };
+      # aarch64 install ISO with GUI for bootstrapping UTM VMs via nixos-anywhere
+      "iso-aarch64" = nixos-generators.nixosGenerate {
+        system = "aarch64-linux";
+        format = "install-iso";
+        modules = [
+          sops-nix.nixosModules.sops
+          ./hosts/bootstrap/default.nix
+          (
+            { pkgs, lib, ... }:
+            {
+              # Override grub device from bootstrap profile (not applicable for ISO)
+              boot.loader.grub.devices = lib.mkForce [ "nodev" ];
+
+              # GNOME desktop for the live environment
+              services.xserver.enable = true;
+              services.displayManager.gdm.enable = true;
+              services.desktopManager.gnome.enable = true;
+
+              # Tools needed to run nixos-anywhere from within the live ISO
+              environment.systemPackages = with pkgs; [
+                nixos-anywhere
+                git
+                vim
+                curl
+              ];
+            }
+          )
         ];
       };
     };

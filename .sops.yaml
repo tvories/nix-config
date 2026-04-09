@@ -5,6 +5,7 @@ keys:
   - &tback age1jvkfpdgegrr3p9v8s4vnld6hxd3qulfcwrn68uwav7m24hcnf5rqt28ah5
   - &nas3 age1fgvfcaptjl6f2dfr70v5kfarmlms6e89eqdg7eyxqj5k4w9zr5zs53wgxs
   - &homebox age1ual2fd0gd9jsc5ns23938q5ahtqd8q0et7nk70seatl4z8d93usskjqele
+  - &utm_arm age1ul3c8l632e7qug9cnt80u0c6kujnufrwvf0yy2fp86v59f9grcmqeehtd6
 creation_rules:
   - path_regex: .*\.sops\.ya?ml$
     key_groups:
@@ -20,3 +21,4 @@ creation_rules:
           - *tback
           - *nas3
           - *homebox
+          - *utm_arm

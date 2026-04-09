@@ -42,6 +42,7 @@
         "headlamp"
         "middleclick"
         "plex"
+        "utm"
       ];
       masApps = {
         # "Adguard for Safari" = 1440147259;
@@ -78,25 +79,27 @@
     };
 
     # Packages
-    environment.systemPackages = [
+    environment.systemPackages = with pkgs; [
       # Puppet stuff
-      pkgs.pdk
-      pkgs.puppet-lint
-      pkgs.ruby
-      pkgs.sqlite
+      pdk
+      puppet-lint
+      ruby
+      sqlite
 
-      pkgs.powershell
-      pkgs.openldap
-      pkgs.drawio
-      pkgs.terraform-ls
-      pkgs.jdk
-      pkgs.bruno
-      pkgs.d2
-      pkgs.vault
-      pkgs.lens
-      pkgs.discord
-      pkgs.jetbrains.goland
-      pkgs.windsurf
+      powershell
+      openldap
+      drawio
+      terraform-ls
+      jdk
+      bruno
+      d2
+      vault
+      lens
+      discord
+      jetbrains.goland
+      windsurf
+      glab
+      claude-code
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

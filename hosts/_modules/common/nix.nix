@@ -29,6 +29,9 @@ in
       # Fallback quickly if substituters are not available.
       connect-timeout = 5;
 
+      # Fall back to building from source if a substitute is unavailable.
+      fallback = true;
+
       # Enable flakes
       experimental-features = [
         "nix-command"

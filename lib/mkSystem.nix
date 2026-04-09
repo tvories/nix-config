@@ -3,7 +3,7 @@
   mkNixosSystem =
     system: hostname: flake-packages:
     let
-      isRpi = system == "aarch64-linux";
+      isRpi = hostname == "tback";
     in
     inputs.nixpkgs.lib.nixosSystem {
       pkgs = import inputs.nixpkgs {
@@ -89,6 +89,7 @@
               inherit inputs hostname flake-packages;
             };
             users.tvories = ../. + "/homes/taylor";
+            backupFileExtension = "hm-backup";
           };
         }
         ../hosts/_modules/common

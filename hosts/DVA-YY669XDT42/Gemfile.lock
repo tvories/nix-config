@@ -9,7 +9,7 @@ GEM
     http (6.0.2)
       http-cookie (~> 1.0)
       llhttp (~> 0.6.1)
-    http-cookie (1.1.0)
+    http-cookie (1.1.4)
       domain_name (~> 0.5)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
@@ -19,7 +19,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0331)
+    mime-types-data (3.2026.0407)
     mize (0.6.1)
     money (7.0.2)
       bigdecimal

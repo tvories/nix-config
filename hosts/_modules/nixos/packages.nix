@@ -7,6 +7,7 @@
       with flake-packages.${pkgs.stdenv.hostPlatform.system};
       [
         byobu
+        comma
         ncdu
       ];
   };

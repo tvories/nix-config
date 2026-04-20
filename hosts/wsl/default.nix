@@ -69,14 +69,14 @@
       # _1password
       # google-cloud-sdk
       sops
-      # python3
+      python3
       openssl
       nfs-utils
       # nil
       # binfmt
       # libgcc
-      # gnumake
-      # gcc
+      gnumake
+      gcc
       # libiconv
       # zlib
       # patch
@@ -95,6 +95,7 @@
       # ncurses # for terminal handling
       # expat # for XML parsing
       libxcrypt
+      nodejs_24
     ];
   };
 }

@@ -26,6 +26,11 @@ in
         "tvories.cachix.org-1:Ql12AwHIbutZhu6fs3Ld29JfKWBZtZvu5araZnwcT+E="
       ];
 
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
+
       # Fallback quickly if substituters are not available.
       connect-timeout = 5;
 

@@ -32,6 +32,7 @@
             sharedModules = [
               inputs.sops-nix.homeManagerModules.sops
               inputs.catppuccin.homeManagerModules.catppuccin
+              inputs.nix-index-database.hmModules.nix-index
             ];
             extraSpecialArgs = {
               inherit inputs hostname flake-packages;
@@ -84,6 +85,7 @@
               inputs.sops-nix.homeManagerModules.sops
               inputs.nixvim.homeModules.nixvim
               inputs.catppuccin.homeManagerModules.catppuccin
+              inputs.nix-index-database.hmModules.nix-index
             ];
             extraSpecialArgs = {
               inherit inputs hostname flake-packages;

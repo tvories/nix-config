@@ -85,6 +85,18 @@ in
           };
         };
       };
+
+      # Use zsh as the login shell to avoid code signing issues on Apple Silicon,
+      # but exec into fish for interactive sessions
+      programs.zsh = {
+        enable = true;
+        initContent = ''
+          if [[ -o interactive && -z "$FISH_RUNNING" ]]; then
+            export FISH_RUNNING=1
+            exec ${lib.getExe pkgs.fish}
+          fi
+        '';
+      };
     })
   ];
 }

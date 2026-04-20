@@ -4,90 +4,159 @@
     programs.starship = {
       enable = true;
       package = pkgs.unstable.starship;
-      catppuccin.enable = true;
+      # catppuccin.enable = true;
 
       settings = {
-        format = ''
-          $os$time$username($hostname)($kubernetes)($git_branch)($python)($terraform)($golang)
-          $directory$character
-        '';
+        "$schema" = "https://starship.rs/config-schema.json";
+
+        format = builtins.concatStringsSep "" [
+          "[](#9A348E)"
+          "$os"
+          "$username"
+          "[](bg:#DA627D fg:#9A348E)"
+          "$directory"
+          "[](fg:#DA627D bg:#FCA17D)"
+          "$git_branch"
+          "$git_status"
+          "[](fg:#FCA17D bg:#86BBD8)"
+          "$c"
+          "$elixir"
+          "$elm"
+          "$golang"
+          "$gradle"
+          "$haskell"
+          "$java"
+          "$julia"
+          "$nodejs"
+          "$nim"
+          "$rust"
+          "$scala"
+          "[](fg:#86BBD8 bg:#06969A)"
+          "$docker_context"
+          "[](fg:#06969A bg:#33658A)"
+          "$time"
+          "[ ](fg:#33658A)"
+        ];
+
+        username = {
+          show_always = true;
+          style_user = "bg:#9A348E";
+          style_root = "bg:#9A348E";
+          format = "[$user ]($style)";
+          disabled = false;
+        };
 
         os = {
-          disabled = false;
-          symbols.Ubuntu = "";
-          symbols.Windows = "";
-          symbols.Macos = "";
-          symbols.Debian = "\uf306";
-          symbols.NixOS = "";
-          style = "bg:blue fg:base";
-          format = "[ $symbol ]($style)";
+          style = "bg:#9A348E";
+          disabled = true;
+        };
+
+        directory = {
+          style = "bg:#DA627D";
+          format = "[ $path ]($style)";
+          truncation_length = 3;
+          truncation_symbol = "…/";
+          substitutions = {
+            "Documents" = "󰈙 ";
+            "Downloads" = " ";
+            "Music" = " ";
+            "Pictures" = " ";
+          };
+        };
+
+        c = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        docker_context = {
+          symbol = " ";
+          style = "bg:#06969A";
+          format = "[ $symbol $context ]($style)";
+        };
+
+        elixir = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        elm = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        git_branch = {
+          symbol = "";
+          style = "bg:#FCA17D";
+          format = "[ $symbol $branch ]($style)";
+        };
+
+        git_status = {
+          style = "bg:#FCA17D";
+          format = "[$all_status$ahead_behind ]($style)";
+        };
+
+        golang = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        gradle = {
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        haskell = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        java = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        julia = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        nodejs = {
+          symbol = "";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        nim = {
+          symbol = "󰆥 ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        rust = {
+          symbol = "";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
+        };
+
+        scala = {
+          symbol = " ";
+          style = "bg:#86BBD8";
+          format = "[ $symbol ($version) ]($style)";
         };
 
         time = {
           disabled = false;
-          time_format = "%R"; # Hour:Minute Format
-          style = "bg:blue fg:base bold";
-          format = "[ 󱑍 $time [](fg:blue bg:peach)]($style)";
-          use_12hr = true;
-        };
-
-        username = {
-          disabled = false;
-          show_always = true;
-          style_user = "bg:peach fg:base bold";
-          style_root = "bg:peach fg:base bold";
-          format = "[ $user [](fg:peach bg:base)]($style)";
-        };
-
-        hostname = {
-          disabled = false;
-          ssh_only = true;
-          ssh_symbol = "🌐";
-          style = "bg:maroon fg:base bold";
-          format = "[ $ssh_symbol $hostname [](fg:maroon bg:base)]($style)";
-        };
-
-        git_branch = {
-          symbol = "  ";
-          style = " bg:yellow fg:base";
-          format = "[ $symbol$branch(:$remote_branch) [](fg:yellow bg:base)]($style)";
-        };
-
-        kubernetes = {
-          disabled = false;
-          symbol = "󱃾 ";
-          style = "bg:green fg:base";
-          format = "[ $symbol$context \\($namespace\\) [](fg:green bg:base)]($style)";
-        };
-
-        python = {
-          symbol = " ";
-          style = "bg:flamingo fg:base";
-          format = "[ $symbol$pyenv_prefix($version )(\\($virtualenv\\)) [](fg:flamingo bg:base)]($style)";
-        };
-
-        golang = {
-          symbol = " ";
-          style = "bg:flamingo fg:base";
-          format = "[ $symbol($version) [](fg:flamingo bg:base)]($style)";
-        };
-
-        terraform = {
-          symbol = "󱁢 ";
-          style = "bg:flamingo fg:base";
-          format = "[ $symbol$version [](fg:flamingo bg:base)]($style)";
-        };
-
-        directory = {
-          truncation_length = 4;
-          truncation_symbol = "…/";
-          style = "fg:lavender";
-          format = "[   $path]($style)";
-        };
-
-        character = {
-          success_symbol = "[ >](bold green)";
-          error_symbol = "[ ✗](#E84D44)";
+          time_format = "%R";
+          style = "bg:#33658A";
+          format = "[ ♥ $time ]($style)";
         };
       };
     };

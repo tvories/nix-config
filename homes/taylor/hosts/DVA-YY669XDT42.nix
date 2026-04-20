@@ -1,9 +1,11 @@
 {
   lib,
-  config,
   pkgs,
   ...
 }:
+let
+  opAgentSock = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+in
 {
   modules = {
     deployment.nix.enable = true;
@@ -11,7 +13,7 @@
     editor = {
       vscode = {
         enable = true;
-        # userSettings = lib.importJSON ../config/editor/vscode/settings.json;
+        userSettings = lib.importJSON ../config/editor/vscode/settings.json;
       };
     };
     shell = {
@@ -35,6 +37,10 @@
         username = "Taylor Vories";
         email = "taylor.vories@davita.com";
       };
+      mise = {
+        enable = true;
+        package = pkgs.unstable.mise;
+      };
     };
     security = {
       ssh = {
@@ -45,14 +51,14 @@
             port = 22;
             user = "taylor";
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
           };
           "tback.mcbadass.local" = {
             port = 22;
             user = "taylor";
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
             forwardAgent = true;
           };
@@ -65,14 +71,14 @@
             user = "git";
             port = 22;
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
           };
           "nas-vm.mcbadass.local" = {
             port = 22;
             user = "taylor";
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
             forwardAgent = true;
           };
@@ -80,7 +86,7 @@
             port = 22;
             user = "taylor";
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
             forwardAgent = true;
           };
@@ -88,20 +94,15 @@
             port = 22;
             user = "tvories";
             extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+              "IdentityAgent" = opAgentSock;
             };
             forwardAgent = true;
           };
         };
       };
+      gnugpg.enable = true;
     };
     kubernetes.enable = true;
-    security.gnugpg.enable = true;
-    shell = {
-      mise = {
-        enable = true;
-        package = pkgs.unstable.mise;
-      };
-    };
+    terminal.ghostty.enable = true;
   };
 }

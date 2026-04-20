@@ -9,17 +9,12 @@
     users.users.tvories = {
       name = "tvories";
       home = "/Users/tvories";
-      shell = pkgs.fish;
+      shell = pkgs.zsh;
       openssh.authorizedKeys.keys = lib.strings.splitString "\n" (
         builtins.readFile ../../homes/taylor/config/ssh/ssh.pub
       );
     };
     ids.gids.nixbld = 350;
-
-    system.activationScripts.postActivation.text = ''
-      # Must match what is in /etc/shells
-      sudo chsh -s /run/current-system/sw/bin/fish tvories
-    '';
 
     #TODO: install homebrew somehow?
 
@@ -100,6 +95,7 @@
       windsurf
       glab
       claude-code
+      uv
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

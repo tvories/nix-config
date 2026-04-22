@@ -17,6 +17,7 @@ in
       nixd
       nil
       nixfmt-rfc-style
+      statix
       nodePackages.prettier
       pre-commit
       shellcheck

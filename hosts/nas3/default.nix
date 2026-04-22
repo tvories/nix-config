@@ -50,14 +50,43 @@ in
       hostId = "8023d2b9";
       domain = "mcbadass.local";
       dhcpcd.enable = false;
-      interfaces.enp1s0 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.1.24";
-            prefixLength = 24;
-          }
-        ];
-        mtu = 9000;
+      interfaces = {
+        enp1s0 = {
+          ipv4.addresses = [
+            {
+              address = "192.168.1.24";
+              prefixLength = 24;
+            }
+          ];
+          mtu = 9000;
+        };
+        vlan20 = {
+          ipv4.addresses = [
+            {
+              address = "192.168.20.24";
+              prefixLength = 24;
+            }
+          ];
+          mtu = 9000;
+        };
+        vlan60 = {
+          ipv4.addresses = [
+            {
+              address = "192.168.60.24";
+              prefixLength = 24;
+            }
+          ];
+          mtu = 9000;
+        };
+        vlan80 = {
+          ipv4.addresses = [
+            {
+              address = "192.168.80.24";
+              prefixLength = 24;
+            }
+          ];
+          mtu = 9000;
+        };
       };
       vlans = {
         vlan20 = {
@@ -72,33 +101,6 @@ in
           id = 80;
           interface = "enp1s0";
         };
-      };
-      interfaces.vlan20 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.20.24";
-            prefixLength = 24;
-          }
-        ];
-        mtu = 9000;
-      };
-      interfaces.vlan60 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.60.24";
-            prefixLength = 24;
-          }
-        ];
-        mtu = 9000;
-      };
-      interfaces.vlan80 = {
-        ipv4.addresses = [
-          {
-            address = "192.168.80.24";
-            prefixLength = 24;
-          }
-        ];
-        mtu = 9000;
       };
       defaultGateway = "192.168.1.1";
       nameservers = [

@@ -5,18 +5,22 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "mpt3sas" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-  boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
+  boot = {
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "ahci" "mpt3sas" "nvme" "usbhid" "usb_storage" "sd_mod" "sr_mod" ];
+      kernelModules = [ ];
     };
-    grub = {
-      enable = true;
-      efiSupport = true;
-      devices = [ "nodev" ];
+    kernelModules = [ "kvm-intel" ];
+    extraModulePackages = [ ];
+    loader = {
+      efi = {
+        canTouchEfiVariables = true;
+      };
+      grub = {
+        enable = true;
+        efiSupport = true;
+        devices = [ "nodev" ];
+      };
     };
   };
 

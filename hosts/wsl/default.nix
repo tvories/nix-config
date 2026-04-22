@@ -38,6 +38,7 @@
         { src = "${coreutils}/bin/readlink"; }
       ];
     };
+    programs.nh.flake = "/home/tadmin/gits/nix-config";
     programs.nix-ld.enable = true;
     services.vscode-server = {
       enable = true;

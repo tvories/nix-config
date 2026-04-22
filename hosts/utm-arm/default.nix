@@ -42,26 +42,27 @@ in
     };
 
     # GNOME desktop environment
-    services.xserver.enable = true;
+    services = {
+      xserver.enable = true;
+      displayManager.gdm = {
+        enable = true;
+        # Disable Wayland so XRDP sessions work correctly via X11
+        # wayland = false;
+      };
+      desktopManager.gnome.enable = true;
 
-    services.displayManager.gdm = {
-      enable = true;
-      # Disable Wayland so XRDP sessions work correctly via X11
-      # wayland = false;
-    };
-    services.desktopManager.gnome.enable = true;
-
-    # XRDP for remote desktop access (port 3389)
-    services.xrdp = {
-      enable = true;
-      defaultWindowManager = "${pkgs.writeShellScript "xrdp-gnome-session" ''
-        . /etc/profile
-        export XDG_SESSION_TYPE=x11
-        export XDG_CURRENT_DESKTOP=GNOME
-        export LIBGL_ALWAYS_SOFTWARE=1
-        exec ${pkgs.dbus}/bin/dbus-run-session -- ${pkgs.gnome-session}/bin/gnome-session
-      ''}";
-      openFirewall = true;
+      # XRDP for remote desktop access (port 3389)
+      xrdp = {
+        enable = true;
+        defaultWindowManager = "${pkgs.writeShellScript "xrdp-gnome-session" ''
+          . /etc/profile
+          export XDG_SESSION_TYPE=x11
+          export XDG_CURRENT_DESKTOP=GNOME
+          export LIBGL_ALWAYS_SOFTWARE=1
+          exec ${pkgs.dbus}/bin/dbus-run-session -- ${pkgs.gnome-session}/bin/gnome-session
+        ''}";
+        openFirewall = true;
+      };
     };
 
     users.users.taylor = {

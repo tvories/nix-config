@@ -7,6 +7,7 @@
     ./homebrew.nix
     ./nix.nix
     ./os-defaults.nix
+    ./packages.nix
   ];
 
   system = {

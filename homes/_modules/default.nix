@@ -12,6 +12,7 @@
     ./kubernetes
     ./security
     ./shell
+    ./terminal
     ./themes
     ./virtualisation
   ];

@@ -129,5 +129,60 @@
   "powershell.powerShellAdditionalExePaths": {
     "pwsh": "/run/current-system/sw/bin/pwsh"
   },
-  "terminal.integrated.shellIntegration.enabled": false
+  "terminal.integrated.shellIntegration.enabled": false,
+  "claudeCode.environmentVariables": [
+    {
+      "name": "CLAUDE_CODE_USE_VERTEX",
+      "value": "true"
+    },
+    {
+      "name": "CLOUD_ML_REGION",
+      "value": "us-east5"
+    },
+    {
+      "name": "ANTHROPIC_VERTEX_PROJECT_ID",
+      "value": "claude-codeassist-p-ebum"
+    },
+    {
+      "name": "ANTHROPIC_MODEL",
+      "value": "us.anthropic.claude-sonnet-4-6"
+    },
+    {
+      "name": "CLAUDE_CODE_SKIP_AUTH_LOGIN",
+      "value": "true"
+    }
+  ],
+  "diffEditor.codeLens": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "files": {
+    "autoSave": "onFocusChange",
+    "eol": "\n",
+    "insertFinalNewline": true,
+    "trimFinalNewlines": true,
+    "trimTrailingWhitespace": true
+  },
+  "git": {
+    "autofetch": true,
+    "confirmSync": false
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "linter": {
+    "linters": {
+      "yamllint": {
+        "configFiles": [
+          ".yamllint.yml",
+          ".yamllint.yaml",
+          ".yamllint",
+          ".ci/yamllint/.yamllint.yaml"
+        ]
+      }
+    }
+  },
+  "powershell.promptToUpdatePowerShell": false,
+  "terminal.integrated.showCommandHint": false,
+  "yaml.customTags": ["!reference sequence"],
+  "gitlab.duoAgentPlatform.connectionType": "websocket",
+  "consulKV.backendUrl": "https://consul-kv.gcp.davita.com"
 }

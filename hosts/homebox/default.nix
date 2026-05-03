@@ -175,7 +175,7 @@ in
             enable = true;
             host = "tdns.t-vo.us";
           };
-          image = "technitium/dns-server:15.0.1";
+          image = "technitium/dns-server:15.1.0";
         };
       };
     };

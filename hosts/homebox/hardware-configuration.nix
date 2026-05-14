@@ -32,6 +32,8 @@
         enable = true;
         efiSupport = true;
         devices = [ "nodev" ];
+        configurationLimit = lib.mkForce 5;
+        copyKernels = false;
       };
     };
   };

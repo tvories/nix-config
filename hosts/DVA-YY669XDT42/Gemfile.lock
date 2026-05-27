@@ -54,7 +54,7 @@ GEM
       tins (~> 1.0)
     test-unit (3.7.7)
       power_assert
-    tins (1.53.0)
+    tins (1.54.0)
       bigdecimal
       mize (~> 0.6)
       readline

@@ -38,6 +38,13 @@
         { src = "${coreutils}/bin/readlink"; }
       ];
     };
+    services.openssh = {
+      enable = true;
+      settings.PasswordAuthentication = false;
+    };
+
+    nix.settings.trusted-users = [ "root" "taylor" ];
+
     programs.nh.flake = "/home/tadmin/gits/nix-config";
     programs.nix-ld.enable = true;
     services.vscode-server = {

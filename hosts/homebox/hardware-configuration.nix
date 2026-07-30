@@ -25,15 +25,10 @@
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
     loader = {
-      efi = {
-        canTouchEfiVariables = true;
-      };
-      grub = {
+      efi.canTouchEfiVariables = true;
+      systemd-boot = {
         enable = true;
-        efiSupport = true;
-        devices = [ "nodev" ];
-        configurationLimit = lib.mkForce 5;
-        copyKernels = false;
+        configurationLimit = lib.mkForce 3;
       };
     };
   };

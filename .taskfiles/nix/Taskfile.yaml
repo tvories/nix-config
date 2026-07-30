@@ -60,6 +60,23 @@ tasks:
       - sh: which nixos-rebuild
         msg: "nixos-rebuild not found"
 
+  build-nixos-local:
+    desc: Build nixos configuration locally (faster for slow targets like RPi)
+    silent: true
+    vars:
+      ssh_user: taylor
+    summary: |
+      Args:
+        host: Host to build configuration for (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - nix-shell -p nixos-rebuild --run 'nixos-rebuild build --flake .#{{.host}} --fast --use-remote-sudo --build-host "" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local"'
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+
   apply-nixos:
     desc: Build and apply nixos configuration
     silent: true

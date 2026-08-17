@@ -103,7 +103,7 @@
       # ncurses # for terminal handling
       # expat # for XML parsing
       libxcrypt
-      nodejs_24
+      # nodejs_24
     ];
   };
 }

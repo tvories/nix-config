@@ -3,12 +3,11 @@ _: {
     enable = true;
     onActivation = {
       autoUpdate = false; # Don't update during rebuild
-      cleanup = "zap"; # Uninstall all programs not declared
+      cleanup = "none"; # TODO: revert to "zap" once nix-darwin fixes --force-cleanup for Homebrew 5.x
       upgrade = true;
     };
     global = {
       brewfile = true; # Run brew bundle from anywhere
-      lockfiles = false; # Don't save lockfile (since running from anywhere)
     };
     taps = [ ];
     brews = [ ];
@@ -27,7 +26,7 @@ _: {
     ];
     masApps = {
       # "Caffeinated" = 1362171212;
-      "Jolt of Caffeine" = 1437130425;
+      # "Jolt of Caffeine" = 1437130425;
     };
   };
 }

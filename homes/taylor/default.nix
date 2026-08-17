@@ -86,6 +86,7 @@
 
     shell = {
       fish.enable = true;
+      zsh.enable = true;
       gcloud = {
         enable = true;
       };

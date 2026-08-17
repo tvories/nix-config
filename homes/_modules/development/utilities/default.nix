@@ -16,9 +16,9 @@ in
       _1password-cli
       nixd
       nil
-      nixfmt-rfc-style
+      nixfmt
       statix
-      nodePackages.prettier
+      prettier
       pre-commit
       shellcheck
       shfmt

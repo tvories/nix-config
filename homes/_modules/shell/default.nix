@@ -14,6 +14,7 @@
     ./starship
     ./utilities
     ./zoxide
+    ./zsh
     ./gcloud
   ];
 }

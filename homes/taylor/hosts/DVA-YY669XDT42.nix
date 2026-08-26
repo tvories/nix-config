@@ -45,58 +45,46 @@ in
     security = {
       ssh = {
         enable = true;
-        matchBlocks = {
+        settings = {
           "nas3.mcbadass.local" = {
-            forwardAgent = true;
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
+            ForwardAgent = "yes";
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = opAgentSock;
           };
           "tback.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = opAgentSock;
+            ForwardAgent = "yes";
           };
           "bitbucket.davita.com" = {
-            user = "git";
-            port = 22;
-            identityFile = "~/.ssh/mac-bitbucket";
+            User = "git";
+            Port = 22;
+            IdentityFile = "~/.ssh/mac-bitbucket";
           };
           "github.com" = {
-            user = "git";
-            port = 22;
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
+            User = "git";
+            Port = 22;
+            IdentityAgent = opAgentSock;
           };
           "nas-vm.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = opAgentSock;
+            ForwardAgent = "yes";
           };
           "homebox.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = opAgentSock;
+            ForwardAgent = "yes";
           };
           "192.168.20.107" = {
-            port = 22;
-            user = "tvories";
-            extraOptions = {
-              "IdentityAgent" = opAgentSock;
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "tvories";
+            IdentityAgent = opAgentSock;
+            ForwardAgent = "yes";
           };
         };
       };

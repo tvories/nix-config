@@ -7,7 +7,7 @@
     in
     inputs.nixpkgs.lib.nixosSystem {
       pkgs = import inputs.nixpkgs {
-        inherit system;
+        localSystem = system;
         overlays = builtins.attrValues overlays;
         config = {
           allowUnfree = true;
@@ -32,7 +32,7 @@
             sharedModules = [
               inputs.sops-nix.homeManagerModules.sops
               inputs.catppuccin.homeManagerModules.catppuccin
-              inputs.nix-index-database.hmModules.nix-index
+              inputs.nix-index-database.homeModules.nix-index
             ];
             extraSpecialArgs = {
               inherit inputs hostname flake-packages;
@@ -54,7 +54,7 @@
     system: hostname: flake-packages:
     inputs.nix-darwin.lib.darwinSystem {
       pkgs = import inputs.nixpkgs {
-        inherit system;
+        localSystem = system;
         overlays = builtins.attrValues overlays;
         config = {
           allowUnfree = true;
@@ -85,7 +85,7 @@
               inputs.sops-nix.homeManagerModules.sops
               inputs.nixvim.homeModules.nixvim
               inputs.catppuccin.homeManagerModules.catppuccin
-              inputs.nix-index-database.hmModules.nix-index
+              inputs.nix-index-database.homeModules.nix-index
             ];
             extraSpecialArgs = {
               inherit inputs hostname flake-packages;

@@ -9,9 +9,10 @@ in
 {
   options.modules.security.ssh = {
     enable = lib.mkEnableOption "ssh";
-    matchBlocks = lib.mkOption {
+    settings = lib.mkOption {
       type = lib.types.attrs;
       default = { };
+      description = "Per-host SSH settings (programs.ssh.settings format)";
     };
   };
 
@@ -21,12 +22,12 @@ in
 
     programs.ssh = {
       enable = true;
-      enableDefaultConfig = true;
+      enableDefaultConfig = false;
 
-      matchBlocks = cfg.matchBlocks // {
-        "*" = {
-          controlMaster = "auto";
-          controlPath = "~/.ssh/control/%C";
+      settings = cfg.settings // {
+        "*" = (cfg.settings."*" or { }) // {
+          ControlMaster = "auto";
+          ControlPath = "~/.ssh/control/%C";
         };
       };
 
@@ -34,6 +35,11 @@ in
         "config.d/*"
       ];
     };
+
+    # Remove stale hm-backup before checkLinkTargets runs
+    home.activation.cleanSshBackup = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+      $DRY_RUN_CMD rm -f "$HOME/.ssh/config.hm-backup"
+    '';
 
     # Force the config to be a real file instead of a symlink
     # This fixes "Bad owner or permissions" errors

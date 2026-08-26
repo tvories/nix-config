@@ -42,9 +42,9 @@
       masApps = {
         # "Adguard for Safari" = 1440147259;
         # "Keka" = 470158793;
-        "Passepartout" = 1433648537;
-        "Wireguard" = 1451685025;
-        "Amphetamine" = 937984704;
+        # "Passepartout" = 1433648537;
+        # "Wireguard" = 1451685025;
+        # "Amphetamine" = 937984704;
       };
     };
     programs.fish = {
@@ -56,6 +56,8 @@
         gcp-vault = "export VAULT_ADDR=https://vault.gcp.davita.com; export VAULT_TOKEN=(vault login -token-only -method oidc)";
 
         adsearch = "ldapsearch -o ldif-wrap=no -H ldaps://10.9.92.49 -b dc=davita,dc=corp -D $USER@davita.corp -W";
+        global-kill = "launchctl unload /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist";
+        global-start = "launchctl load /Library/LaunchAgents/com.paloaltonetworks.gp.pangpa.plist";
       };
     };
     # Dock
@@ -64,7 +66,8 @@
         dock = {
           persistent-apps = [
             "/Applications/Firefox.app"
-            "/Applications/iTerm.app"
+            # "/Applications/iTerm.app"
+            "${pkgs.ghostty-bin}/Applications/Ghostty.app"
             "/Applications/Microsoft Outlook.app"
             "/Applications/Microsoft Teams.app"
             "/Applications/Obsidian.app"
@@ -89,12 +92,13 @@
       bruno
       d2
       vault
-      lens
+      # lens
       discord
-      jetbrains.goland
-      windsurf
+      # jetbrains.goland
+      # windsurf
       glab
       claude-code
+      devin-cli
       uv
 
       (pkgs.bundlerApp {

@@ -34,11 +34,11 @@
             "name": null,
             "owner": "jdx",
             "repo": "usage",
-            "rev": "v4.0.0",
-            "sha256": "sha256-OY+cwnwaJ9WBufCVp8x1SloWfAwH8obSfinDhdFbSM8=",
+            "rev": "v6.1.0",
+            "sha256": "sha256-c8ygclMsPPpOwJPh6tMwY4omwv6nfoBFTJEkR+VFibQ=",
             "sparseCheckout": [],
             "type": "github"
         },
-        "version": "v4.0.0"
+        "version": "v6.1.0"
     }
 }

@@ -39,42 +39,34 @@
     security = {
       ssh = {
         enable = true;
-        matchBlocks = {
+        settings = {
           "nas3.mcbadass.local" = {
-            forwardAgent = true;
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-            };
+            ForwardAgent = "yes";
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
           };
           "tback.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            ForwardAgent = "yes";
           };
           "bitbucket.davita.com" = {
-            user = "git";
-            port = 22;
-            identityFile = "~/.ssh/mac-bitbucket";
+            User = "git";
+            Port = 22;
+            IdentityFile = "~/.ssh/mac-bitbucket";
           };
           "github.com" = {
-            user = "git";
-            port = 22;
-            extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-            };
+            User = "git";
+            Port = 22;
+            IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
           };
           "nas-vm.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            extraOptions = {
-              "IdentityAgent" = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-            };
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
+            ForwardAgent = "yes";
           };
         };
       };

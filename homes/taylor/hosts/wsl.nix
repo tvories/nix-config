@@ -34,63 +34,63 @@
     security = {
       ssh = {
         enable = true;
-        matchBlocks = {
+        settings = {
           "tback.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityFile = "/home/taylor/.ssh/taylor-1pw-key";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "homebox.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityFile = "/home/taylor/.ssh/taylor-1pw-key";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "nas-vm.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityFile = "/home/taylor/.ssh/taylor-1pw-key";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "192.168.1.97" = {
-            port = 22;
-            user = "root";
-            identityFile = "/home/taylor/nixos-root";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "root";
+            IdentityFile = "/home/taylor/nixos-root";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "192.168.1.101" = {
-            port = 22;
-            user = "root";
-            identityFile = "/home/taylor/nixos-root";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "root";
+            IdentityFile = "/home/taylor/nixos-root";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "192.168.1.128" = {
-            port = 22;
-            user = "root";
-            identityFile = "/home/taylor/nixos-root";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "root";
+            IdentityFile = "/home/taylor/nixos-root";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "nas3.mcbadass.local" = {
-            port = 22;
-            user = "taylor";
-            identityFile = "/home/taylor/.ssh/taylor-1pw-key";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "taylor";
+            IdentityFile = "/home/taylor/.ssh/taylor-1pw-key";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
           "192.168.1.230" = {
             # nas-vm ip
-            port = 22;
-            user = "root";
-            identityFile = "/home/taylor/.ssh/nixos-root";
-            checkHostIP = false;
-            forwardAgent = true;
+            Port = 22;
+            User = "root";
+            IdentityFile = "/home/taylor/.ssh/nixos-root";
+            CheckHostIP = "no";
+            ForwardAgent = "yes";
           };
         };
       };

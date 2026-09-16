@@ -107,4 +107,20 @@
   home.sessionVariables = {
     NIX_SSH = "ssh.exe";
   };
+
+  home.packages = [ pkgs.socat ];
+
+  # Bridge the Windows-side 1Password SSH agent (exposed as a named pipe,
+  # which ssh.exe on Windows already talks to) into a Unix socket so the
+  # WSL-side ssh client (used by nh/nixos-rebuild for remote deploys) can
+  # authenticate through it too, without a private key on disk.
+  programs.fish.interactiveShellInit = ''
+    set -gx SSH_AUTH_SOCK "$HOME/.1password/agent.sock"
+    if not test -S $SSH_AUTH_SOCK
+      mkdir -p (dirname $SSH_AUTH_SOCK)
+      rm -f $SSH_AUTH_SOCK
+      setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork >/tmp/1password-ssh-relay.log 2>&1 &
+      disown
+    end
+  '';
 }

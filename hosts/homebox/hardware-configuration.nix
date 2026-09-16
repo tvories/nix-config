@@ -28,7 +28,10 @@
       efi.canTouchEfiVariables = true;
       systemd-boot = {
         enable = true;
-        configurationLimit = lib.mkForce 3;
+        # Temporary: the EFI System Partition on this host is only ~99M,
+        # too small to hold more than a single generation. Restore to a
+        # higher value once the partition has been expanded.
+        configurationLimit = lib.mkForce 1;
       };
     };
   };

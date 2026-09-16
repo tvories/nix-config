@@ -34,5 +34,8 @@ in
         "/etc/ssh/authorized_keys.d/%u"
       ];
     };
+    # The global enable above only installs the mechanism; each PAM service
+    # must opt in individually for it to actually apply.
+    security.pam.services.sudo.sshAgentAuth = true;
   };
 }

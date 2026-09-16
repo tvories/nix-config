@@ -49,7 +49,8 @@
     programs.nix-ld.enable = true;
     services.vscode-server = {
       enable = true;
-      enableFHS = true;
+      enableFHS = false;
+      nodejsPackage = pkgs.nodejs_24;
       extraRuntimeDependencies = with pkgs; [
         libsecret
       ];
@@ -104,6 +105,8 @@
       # expat # for XML parsing
       libxcrypt
       # nodejs_24
+      zlib
+      uv
     ];
   };
 }

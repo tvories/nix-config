@@ -26,7 +26,15 @@
         # userSettings = lib.importJSON ./config/editor/vscode/settings.json;
         extensions =
           let
-            inherit (inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system})
+            # nix-vscode-extensions dropped x86_64-darwin upstream; fall back
+            # to the aarch64-darwin extension set on that system rather than
+            # failing evaluation entirely (marketplace listings don't differ
+            # meaningfully between the two Darwin architectures).
+            vscodeExtensionsSystem =
+              if builtins.hasAttr pkgs.stdenv.hostPlatform.system inputs.nix-vscode-extensions.extensions
+              then pkgs.stdenv.hostPlatform.system
+              else "aarch64-darwin";
+            inherit (inputs.nix-vscode-extensions.extensions.${vscodeExtensionsSystem})
               vscode-marketplace
               ;
           in

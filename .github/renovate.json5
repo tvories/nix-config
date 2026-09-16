@@ -41,6 +41,16 @@
       labels: ["dependencies", "containers"],
     },
     {
+      // rustfs/rustfs mixes clean numbered RCs with -glibc build variants
+      // and floating tags (latest/rc/beta), which confuses default docker
+      // versioning's newest-tag detection. Force strict semver comparison
+      // and restrict candidates to the clean X.Y.Z(-rc.N)? tags.
+      matchDatasources: ["docker"],
+      matchPackageNames: ["rustfs/rustfs"],
+      versioning: "semver",
+      allowedVersions: "/^\\d+\\.\\d+\\.\\d+(-rc\\.\\d+)?$/",
+    },
+    {
       // GitHub releases/tags: semantic commits
       matchDatasources: ["github-releases", "github-tags"],
       pinDigests: false,

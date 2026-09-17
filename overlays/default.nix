@@ -37,10 +37,17 @@
   # The unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {
-    unstable = import inputs.nixpkgs-unstable {
-      inherit (final) system;
-      config.allowUnfree = true;
-    };
+    # nixpkgs-unstable dropped x86_64-darwin support entirely (hard eval
+    # assertion, not a missing-package issue) — fall back to the stable
+    # set on that system rather than failing flake evaluation.
+    unstable =
+      if final.system == "x86_64-darwin" then
+        final
+      else
+        import inputs.nixpkgs-unstable {
+          inherit (final) system;
+          config.allowUnfree = true;
+        };
   };
 
   # node-build-fix = final: prev: {

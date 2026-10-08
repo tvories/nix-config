@@ -56,7 +56,11 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "technitium/dns-server:latest";
+      # A floating :latest default here conflicted with the pinned version
+      # in hosts/homebox/default.nix for Renovate's version tracking (same
+      # depName, unparseable currentValue on one side silently blocked the
+      # grouped update for both). Keep this pinned and in sync manually.
+      default = "technitium/dns-server:15.5.1";
       description = "Docker image to use for Technitium DNS Server";
     };
 

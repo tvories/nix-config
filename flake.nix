@@ -21,7 +21,11 @@
   inputs = {
     # Nixpkgs and unstable
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # The nixos-* branches advance once Linux/NixOS jobs pass, often before
+    # Darwin binaries are cached. These branches wait for Darwin builds, so
+    # Macs pull from cache instead of compiling locally.
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # impermanence
     # https://github.com/nix-community/impermanence
@@ -43,13 +47,16 @@
     # nix-darwin
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
     # For installing homebrew
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
-    mac-app-util.url = "github:hraban/mac-app-util";
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
 
     # sops-nix
     sops-nix = {
@@ -147,7 +154,7 @@
 
       legacyPackages = forAllSystems (
         system:
-        import nixpkgs {
+        import (if nixpkgs.lib.hasSuffix "darwin" system then inputs.nixpkgs-darwin else nixpkgs) {
           localSystem = system;
           overlays = builtins.attrValues overlays;
           config.allowUnfree = true;

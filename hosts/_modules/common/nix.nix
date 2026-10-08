@@ -10,7 +10,10 @@ in
 {
   nix = {
     settings = {
-      trusted-substituters = [
+      # extra-* so the daemon enables these itself and they append to the
+      # cache.nixos.org defaults; trusted-substituters alone only permits
+      # trusted users to opt in.
+      extra-substituters = [
         "https://nix-community.cachix.org"
         "https://cache.garnix.io"
         "https://numtide.cachix.org"
@@ -18,7 +21,7 @@ in
         "https://tvories.cachix.org"
       ];
 
-      trusted-public-keys = [
+      extra-trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
@@ -26,10 +29,12 @@ in
         "tvories.cachix.org-1:Ql12AwHIbutZhu6fs3Ld29JfKWBZtZvu5araZnwcT+E="
       ];
 
+      # macOS admins are in "admin", not "wheel".
       trusted-users = [
         "root"
         "@wheel"
-      ];
+      ]
+      ++ lib.optional isDarwin "@admin";
 
       # Fallback quickly if substituters are not available.
       connect-timeout = 5;

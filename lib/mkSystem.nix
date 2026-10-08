@@ -53,7 +53,7 @@
   mkDarwinSystem =
     system: hostname: flake-packages:
     inputs.nix-darwin.lib.darwinSystem {
-      pkgs = import inputs.nixpkgs {
+      pkgs = import inputs.nixpkgs-darwin {
         localSystem = system;
         overlays = builtins.attrValues overlays;
         config = {

@@ -41,7 +41,7 @@ in
       };
 
       onepassword-connect-sync = {
-        image = "docker.io/1password/connect-sync:1.8.2";
+        image = "docker.io/1password/connect-sync:1.8.3";
         autoStart = true;
         ports = [ "8081:8080" ];
         volumes = [

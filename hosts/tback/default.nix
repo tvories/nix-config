@@ -164,8 +164,26 @@ in
     services.openssh.enable = true;
     modules = {
       services = {
-        node-exporter.enable = true;
-        smartctl-exporter.enable = true;
+        node-exporter = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          # Units shown as running/stopped tiles on the Grafana dashboards
+          systemdUnits = [
+            "rest-server"
+            "uptime-kuma"
+            "wireguard-wg0"
+            "traefik"
+            "docker"
+            "sshd"
+            "docker-technitium"
+            "smartd"
+          ];
+        };
+        smartctl-exporter = {
+          enable = true;
+          # USB enclosure needs SAT passthrough; autodiscovery finds nothing.
+          devices = [ "/dev/disk/by-id/usb-WDC_WD12_0EDAZ-11F3RA_000000000024-0:0;sat" ];
+        };
         msmtp.enable = true;
         docker.enable = true;
         traefik = {

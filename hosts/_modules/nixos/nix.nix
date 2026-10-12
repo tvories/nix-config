@@ -3,5 +3,5 @@ _: {
   boot.loader.grub.configurationLimit = 10;
   boot.loader.systemd-boot.configurationLimit = 10;
 
-  # GC settings are in common/nix.nix
+  # GC: programs.nh.clean in nixos/packages.nix (Darwin uses nix.gc in common/nix.nix)
 }

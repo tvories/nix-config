@@ -159,7 +159,26 @@ in
 
       services = {
         nfs.enable = true;
-        node-exporter.enable = true;
+        node-exporter = {
+          enable = true;
+          enabledCollectors = [ "systemd" ];
+          # Units shown as running/stopped tiles on the Grafana dashboards
+          systemdUnits = [
+            "rest-server"
+            "uptime-kuma"
+            "wireguard-wg0"
+            "traefik"
+            "docker"
+            "sshd"
+            "docker-technitium"
+            "smartd"
+            "docker-zerobyte"
+            "docker-rustfs"
+            "zrepl"
+            "samba-smbd"
+            "nfs-server"
+          ];
+        };
         zfs-exporter.enable = true;
         openssh.enable = true;
         msmtp.enable = true;

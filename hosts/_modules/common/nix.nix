@@ -64,26 +64,17 @@ in
     # Add nixpkgs input to NIX_PATH
     nixPath = [ "nixpkgs=${inputs.nixpkgs.outPath}" ];
 
-    # garbage collection
-    gc = {
+    # Darwin only: NixOS hosts use programs.nh.clean (nixos/packages.nix),
+    # which also cleans home-manager profiles.
+    # optionalAttrs, not mkIf: NixOS has no nix.gc.interval option.
+    gc = lib.optionalAttrs isDarwin {
       automatic = true;
       options = "--delete-older-than 7d";
-    }
-    // (
-      if isDarwin then
-        {
-          # nix-darwin uses launchd interval
-          interval = {
-            Weekday = 0;
-            Hour = 2;
-            Minute = 0;
-          };
-        }
-      else
-        {
-          # NixOS uses systemd dates
-          dates = "weekly";
-        }
-    );
+      interval = {
+        Weekday = 0;
+        Hour = 2;
+        Minute = 0;
+      };
+    };
   };
 }

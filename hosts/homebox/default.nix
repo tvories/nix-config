@@ -152,11 +152,29 @@ in
     services.openssh.enable = true;
     modules = {
       services = {
-        node-exporter.enable = true;
+        node-exporter = {
+          enable = true;
+          openFirewall = true;
+          enabledCollectors = [ "systemd" ];
+          # Units shown as running/stopped tiles on the Grafana dashboards
+          systemdUnits = [
+            "rest-server"
+            "uptime-kuma"
+            "wireguard-wg0"
+            "traefik"
+            "docker"
+            "sshd"
+            "docker-technitium"
+            "smartd"
+          ];
+        };
         msmtp.enable = true;
         docker.enable = true;
         smartd.enable = true;
-        smartctl-exporter.enable = true;
+        smartctl-exporter = {
+          enable = true;
+          openFirewall = true;
+        };
         traefik = {
           enable = true;
           domain = "t-vo.us";

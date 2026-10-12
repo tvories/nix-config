@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 {
   imports = [
     ./nix.nix
@@ -11,6 +11,12 @@
 
   documentation.nixos.enable = false;
   documentation.man.generateCaches = false; # Speeds up build time. Man caches take forever to build: https://discourse.nixos.org/t/slow-build-at-building-man-cache/52365
+
+  # mkDefault so a host's own journald extraConfig replaces this instead of
+  # appending a second, conflicting SystemMaxUse (e.g. wsl keeps 5G).
+  services.journald.extraConfig = lib.mkDefault ''
+    SystemMaxUse=1G
+  '';
 
   # Increase open file limit for sudoers
   security.pam.loginLimits = [

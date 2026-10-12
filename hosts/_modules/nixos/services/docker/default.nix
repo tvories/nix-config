@@ -17,6 +17,13 @@ in
       docker = {
         enable = true;
         package = pkgs.docker_29;
+        # Every image bump leaves the old version behind; --all removes
+        # unused tagged images, not just dangling layers. Volumes untouched.
+        autoPrune = {
+          enable = true;
+          dates = "weekly";
+          flags = [ "--all" ];
+        };
       };
     };
   };

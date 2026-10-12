@@ -89,7 +89,26 @@ tasks:
       vars:
         - host
     cmds:
-      - nix-shell -p nixos-rebuild --run 'nixos-rebuild switch --flake .#{{.host}} --fast --use-remote-sudo --build-host "" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local"'
+      - nh os switch "{{.ROOT_DIR}}" --hostname "{{.host}}" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local" --elevation-strategy passwordless
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nh
+        msg: "nh not found"
+
+  apply-nixos-local:
+    desc: Build nixos configuration locally, then apply it to the remote host (faster for slow targets like RPi)
+    silent: true
+    vars:
+      ssh_user: taylor
+    summary: |
+      Args:
+        host: Host to build and deploy to (required)
+    requires:
+      vars:
+        - host
+    cmds:
+      - nixos-rebuild switch --flake "{{.ROOT_DIR}}#{{.host}}" --sudo --build-host "" --target-host "{{.ssh_user}}@{{.host}}.mcbadass.local"
     preconditions:
       - sh: which nix
         msg: "nix not found"

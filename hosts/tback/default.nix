@@ -89,6 +89,19 @@ in
       ];
     };
 
+    # The backup disk's VIA VL711 USB bridge has a kernel UAS quirk
+    # (US_FL_NO_ATA_1X) that blocks ATA passthrough, so SMART can't be read.
+    # Forcing usb-storage instead of uas lifts it; SMART works via -d sat.
+    boot.kernelParams = [ "usb-storage.quirks=2109:0711:u" ];
+
+    # smartctl_exporter 0.14 registers metric descriptors only from its first
+    # collection at startup; if the USB disk isn't readable yet, every later
+    # disk metric is "unregistered" and /metrics returns HTTP 500.
+    systemd.services.prometheus-smartctl-exporter = {
+      after = [ "backup.mount" ];
+      wants = [ "backup.mount" ];
+    };
+
     # Disk mount for usb drive
     fileSystems."/backup" = {
       device = "/dev/disk/by-id/usb-WDC_WD12_0EDAZ-11F3RA_000000000024-0:0-part1";
@@ -183,6 +196,11 @@ in
           enable = true;
           # USB enclosure needs SAT passthrough; autodiscovery finds nothing.
           devices = [ "/dev/disk/by-id/usb-WDC_WD12_0EDAZ-11F3RA_000000000024-0:0;sat" ];
+          # The backup disk sleeps between restic runs and the default
+          # powermode check skips sleeping disks, so it never reported.
+          # Wake it at most every 6h; cached values are served in between.
+          interval = "6h";
+          extraFlags = [ "--smartctl.powermode-check=never" ];
         };
         msmtp.enable = true;
         docker.enable = true;

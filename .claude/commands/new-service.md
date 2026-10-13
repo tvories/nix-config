@@ -25,6 +25,6 @@ in
 3. Show the user a summary of what was created and remind them to:
    - Enable the service on a host with `modules.services.$ARGUMENTS.enable = true;`
    - Add any SOPS secrets needed: `sops.secrets.<name> = { sopsFile = ./secret.sops.yaml; };`
-   - Run `task nix:build-nixos host=<hostname>` to validate before deploying
+   - Run `just nix build-nixos <hostname>` to validate before deploying
 
 Do NOT enable the module on any host — leave that to the user.

@@ -10,6 +10,7 @@
     ./fish
     ./git
     ./go-task
+    ./just
     ./mise
     ./starship
     ./utilities

@@ -99,6 +99,7 @@
         enable = true;
       };
       go-task.enable = true;
+      just.enable = true;
     };
     themes = {
       catppuccin = {

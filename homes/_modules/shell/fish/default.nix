@@ -83,6 +83,12 @@ in
             description = "Flush DNS cache";
             body = builtins.readFile ./functions/flushdns.fish;
           };
+          gsi = {
+            description = "Search GCE instances across the org by name prefix (-l adds labels)";
+            body = builtins.replaceStrings [ "@jq@" ] [ (lib.getExe pkgs.jq) ] (
+              builtins.readFile ./functions/gsi.fish
+            );
+          };
         };
       };
 

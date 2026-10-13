@@ -28,12 +28,25 @@ in
         smartctl -d). Empty autodiscovers via smartctl --scan.
       '';
     };
+    interval = lib.mkOption {
+      type = lib.types.str;
+      default = "60s";
+      example = "6h";
+      description = "Minimum time between smartctl queries per disk; cached data is served in between";
+    };
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "--smartctl.powermode-check=never" ];
+      description = "Extra smartctl_exporter flags";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     services.prometheus.exporters.smartctl = {
       enable = true;
-      inherit (cfg) port openFirewall devices;
+      inherit (cfg) port openFirewall devices extraFlags;
+      maxInterval = cfg.interval;
     };
   };
 }

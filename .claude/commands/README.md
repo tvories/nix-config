@@ -22,9 +22,9 @@ Custom slash commands for Claude CLI. Each `.md` file in this directory becomes 
 
 Runs a full build → diff → confirm → switch cycle for a NixOS host.
 
-- Calls `task nix:build-nixos host=<hostname>` first
+- Calls `just nix build-nixos <hostname>` first
 - Shows the `nvd` diff before asking to proceed
-- Calls `task nix:apply-nixos host=<hostname>` on confirmation
+- Calls `just nix apply-nixos <hostname>` on confirmation (`just nix apply-nixos-local tback` for the RPi)
 - Stops on build failure — never applies a broken config
 
 **Valid hosts:** `nas3`, `nas-vm`, `tback`, `homebox`, `wsl`
@@ -40,7 +40,7 @@ Runs a full build → diff → confirm → switch cycle for a NixOS host.
 
 Same build → diff → confirm → switch flow for nix-darwin hosts.
 
-- Calls `task nix:build-darwin host=<hostname>` then `task nix:apply-darwin`
+- Calls `just nix build-darwin <hostname>` then `just nix apply-darwin <hostname>`
 - Darwin deploys run locally (not via SSH)
 
 **Valid hosts:** `DVA-YY669XDT42` (personal, aarch64), `DVA-C02CQ7GCMD6T` (work, x86_64)
@@ -137,7 +137,7 @@ Guides editing SOPS secrets for a given host.
 
 ## Notes
 
-- Commands use `task` (go-task) from `.taskfiles/nix/Taskfile.yaml`
+- Commands use `just` recipes from `justfile` / `justfiles/nix.just`
 - SSH targets resolve as `taylor@<hostname>.mcbadass.local`
 - SOPS age keys are per-host; defined in `.sops.yaml` at repo root
 - Keep this README in sync when adding new commands

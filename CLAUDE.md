@@ -107,7 +107,7 @@ let ifGroupsExist = groups: builtins.filter (group: builtins.hasAttr group confi
 
 Modules live under `modules.*` in home configs:
 - `modules.editor.nvim` / `modules.editor.vscode`
-- `modules.shell.fish` / `modules.shell.gcloud` / `modules.shell.go-task`
+- `modules.shell.fish` / `modules.shell.gcloud` / `modules.shell.go-task` / `modules.shell.just`
 - `modules.themes.catppuccin`
 - `modules.deployment.*` / `modules.development.*` / `modules.security.*`
 - `modules.kubernetes.*` / `modules.virtualisation.*`
@@ -150,17 +150,20 @@ let cfg = config.modules.services.<name>; in
 
 ## Deployment Commands
 
+Recipes live in `justfile` + `justfiles/*.just` (run `just` to list them).
+
 ### NixOS (remote via SSH)
 ```bash
-task nix:build-nixos host=<hostname>    # dry-run build + diff
-task nix:apply-nixos host=<hostname>    # build + switch (prompts to confirm)
+just nix build-nixos <hostname>         # build on the host itself
+just nix apply-nixos <hostname>         # nh os switch, passwordless elevation via forwarded SSH agent
+just nix apply-nixos-local <hostname>   # build on this machine, then switch (use for tback, the RPi)
 ```
 Targets `taylor@<hostname>.mcbadass.local` via SSH.
 
 ### Darwin
 ```bash
-task nix:build-darwin host=<hostname>   # build + diff
-task nix:apply-darwin host=<hostname>   # build + switch (prompts to confirm)
+just nix build-darwin <hostname>        # build + nvd diff
+just nix apply-darwin <hostname>        # build + diff, confirm, then sudo darwin-rebuild switch
 ```
 
 ### Direct (on the target machine)
@@ -178,7 +181,7 @@ darwin-rebuild switch --flake .#<hostname>
 - Per-host secrets: `hosts/<hostname>/secret.sops.yaml`
 - Per-home secrets: `homes/taylor/secrets/`
 - Reference in Nix: `sops.secrets.<name> = { sopsFile = ./secret.sops.yaml; };`
-- Task helpers: `task sops:*`
+- Re-encrypt all secrets under the current directory: `just sops re-encrypt`
 
 **NEVER:**
 - Commit unencrypted secrets

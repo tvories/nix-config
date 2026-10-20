@@ -37,7 +37,7 @@ in
 
       services.gpg-agent = {
         enable = true;
-        pinentryFlavor = "curses";
+        pinentry.package = pkgs.pinentry-curses;
       };
 
       programs = let

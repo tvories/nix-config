@@ -24,7 +24,9 @@ in
       shfmt
       # yamllint
       unstable.helm-ls
-      unstable.minio-client
+      # Same version as unstable, which marks it insecure (abandoned upstream).
+      # Expect 26.11 to flag it too; rclone or awscli2 are the replacements.
+      minio-client
       nix-inspect
     ];
   };

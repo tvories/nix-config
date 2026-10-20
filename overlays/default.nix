@@ -5,6 +5,9 @@
 {
   rust-overlay = inputs.rust-overlay.overlays.default;
 
+  # Replaces pkgs.claude-code everywhere with the always-current build.
+  claude-code = inputs.claude-code.overlays.default;
+
   additions = final: prev: {
     # flake = import ../pkgs {
     #   pkgs = prev;

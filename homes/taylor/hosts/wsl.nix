@@ -95,32 +95,79 @@
         };
       };
     };
-    # security.gnugpg.enable = true;
+    # gpg-agent + pinentry for the GPG keys carried over from Ubuntu.
+    security.gnugpg.enable = true;
     shell = {
       mise = {
         enable = true;
         package = pkgs.unstable.mise;
+        # On NixOS mise defaults to compiling runtimes from source, which fails
+        # without a dev shell (e.g. Python can't find zlib). nix-ld lets the
+        # precompiled builds run instead.
+        settings.all_compile = false;
+        # Runtimes and tools whose version should follow a project or cluster;
+        # repos override these with their own .mise.toml.
+        globalConfig.tools = {
+          go = "latest";
+          node = "lts";
+          pnpm = "latest";
+          terraform = "latest";
+          terragrunt = "latest";
+          packer = "latest";
+          vault = "latest";
+          velero = "latest";
+          clusterctl = "latest";
+          calicoctl = "latest";
+          kube-capacity = "latest";
+          crane = "latest";
+          # nixpkgs' krr is broken (dependency prometrix) and it isn't on PyPI;
+          # Robusta ships it as GitHub release zips with "ubuntu" in the name.
+          "github:robusta-dev/krr" = {
+            version = "latest";
+            asset_pattern = "krr-ubuntu-latest-*.zip";
+          };
+        };
       };
     };
   };
 
-  home.sessionVariables = {
-    NIX_SSH = "ssh.exe";
-  };
+  # SSH agent: provided system-wide by wsl.ssh-agent (hosts/wsl/default.nix).
 
-  home.packages = [ pkgs.socat ];
-
-  # Bridge the Windows-side 1Password SSH agent (exposed as a named pipe,
-  # which ssh.exe on Windows already talks to) into a Unix socket so the
-  # WSL-side ssh client (used by nh/nixos-rebuild for remote deploys) can
-  # authenticate through it too, without a private key on disk.
+  # The full Windows PATH is off (wsl.conf appendWindowsPath=false), but System32
+  # alone is cheap (~1 ms per missed lookup over 9p vs ~60 ms for the whole
+  # Windows PATH). Appended so Linux commands always win.
   programs.fish.interactiveShellInit = ''
-    set -gx SSH_AUTH_SOCK "$HOME/.1password/agent.sock"
-    if not test -S $SSH_AUTH_SOCK
-      mkdir -p (dirname $SSH_AUTH_SOCK)
-      rm -f $SSH_AUTH_SOCK
-      setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"npiperelay.exe -ei -s //./pipe/openssh-ssh-agent",nofork >/tmp/1password-ssh-relay.log 2>&1 &
-      disown
-    end
+    fish_add_path --append --path /mnt/c/Windows/System32
   '';
+
+  # Docker Desktop runs the engine and exposes /var/run/docker.sock here, but
+  # only shares a bare `docker` binary in /usr/bin (not on NixOS's PATH) and no
+  # compose/buildx plugins. Use the Nix client and register the plugins where
+  # the docker CLI looks for them.
+  home.packages = with pkgs; [
+    docker-client
+
+    # Tools carried over from the Ubuntu distro's Homebrew
+    fd
+    fzf
+    pv
+    rclone
+    restic
+    ansible
+    kubernetes-helm
+    kustomize
+    kubeseal
+    kompose
+    # Not in mise's registry
+    govc
+    # Talos TUI; young 0.1.x project, stable nixpkgs lags behind releases
+    unstable.talos-pilot
+    # mise would compile these from source, which is fragile on NixOS
+    ruby
+    dotnet-sdk
+  ];
+  home.file.".docker/cli-plugins/docker-compose".source =
+    "${pkgs.docker-compose}/libexec/docker/cli-plugins/docker-compose";
+  home.file.".docker/cli-plugins/docker-buildx".source =
+    "${pkgs.docker-buildx}/libexec/docker/cli-plugins/docker-buildx";
 }

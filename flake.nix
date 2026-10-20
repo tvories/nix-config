@@ -1,23 +1,6 @@
 {
   description = "taylor Nix Flake";
 
-  nixConfig = {
-    extra-substituters = [
-      "https://nix-community.cachix.org"
-      "https://cache.garnix.io"
-      "https://numtide.cachix.org"
-      "https://bjw-s.cachix.org"
-      "https://tvories.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-      "bjw-s.cachix.org-1:dWyzjMYlnKeq01PplRWadakXfZQBoxJN7zGO6/HwsPs="
-      "tvories.cachix.org-1:Ql12AwHIbutZhu6fs3Ld29JfKWBZtZvu5araZnwcT+E="
-    ];
-  };
-
   inputs = {
     # Nixpkgs and unstable
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
@@ -76,19 +59,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # for VSCode remote-ssh
-    nix-ld-vscode = {
-      url = "github:scottstephens/nix-ld-vscode/main";
+    # Claude Code from Anthropic's native binaries, bumped hourly upstream;
+    # nixpkgs stable lags dozens of releases behind.
+    claude-code = {
+      url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Release branch matching nixpkgs (main tracks unstable).
     nixoswsl = {
-      url = "github:nix-community/NixOS-WSL/main";
+      url = "github:nix-community/NixOS-WSL/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
     };
 
     nixos-generators = {
@@ -130,9 +111,7 @@
       nix-vscode-extensions,
       sops-nix,
       nixpkgs-unstable,
-      nix-ld-vscode,
       nixoswsl,
-      vscode-server,
       nixos-generators,
       disko,
       rust-overlay,

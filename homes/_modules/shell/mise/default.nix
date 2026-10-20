@@ -29,20 +29,17 @@ in
       # flake-packages.${pkgs.system}.usage
     ];
 
-    xdg.configFile = {
-      "mise/config.toml" = lib.mkIf (cfg.globalConfig != { }) {
-        source = tomlFormat.generate "mise-config" cfg.globalConfig;
-      };
-      "mise/settings.toml" = {
-        source = tomlFormat.generate "mise-settings" (
-          {
-            experimental = true;
-            python_venv_auto_create = true;
-          } //
-          cfg.settings
-        );
-      };
-    };
+    # mise only reads settings from the [settings] table of config.toml;
+    # a separate settings.toml is silently ignored.
+    xdg.configFile."mise/config.toml".source = tomlFormat.generate "mise-config" (
+      cfg.globalConfig
+      // {
+        settings = {
+          experimental = true;
+        }
+        // cfg.settings;
+      }
+    );
 
     programs = {
       bash.initExtra = ''

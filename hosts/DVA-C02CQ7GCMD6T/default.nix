@@ -93,6 +93,7 @@
       pkgs.terraform-ls
       pkgs.jdk
       pkgs.bruno
+      pkgs.claude-code
       pkgs.ripgrep
       pkgs.d2
 

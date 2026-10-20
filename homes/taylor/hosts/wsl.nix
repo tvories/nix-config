@@ -92,6 +92,14 @@
             CheckHostIP = "no";
             ForwardAgent = "yes";
           };
+          # Key lives in 1Password (reached via wsl.ssh-agent). The .pub tells the
+          # agent which key to sign with; IdentitiesOnly stops it offering all
+          # ~10 agent keys, which trips GitHub's ~6-attempt cutoff.
+          "github.com" = {
+            User = "git";
+            IdentityFile = "~/.ssh/taylor_github.pub";
+            IdentitiesOnly = "yes";
+          };
         };
       };
     };
@@ -132,6 +140,11 @@
   };
 
   # SSH agent: provided system-wide by wsl.ssh-agent (hosts/wsl/default.nix).
+
+  # Public half of the 1Password-held GitHub key, for the github.com block above.
+  home.file.".ssh/taylor_github.pub".text = ''
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA6CFlucjbbSX98j1saZPFni2pqyoHzGvZ7k7pI53Ngl taylor_github
+  '';
 
   # The full Windows PATH is off (wsl.conf appendWindowsPath=false), but System32
   # alone is cheap (~1 ms per missed lookup over 9p vs ~60 ms for the whole

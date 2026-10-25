@@ -25,7 +25,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.1013)
+    mime-types-data (3.2026.1020)
     mize (0.7.0)
     money (7.1.1)
       bigdecimal
@@ -48,7 +48,8 @@ GEM
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
-    prism (1.9.0)
+    prism (2.0.0)
+    prism (2.0.0-arm64-darwin)
     public_suffix (4.0.7)
     rbs (4.2.0)
       logger

@@ -33,42 +33,41 @@ in
           }
         ];
 
-        interactiveShellInit =
-          ''
-            function remove_path
-              if set -l index (contains -i $argv[1] $PATH)
-                set --erase --universal fish_user_paths[$index]
-              end
+        interactiveShellInit = ''
+          function remove_path
+            if set -l index (contains -i $argv[1] $PATH)
+              set --erase --universal fish_user_paths[$index]
             end
+          end
 
-            function update_path
-              if test -d $argv[1]
-                fish_add_path -m $argv[1]
-              else
-                remove_path $argv[1]
-              end
-            end
-
-            # Paths are in reverse priority order
-            update_path /opt/homebrew/bin
-            update_path ${homeDirectory}/.krew/bin
-            update_path /nix/var/nix/profiles/default/bin
-            update_path /run/current-system/sw/bin
-            update_path /etc/profiles/per-user/${username}/bin
-            update_path /run/wrappers/bin
-            # update_path ${homeDirectory}/.nix-profile/bin
-            update_path ${homeDirectory}/go/bin
-            update_path ${homeDirectory}/.cargo/bin
-            update_path ${homeDirectory}/.local/bin
-          ''
-          + (
-            if hasAnyNixShell then
-              ''
-                any-nix-shell fish --info-right | source
-              ''
+          function update_path
+            if test -d $argv[1]
+              fish_add_path -m $argv[1]
             else
-              ""
-          );
+              remove_path $argv[1]
+            end
+          end
+
+          # Paths are in reverse priority order
+          update_path /opt/homebrew/bin
+          update_path ${homeDirectory}/.krew/bin
+          update_path /nix/var/nix/profiles/default/bin
+          update_path /run/current-system/sw/bin
+          update_path /etc/profiles/per-user/${username}/bin
+          update_path /run/wrappers/bin
+          # update_path ${homeDirectory}/.nix-profile/bin
+          update_path ${homeDirectory}/go/bin
+          update_path ${homeDirectory}/.cargo/bin
+          update_path ${homeDirectory}/.local/bin
+        ''
+        + (
+          if hasAnyNixShell then
+            ''
+              any-nix-shell fish --info-right | source
+            ''
+          else
+            ""
+        );
       };
 
       home.sessionVariables.fish_greeting = "";
@@ -79,6 +78,10 @@ in
     (lib.mkIf (cfg.enable && isDarwin) {
       programs.fish = {
         functions = {
+          adgroup = {
+            description = "List Active Directory groups for a user (-g filters to gcp/gl/user-sync)";
+            body = builtins.readFile ./functions/adgroup.fish;
+          };
           flushdns = {
             description = "Flush DNS cache";
             body = builtins.readFile ./functions/flushdns.fish;

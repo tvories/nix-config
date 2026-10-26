@@ -35,7 +35,7 @@ in
       settings = lib.mkMerge [
         {
           # Font
-          font-family = "JetBrainsMono Nerd Font Mono";
+          font-family = "Bitstream Vera Sans Mono";
           font-size = cfg.fontSize;
 
           theme = "dark:Rose Pine,light:Rose Pine Dawn";

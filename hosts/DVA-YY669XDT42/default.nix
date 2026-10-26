@@ -22,7 +22,6 @@
       taps = [ ];
       brews = [ "helm" ];
       casks = [
-        # "discord"
         "google-chrome"
         "brave-browser"
         "obsidian"
@@ -93,13 +92,17 @@
       d2
       vault
       # lens
-      discord
       # jetbrains.goland
       # windsurf
       glab
       claude-code
-      devin-cli
+      # devin-cli
       uv
+      ripgrep
+      skills
+      nodejs_26
+      cloudflared
+      stats
 
       (pkgs.bundlerApp {
         pname = "morpheus-cli";

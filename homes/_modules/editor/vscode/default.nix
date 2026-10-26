@@ -9,12 +9,15 @@ let
 
   cfg = config.modules.editor.vscode;
   userDir =
-    if isDarwin then "Library/Application Support/Code/User" else "${config.xdg.configHome}/Code/User";
-  # configFilePath = "${userDir}/settings.json";
+    if isDarwin then
+      "${config.home.homeDirectory}/Library/Application Support/Code/User"
+    else
+      "${config.xdg.configHome}/Code/User";
+  configFilePath = "${userDir}/settings.json";
 
-  # pathsToMakeWritable = lib.flatten [
-  #   configFilePath
-  # ];
+  pathsToMakeWritable = lib.flatten [
+    configFilePath
+  ];
 in
 {
   options.modules.editor.vscode = {
@@ -40,13 +43,12 @@ in
           inherit (cfg) extensions;
           inherit (cfg) userSettings;
         };
-
       };
 
-      # home.file = lib.genAttrs pathsToMakeWritable (_: {
-      #   force = true;
-      #   mutable = true;
-      # });
+      home.file = lib.genAttrs pathsToMakeWritable (_: {
+        force = true;
+        mutable = true;
+      });
     })
   ];
 }

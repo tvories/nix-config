@@ -32,7 +32,6 @@
       taps = [ ];
       brews = [ "helm" ];
       casks = [
-        # "discord"
         "google-chrome"
         "brave-browser"
         "obsidian"

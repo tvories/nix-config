@@ -27,7 +27,7 @@
       "enabled": true
     },
     "defaultFormatter": "esbenp.prettier-vscode",
-    "fontFamily": "JetBrainsMono Nerd Font",
+    "fontFamily": "Bitstream Vera Sans Mono",
     "fontSize": 14,
     "formatOnSave": true,
     "fontLigatures": true,
@@ -83,7 +83,8 @@
     },
     "tree": {
       "expanded": true
-    }
+    },
+    "ripgrep.ripgrep": "/run/current-system/sw/bin/rg"
   },
   "update": {
     "mode": "manual",

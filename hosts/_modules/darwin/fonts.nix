@@ -8,6 +8,7 @@
       nerd-fonts.jetbrains-mono
       nerd-fonts.droid-sans-mono
       nerd-fonts.fira-code
+      nerd-fonts.bitstream-vera-sans-mono
     ];
   };
 }

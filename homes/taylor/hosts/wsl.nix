@@ -13,9 +13,9 @@
         enable = true;
         package = pkgs.unstable.atuin;
         flags = [ "--disable-up-arrow" ];
+        autoLogin.enable = true;
         settings = {
           sync_address = "https://atuin.t-vo.us";
-          # key_path = config.sops.secrets.atuin_work_key.path;
           auto_sync = true;
           sync_frequency = "1m";
           search_mode = "fuzzy";
@@ -59,21 +59,21 @@
           "192.168.1.97" = {
             Port = 22;
             User = "root";
-            IdentityFile = "/home/taylor/nixos-root";
+            IdentityFile = "/home/taylor/.ssh/nixos-root";
             CheckHostIP = "no";
             ForwardAgent = "yes";
           };
           "192.168.1.101" = {
             Port = 22;
             User = "root";
-            IdentityFile = "/home/taylor/nixos-root";
+            IdentityFile = "/home/taylor/.ssh/nixos-root";
             CheckHostIP = "no";
             ForwardAgent = "yes";
           };
           "192.168.1.128" = {
             Port = 22;
             User = "root";
-            IdentityFile = "/home/taylor/nixos-root";
+            IdentityFile = "/home/taylor/.ssh/nixos-root";
             CheckHostIP = "no";
             ForwardAgent = "yes";
           };

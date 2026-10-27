@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # The full Windows PATH (wsl.interop.includePath) adds ~60 /mnt/c dirs that
   # every command lookup and fish completion scans over the slow 9p bridge.
@@ -84,6 +89,12 @@ in
         "touch"
         "ls"
       ];
+    };
+    # The bridge exits 0 after a Windows-side timeout (e.g. an unanswered
+    # 1Password prompt), which Restart=on-failure ignores, leaving no agent.
+    systemd.user.services.wsl2-ssh-agent.serviceConfig = {
+      Restart = lib.mkForce "always";
+      RestartSec = 1;
     };
     services.openssh = {
       enable = true;

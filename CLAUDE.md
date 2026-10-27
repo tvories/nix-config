@@ -18,7 +18,8 @@ Nixpkgs stable: `nixos-25.11`. `system.stateVersion = "25.11"`.
 | `nas-vm`           | x86_64-linux     | VM clone of NAS for testing; mirrors nas3 setup           | 192.168.1.230                  |
 | `tback`            | aarch64-linux    | Raspberry Pi 4; backup server (restic), Wireguard, Traefik | DHCP                           |
 | `homebox`          | x86_64-linux     | Primary services host; Technitium DNS, Traefik, Docker     | .43 / .243 / .240              |
-| `wsl`              | x86_64-linux     | NixOS-WSL dev environment                                 | —                              |
+| `wsl`              | x86_64-linux     | NixOS-WSL dev environment (hostname `deskmonster`; `just nix switch`) | —                  |
+| `felix`            | x86_64-linux     | Compulab fitlet2; kid's XFCE desktop (auto-login `kid`). Installed from `just nix build-installer felix` | DHCP |
 | `DVA-YY669XDT42`   | aarch64-darwin   | Personal MacBook                                          | —                              |
 | `DVA-C02CQ7GCMD6T` | x86_64-darwin    | Work MacBook                                              | —                              |
 

@@ -177,6 +177,10 @@ in
             "zrepl"
             "samba-smbd"
             "nfs-server"
+            # Not a tile: oneshot that stays "failed" until the next monthly
+            # run, which the SystemdUnitFailed alert picks up (scrubs failed
+            # silently Sep-Oct 2026 after a ZFS update without reboot).
+            "zfs-scrub"
           ];
         };
         zfs-exporter.enable = true;

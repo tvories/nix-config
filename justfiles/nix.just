@@ -69,6 +69,15 @@ build-wsl-image out_dir="/mnt/c/Users/taylor/Downloads" age_key="": (require "ni
     sudo "$builder/bin/nixos-wsl-tarball-builder" --extra-files "$stage" --chown /home/taylor 1000:100
     ls -lh "{{ out_dir }}/nixos.wsl"
 
+[doc('Build the offline USB installer ISO for a host (flake output <host>-installer) into out_dir')]
+build-installer host out_dir="/mnt/c/Users/taylor/Downloads": (require "nix")
+    #!/usr/bin/env bash
+    set -euo pipefail
+    out=$(nix build --no-link --print-out-paths "{{ repo_dir }}#{{ host }}-installer")
+    iso=$(find "$out/iso" -name '*.iso' | head -1)
+    install -m 644 "$iso" "{{ out_dir }}/{{ host }}-installer.iso"
+    ls -lh "{{ out_dir }}/{{ host }}-installer.iso"
+
 [doc('Build on this machine, then switch the remote host (nh cannot force a local build for tback)')]
 apply-nixos-local host: (require "nix" "nixos-rebuild")
     nixos-rebuild switch --flake "{{ repo_dir }}#{{ host }}" --sudo --build-host "" --target-host "{{ ssh_user }}@{{ host }}.{{ domain }}"

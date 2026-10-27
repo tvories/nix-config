@@ -162,6 +162,7 @@
         wsl = mkSystemLib.mkNixosSystem "x86_64-linux" "wsl" flake-packages;
         tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
         homebox = mkSystemLib.mkNixosSystem "x86_64-linux" "homebox" flake-packages;
+        felix = mkSystemLib.mkNixosSystem "x86_64-linux" "felix" flake-packages;
         utm-arm = mkSystemLib.mkNixosSystem "aarch64-linux" "utm-arm" flake-packages;
       };
 
@@ -182,6 +183,13 @@
           );
         in
         nixos // darwin;
+
+      # Offline USB installer carrying felix's full system (hosts/felix/installer.nix).
+      felix-installer =
+        (nixpkgs.lib.nixosSystem {
+          modules = [ ./hosts/felix/installer.nix ];
+          specialArgs.target = self.nixosConfigurations.felix;
+        }).config.system.build.isoImage;
 
       iso = nixos-generators.nixosGenerate {
         system = "x86_64-linux";

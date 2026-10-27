@@ -17,7 +17,7 @@ in {
       age.generateKey = true;
 
       secrets = {
-        # atuin_key = {};
+        # atuin_key / atuin_password: declared by modules.shell.atuin.autoLogin
         atuin_work_key = {};
       };
     };

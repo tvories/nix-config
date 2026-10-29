@@ -135,6 +135,9 @@
             asset_pattern = "krr-ubuntu-latest-*.zip";
           };
         };
+        globalConfig.shell_alias = {
+          tf = "terraform";
+        };
       };
     };
   };

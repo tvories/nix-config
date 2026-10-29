@@ -13,7 +13,7 @@ in
   imports = [
     ./disk-config.nix
     ./hardware-configuration.nix
-    ./pegasus.nix
+    ./kid-apps.nix
     # Temporary: Echo Dot 2nd gen flashing tools. Remove once it's flashed.
     ./amonet.nix
   ];
@@ -63,8 +63,12 @@ in
       pulse.enable = true;
     };
 
+    # A group of its own, like taylor's: installers that write into the home
+    # (Cozy Kids Launcher's) chown files to user:user.
+    modules.users.groups.kid = { };
     modules.users.additionalUsers.kid = {
       isNormalUser = true;
+      group = "kid";
       description = "Kid";
       # Not in wheel: no sudo. Set a password with `sudo passwd kid` if the
       # account should ever be locked.
@@ -73,8 +77,7 @@ in
         "video"
         "networkmanager"
       ];
-      # Games and learning apps are installed from the launcher's list in
-      # pegasus.nix.
+      # Games and learning apps are installed from the list in kid-apps.nix.
       packages = [ pkgs.firefox ];
     };
 

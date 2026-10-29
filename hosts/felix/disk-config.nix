@@ -5,9 +5,8 @@
       # The fitlet2's M.2 2242 SATA SSD. It enumerates as /dev/sdX alongside
       # the USB installer, so install-felix picks the disk at runtime and
       # overrides this (hosts/felix/installer.nix). The installed system
-      # mounts by partition label, so this path is only used for formatting;
-      # set it to the drive's /dev/disk/by-id path once known.
-      device = lib.mkDefault "/dev/disk/by-id/CHANGE-ME";
+      # mounts by partition label, so this path is only used for formatting.
+      device = lib.mkDefault "/dev/disk/by-id/ata-NGFF_2242_64GB_SSD_2020122500731";
       type = "disk";
       content = {
         type = "gpt";

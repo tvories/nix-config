@@ -13,6 +13,7 @@ in
     # Host-specific
     ./disk-config.nix
     ./hardware-configuration.nix
+    ./logging.nix
     # ./3d-printing.nix
     # ./wireguard.nix
     # ./restic-server.nix

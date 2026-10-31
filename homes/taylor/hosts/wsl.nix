@@ -174,6 +174,8 @@
     kustomize
     kubeseal
     kompose
+    # logcli, for querying homebox's Loki when the cluster's Grafana is down
+    grafana-loki
     # Not in mise's registry
     govc
     # Talos TUI; young 0.1.x project, stable nixpkgs lags behind releases

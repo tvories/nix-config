@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -27,6 +28,20 @@
             "chat.commandCenter.enabled" = false;
             "chat.titleBar.openInAgentsWindow.enabled" = false;
           };
+      # keyd's Cmd+C/V (hosts/deskmonster) send Ctrl/Shift+Insert, which the
+      # editor treats as copy and paste but the terminal hands to the shell.
+      keybindings = [
+        {
+          key = "ctrl+insert";
+          command = "workbench.action.terminal.copySelection";
+          when = "terminalFocus && terminalTextSelected";
+        }
+        {
+          key = "shift+insert";
+          command = "workbench.action.terminal.paste";
+          when = "terminalFocus";
+        }
+      ];
     };
     terminal.ghostty = {
       enable = true;
@@ -40,6 +55,9 @@
     # Use the SSH agent).
     security.ssh.settings."*".IdentityAgent = "~/.1password/agent.sock";
   };
+  # The same agent for tools that read SSH_AUTH_SOCK rather than ssh_config
+  # (git signing, ssh-add).
+  home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
 
   # KRdp streams the whole 5120x1440 desktop by default, wider than many H.264
   # decoders accept (macOS FreeRDP shows a white screen); share the main
@@ -50,13 +68,16 @@
     ExecStart=${pkgs.kdePackages.krdp}/bin/krdpserver --monitor 0
   '';
 
-  # The dock. Plasma's own panels can't magnify icons on hover; Crystal Dock
-  # can, and auto-hides through KWin's screen edges (so ElectricBorderDelay
-  # below sets how fast it appears). Its launchers, zoom and hiding are set in
-  # its own right-click menu and kept in ~/.config/crystal-dock.
-  home.packages = [ pkgs.crystal-dock ];
-  xdg.configFile."autostart/crystal-dock.desktop".source =
-    "${pkgs.crystal-dock}/share/applications/crystal-dock.desktop";
+  # CurseForge is a self-updating AppImage (programs.appimage, hosts/deskmonster)
+  # kept in ~/Applications. Its login finishes by opening a cfauth:// link in
+  # the app, which only works with an app menu entry claiming that scheme.
+  xdg.desktopEntries.curseforge = {
+    name = "CurseForge";
+    exec = "${config.home.homeDirectory}/Applications/curseforge-latest-linux.AppImage %U";
+    icon = "applications-games";
+    categories = [ "Game" ];
+    mimeType = [ "x-scheme-handler/cfauth" ];
+  };
 
   programs.plasma = {
     enable = true;
@@ -74,10 +95,16 @@
     # Windows minimise into the dock with KWin's version of the Mac genie effect.
     kwin.effects.minimization.animation = "magiclamp";
 
-    # How long the mouse has to rest on a screen edge before it fires (KDE's
-    # default is 150 ms). Covers the auto-hidden dock and the hot corners
-    # alike; plasma-manager has no typed option for it.
-    configFile.kwinrc.Windows.ElectricBorderDelay = 50;
+    # Screen-edge timing, which also drives the auto-hidden dock and the hot
+    # corners; plasma-manager has no typed options for these.
+    # ElectricBorderDelay: how long the mouse rests on the edge before it
+    # fires (KDE default 150 ms). ElectricBorderCooldown: how soon the same
+    # edge can fire again, e.g. re-showing the dock just after it hid (KDE
+    # default 350 ms; KWin keeps it at least 50 ms above the delay).
+    configFile.kwinrc.Windows = {
+      ElectricBorderDelay = 0;
+      ElectricBorderCooldown = 100;
+    };
 
     # macOS's Mission Control keys, on top of KDE's defaults. These use the
     # physical Ctrl key, as on a Mac; keyd's Cmd layer (hosts/deskmonster)
@@ -94,11 +121,40 @@
       repeatRate = 40; # repeats per second
     };
 
-    # Mac-style menu bar on top of every screen; the dock is Crystal Dock
-    # (below). At the first login after this block changes, plasma-manager
+    # Mac-style layout: menu bar on top, floating dock at the bottom, on every
+    # screen. At the first login after this block changes, plasma-manager
     # deletes and rebuilds the whole panel layout, wiping panel edits made in
-    # the GUI; change them here instead.
+    # the GUI (pinned and unpinned icons included); change them here instead.
+    # Plasma panels can't magnify icons on hover. Crystal Dock 2.16 can, but
+    # crashes on Plasma 6.6 when it auto-hides (KWin rejects its screen-edge
+    # request with a protocol error).
     panels = [
+      # Dock
+      {
+        location = "bottom";
+        screen = "all";
+        alignment = "center";
+        lengthMode = "fit";
+        # Hidden until the mouse reaches the bottom edge, like the Mac dock's
+        # "Automatically hide and show the Dock".
+        hiding = "autohide";
+        floating = true;
+        height = 56;
+        widgets = [
+          {
+            iconTasks.launchers = [
+              "applications:org.kde.dolphin.desktop"
+              "applications:firefox.desktop"
+              "applications:brave-browser.desktop"
+              "applications:com.mitchellh.ghostty.desktop"
+              "applications:code.desktop"
+              "applications:1password.desktop"
+              "applications:steam.desktop"
+              "applications:systemsettings.desktop"
+            ];
+          }
+        ];
+      }
       # Menu bar
       {
         location = "top";

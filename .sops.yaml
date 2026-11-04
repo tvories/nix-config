@@ -7,6 +7,7 @@ keys:
   - &homebox age1ual2fd0gd9jsc5ns23938q5ahtqd8q0et7nk70seatl4z8d93usskjqele
   - &utm_arm age1ul3c8l632e7qug9cnt80u0c6kujnufrwvf0yy2fp86v59f9grcmqeehtd6
   - &nixoswsl age1pgs7fw2tm4pfpt83lpu3yeqenuw07k49zjqxkngkjt3rua3e99vskwpc5y
+  - &deskmonster age1383r6v2d4n4634mcdx2epha43hqc8u7sp244825ujzlqc2t6kscqmzcpqm
 creation_rules:
   - path_regex: .*\.sops\.ya?ml$
     key_groups:
@@ -24,3 +25,4 @@ creation_rules:
           - *homebox
           - *utm_arm
           - *nixoswsl
+          - *deskmonster

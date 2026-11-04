@@ -64,6 +64,7 @@ in
     ./disk-config.nix
     ./hardware-configuration.nix
     ./gaming.nix
+    ./services.nix
   ];
 
   config = {
@@ -211,6 +212,10 @@ in
     services.hardware.openrgb = {
       enable = true;
       motherboard = "amd";
+      # The Ducky only takes per-key colours from OpenRGB (Direct mode), so
+      # moving effects like a rainbow wave have to be drawn by the Effects
+      # plugin, which this build includes.
+      package = pkgs.openrgb-with-all-plugins;
     };
 
     programs.firefox = {
@@ -218,6 +223,8 @@ in
       preferences = {
         "media.ffmpeg.vaapi.enabled" = true;
         "media.hardware-video-decoding.force-enabled" = true;
+        # Middle-click scrolling, on by default everywhere except Linux.
+        "general.autoScroll" = true;
       };
     };
     programs._1password.enable = true;
@@ -301,8 +308,11 @@ in
 
     environment.systemPackages = with pkgs; [
       # Chromium-based browser for sites that need one; Brave for its built-in
-      # tracker blocking and fingerprint randomisation.
-      brave
+      # tracker blocking and fingerprint randomisation. Chromium leaves
+      # middle-click scrolling off on Linux; this Blink feature turns it on.
+      (brave.override {
+        commandLineArgs = "--enable-blink-features=MiddleClickAutoscroll";
+      })
       usbutils
       pciutils
       # Picks the OS for the next boot (`efibootmgr --bootnext`), for
@@ -311,6 +321,10 @@ in
       rebootWindows
       rebootNix
       claude-code
+      signal-desktop
+      # At /run/current-system/sw/bin/rg, where the shared VS Code settings
+      # point Todo Tree (as on the Macs).
+      ripgrep
       powershell
       sops
       python3
@@ -321,6 +335,22 @@ in
       whitesur-kde
       whitesur-icon-theme
       whitesur-cursors
+    ];
+
+    # The Macs' fonts (hosts/_modules/darwin/fonts.nix), so Ghostty, VS Code
+    # and the shell prompt's icons look the same here.
+    fonts.packages = with pkgs; [
+      font-awesome
+      monaspace
+      atkinson-hyperlegible
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.droid-sans-mono
+      nerd-fonts.fira-code
+      nerd-fonts.bitstream-vera-sans-mono
+      # Ghostty asks for "Bitstream Vera Sans Mono"; the Nerd Font build above
+      # is named "BitstromWera", so it needs the original too. Ghostty draws
+      # the Nerd Font icons itself.
+      ttf_bitstream_vera
     ];
 
     services.openssh = {

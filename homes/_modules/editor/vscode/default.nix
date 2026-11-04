@@ -30,6 +30,10 @@ in
       type = lib.types.attrs;
       default = { };
     };
+    keybindings = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      default = [ ];
+    };
   };
 
   config = lib.mkMerge [
@@ -41,7 +45,7 @@ in
 
         profiles.default = {
           inherit (cfg) extensions;
-          inherit (cfg) userSettings;
+          inherit (cfg) userSettings keybindings;
         };
       };
 

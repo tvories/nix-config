@@ -12,6 +12,13 @@
   # Raises CPU and GPU priority while a game runs (`gamemoderun %command%`).
   programs.gamemode.enable = true;
 
+  # Lets downloaded AppImages run directly (chmod +x, then launch), for apps
+  # nixpkgs doesn't package, such as the CurseForge mod manager.
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   environment.systemPackages = with pkgs; [
     heroic
     lutris

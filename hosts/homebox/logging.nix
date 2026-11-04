@@ -78,7 +78,10 @@ in
 
       schema_config.configs = [
         {
-          from = "2026-10-30";
+          # Before any log line the cluster's Vector can still send: Loki
+          # answers 500 (retried, blocking newer logs) for lines dated before
+          # the schema start. reject_old_samples still drops anything >7d old.
+          from = "2026-01-01";
           store = "tsdb";
           object_store = "filesystem";
           schema = "v13";

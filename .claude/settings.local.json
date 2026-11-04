@@ -19,10 +19,19 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:search.nixos.org)",
       "WebFetch(domain:nixos.org)",
-      "WebFetch(domain:home-manager.dev)"
+      "WebFetch(domain:home-manager.dev)",
+      "Read(//home/taylor/.local/share/plasma-manager/**)",
+      "Read(//home/taylor/.config/**)",
+      "Bash(kscreen-doctor -o)",
+      "Bash(sed -n '/^\\\\[kwin\\\\]/,/^\\\\[/p' ~/.config/kglobalshortcutsrc | grep -iE \"overview|expose|grid|desktop to the|Switch to Desktop [12]=|Window Maximize=|Window Minimize=|Close|Show Desktop|Walk Through Windows of\" | head -30; ls /run/current-system/sw/share/kglobalaccel 2>/dev/null | head; grep -rl -i \"mac\" /run/current-system/sw/share/kcmkeys 2>/dev/null)",
+      "Read(//nix/store/33pd64hba9caq28irkklm56jmzd0h2ak-system-path/share/kglobalaccel/**)",
+      "Read(//nix/store/kgny3ws3zm375gdqx1rgdd9gkifvgscy-plasma-desktop-6.6.6/share/kcmkeys/**)"
     ],
     "deny": [
       "Bash(rm:*)"
+    ],
+    "additionalDirectories": [
+      "/home/taylor/.config"
     ]
   }
 }

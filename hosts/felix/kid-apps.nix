@@ -92,6 +92,10 @@ in
     # installer) runs a Python server and shows it in a Chromium kiosk.
     pkgs.python3
     pkgs.chromium
+    # Its "Learning games" tile runs `gcompris`; nixpkgs names it gcompris-qt.
+    (pkgs.writeShellScriptBin "gcompris" ''
+      exec ${lib.getExe' pkgs.gcompris "gcompris-qt"} "$@"
+    '')
   ];
 
   environment.etc."xdg/autostart/kid-desktop-icons.desktop".text = ''

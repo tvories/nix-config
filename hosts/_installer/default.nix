@@ -1,30 +1,36 @@
-# Offline USB installer for felix: a NixOS live ISO carrying felix's complete,
-# prebuilt system and disko scripts, so installing needs no network or builds.
+# Offline USB installer for a host: a NixOS live ISO carrying the host's
+# complete, prebuilt system and disko scripts, so installing needs no network
+# or builds.
 #
-#   just nix build-installer felix   # then write the ISO to a USB stick
-#   boot the fitlet2 from it, then:  sudo install-felix [/dev/sdX]
+#   just nix build-installer <host>   # then write the ISO to a USB stick
+#   boot the machine from it, then:   sudo install-<host> [/dev/disk]
 #
-# `target` is felix's nixosConfiguration, passed in from flake.nix.
+# `target` is the host's nixosConfiguration and `diskTransports` the buses
+# (lsblk TRAN) its install disk can be on; both are passed in from flake.nix.
 {
   lib,
   pkgs,
   modulesPath,
   target,
+  diskTransports,
   ...
 }:
 let
-  # The SSD and the USB stick are both /dev/sdX, so the disko scripts point at
-  # a symlink that install-felix creates once the target disk is chosen. Only
-  # formatting uses it; the installed system mounts by partition label.
-  targetLink = "/dev/felix-target";
+  inherit (target.config.networking) hostName;
+  # Disk names depend on what's plugged in (the USB stick is /dev/sdX too), so
+  # the disko scripts point at a symlink that the install script creates once
+  # the target disk is chosen. Only formatting uses it; the installed system
+  # mounts by partition label.
+  targetLink = "/dev/${hostName}-target";
   diskoBuild =
     (target.extendModules {
       modules = [ { disko.devices.disk.main.device = lib.mkForce targetLink; } ];
     }).config.system.build;
   inherit (target.config.system.build) toplevel;
+  isCandidate = lib.concatMapStringsSep " || " (t: ''$2 == "${t}"'') diskTransports;
 
-  installFelix = pkgs.writeShellApplication {
-    name = "install-felix";
+  installHost = pkgs.writeShellApplication {
+    name = "install-${hostName}";
     runtimeInputs = with pkgs; [
       util-linux
       gptfdisk
@@ -32,7 +38,7 @@ let
     ];
     text = ''
       if [ "$(id -u)" -ne 0 ]; then
-        echo "Run as root: sudo install-felix [/dev/sdX]" >&2
+        echo "Run as root: sudo install-${hostName} [/dev/disk]" >&2
         exit 1
       fi
 
@@ -44,17 +50,18 @@ let
       fi
 
       if [ $# -ge 1 ]; then
-        disk=$1
+        disk=$(readlink -f "$1")
       else
-        # Internal, non-removable SATA/NVMe disks other than the USB stick.
+        # Internal, non-removable disks on the host's install buses, other
+        # than the USB stick.
         mapfile -t candidates < <(
-          lsblk -dpno NAME,TRAN,RM | awk '($2 == "sata" || $2 == "nvme") && $3 == 0 { print $1 }' |
+          lsblk -dpno NAME,TRAN,RM | awk '(${isCandidate}) && $3 == 0 { print $1 }' |
             grep -vxF "''${boot_disk:-none}" || true
         )
         if [ ''${#candidates[@]} -ne 1 ]; then
-          echo "Expected exactly one internal SATA/NVMe disk, found ''${#candidates[@]}:" >&2
+          echo "Expected exactly one internal ${lib.concatStringsSep "/" diskTransports} disk, found ''${#candidates[@]}:" >&2
           lsblk -d -o NAME,SIZE,TRAN,RM,MODEL >&2
-          echo "Re-run with the disk to use, e.g.: sudo install-felix /dev/sda" >&2
+          echo "Re-run with the disk to use, e.g.: sudo install-${hostName} /dev/disk/by-id/..." >&2
           exit 1
         fi
         disk=''${candidates[0]}
@@ -69,15 +76,15 @@ let
         exit 1
       fi
 
-      lsblk -o NAME,SIZE,TRAN,MODEL,MOUNTPOINTS
+      lsblk -o NAME,SIZE,TRAN,MODEL,FSTYPE,LABEL,MOUNTPOINTS
       echo
       echo "Target: $disk  $(lsblk -dno SIZE,MODEL "$disk")"
       for id in /dev/disk/by-id/*; do
         [ "$(readlink -f "$id")" = "$disk" ] && echo "  by-id: $id"
       done
-      echo "This ERASES $disk and installs felix."
-      read -rp "Type 'felix' to continue: " answer
-      [ "$answer" = felix ] || { echo "Aborted."; exit 1; }
+      echo "This ERASES $disk and installs ${hostName}."
+      read -rp "Type '${hostName}' to continue: " answer
+      [ "$answer" = ${hostName} ] || { echo "Aborted."; exit 1; }
 
       ln -sfn "$disk" ${targetLink}
       # Clear any previous partition table so disko starts from a blank disk.
@@ -89,7 +96,7 @@ let
       nixos-install --system ${toplevel} --no-root-passwd --no-channel-copy
       echo
       echo "Installed. Remove the USB drive and reboot."
-      echo "Then set disko.devices.disk.main.device in hosts/felix/disk-config.nix to the by-id path above."
+      echo "Then set disko.devices.disk.main.device in hosts/${hostName}/disk-config.nix to the by-id path above."
     '';
   };
 in
@@ -98,7 +105,7 @@ in
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  # Puts felix's whole closure on the ISO, so nixos-install copies from the
+  # Puts the host's whole closure on the ISO, so nixos-install copies from the
   # stick instead of downloading.
   isoImage.storeContents = [
     toplevel
@@ -106,11 +113,11 @@ in
     diskoBuild.mountScript
   ];
 
-  environment.systemPackages = [ installFelix ];
+  environment.systemPackages = [ installHost ];
 
   services.getty.helpLine = lib.mkAfter ''
 
-    To install felix (erases the internal SSD): sudo install-felix
+    To install ${hostName} (erases the chosen disk): sudo install-${hostName}
   '';
 
   # Lets the install also be driven over SSH from another machine.

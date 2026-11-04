@@ -20,6 +20,7 @@ Nixpkgs stable: `nixos-25.11`. `system.stateVersion = "25.11"`.
 | `homebox`          | x86_64-linux     | Primary services host; Technitium DNS, Traefik, Docker     | .43 / .243 / .240              |
 | `wsl`              | x86_64-linux     | NixOS-WSL dev environment (hostname `deskmonster`; `just nix switch`) | —                  |
 | `felix`            | x86_64-linux     | Compulab fitlet2; kid's XFCE desktop (auto-login `kid`). Installed from `just nix build-installer felix` | DHCP |
+| `deskmonster`      | x86_64-linux     | Desktop PC (5600X, RTX 3080); KDE Plasma gaming/dev desktop, dual-boot trial beside Windows on the Intel 660p NVMe. Installed from `just nix build-installer deskmonster`; shares home config with `wsl` via `homes/taylor/hosts/_workstation.nix` | DHCP |
 | `DVA-YY669XDT42`   | aarch64-darwin   | Personal MacBook                                          | —                              |
 | `DVA-C02CQ7GCMD6T` | x86_64-darwin    | Work MacBook                                              | —                              |
 

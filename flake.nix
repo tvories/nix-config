@@ -93,6 +93,13 @@
       url = "github:oxalica/rust-overlay";
     };
 
+    # Declarative KDE Plasma settings (panels, input, shortcuts) for home-manager
+    plasma-manager = {
+      url = "github:nix-community/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # nix-index pre-built database
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -130,6 +137,13 @@
       overlays = import ./overlays { inherit inputs; };
       mkSystemLib = import ./lib/mkSystem.nix { inherit inputs overlays; };
       flake-packages = self.packages;
+      # Offline USB installer carrying a host's full system (hosts/_installer).
+      mkInstaller =
+        target: diskTransports:
+        (nixpkgs.lib.nixosSystem {
+          modules = [ ./hosts/_installer ];
+          specialArgs = { inherit target diskTransports; };
+        }).config.system.build.isoImage;
 
       legacyPackages = forAllSystems (
         system:
@@ -163,6 +177,7 @@
         tback = mkSystemLib.mkNixosSystem "aarch64-linux" "tback" flake-packages;
         homebox = mkSystemLib.mkNixosSystem "x86_64-linux" "homebox" flake-packages;
         felix = mkSystemLib.mkNixosSystem "x86_64-linux" "felix" flake-packages;
+        deskmonster = mkSystemLib.mkNixosSystem "x86_64-linux" "deskmonster" flake-packages;
         utm-arm = mkSystemLib.mkNixosSystem "aarch64-linux" "utm-arm" flake-packages;
       };
 
@@ -184,12 +199,13 @@
         in
         nixos // darwin;
 
-      # Offline USB installer carrying felix's full system (hosts/felix/installer.nix).
-      felix-installer =
-        (nixpkgs.lib.nixosSystem {
-          modules = [ ./hosts/felix/installer.nix ];
-          specialArgs.target = self.nixosConfigurations.felix;
-        }).config.system.build.isoImage;
+      felix-installer = mkInstaller self.nixosConfigurations.felix [
+        "sata"
+        "nvme"
+      ];
+      # NVMe only: the desktop has several SATA data disks, and its Windows
+      # NVMe is unplugged while installing, leaving just the one to install to.
+      deskmonster-installer = mkInstaller self.nixosConfigurations.deskmonster [ "nvme" ];
 
       iso = nixos-generators.nixosGenerate {
         system = "x86_64-linux";

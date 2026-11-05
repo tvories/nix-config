@@ -163,6 +163,8 @@
     govc
     # Talos TUI; young 0.1.x project, stable nixpkgs lags behind releases
     unstable.talos-pilot
+    # Terminal multiplexer for coding agents; not in stable nixpkgs
+    unstable.herdr
     # mise would compile these from source, which is fragile on NixOS
     ruby
     dotnet-sdk

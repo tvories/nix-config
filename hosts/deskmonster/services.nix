@@ -25,7 +25,10 @@
 
   # The old Windows F: drive (HGST 6 TB), which holds the restic repos under
   # /restic. Windows still dual-boots and uses it, so it stays NTFS. Owned by
-  # taylor with the restic group, so both can write.
+  # taylor with the restic group, so both can write. uid/gid/umask only cover
+  # files without Linux ownership stored on them: ntfs3 honours the WSL-style
+  # owner and mode that Linux writes into NTFS, which is how the old
+  # Docker server left the repos root-only until they were chowned once.
   fileSystems."/mnt/f" = {
     device = "/dev/disk/by-uuid/58B0E9BAB0E99EAE";
     fsType = "ntfs3";

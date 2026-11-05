@@ -45,11 +45,24 @@
     };
     terminal.ghostty = {
       enable = true;
+      fontSize = 12;
       # keyd's Cmd+C/V (hosts/deskmonster) send these.
-      extraSettings.keybind = [
-        "ctrl+insert=copy_to_clipboard"
-        "shift+insert=paste_from_clipboard"
-      ];
+      extraSettings = {
+        keybind = [
+          "ctrl+insert=copy_to_clipboard"
+          "shift+insert=paste_from_clipboard"
+          # Cmd+T: keyd sends Ctrl+T. Takes Ctrl+T from fish (transpose chars).
+          "ctrl+t=new_tab"
+          # Cmd+W, likewise. Takes Ctrl+W (delete word) from the shell too, and
+          # closes without asking; Alt+Backspace still deletes a word.
+          "ctrl+w=close_surface"
+        ];
+        # Show the tab bar even with one tab, as macOS Terminal can.
+        window-show-tab-bar = "always";
+        # Forced over the shared module's Rose Pine. Kanagawabones has no
+        # light variant, so it stays dark in light mode too.
+        theme = lib.mkForce "Kanagawabones";
+      };
     };
     # The 1Password desktop app serves the SSH keys (Settings > Developer >
     # Use the SSH agent).
@@ -57,7 +70,26 @@
   };
   # The same agent for tools that read SSH_AUTH_SOCK rather than ssh_config
   # (git signing, ssh-add).
+  # Without this file the agent offers only Personal-vault keys; with it, only
+  # what is listed. The work key is named by item so its vault's name doesn't
+  # matter here.
+  xdg.configFile."1Password/ssh/agent.toml".text = ''
+    [[ssh-keys]]
+    vault = "k8s"
+
+    [[ssh-keys]]
+    item = "DaVita Bitbucket"
+  '';
   home.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
+  # Shells only see the line above; this gives it to the whole desktop session,
+  # so apps launched from the menu (VS Code) get it too.
+  systemd.user.sessionVariables.SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
+
+  home.packages = with pkgs; [
+    discord
+    # Kubernetes IDE; stable nixpkgs' build is from 2024
+    unstable.lens
+  ];
 
   # KRdp streams the whole 5120x1440 desktop by default, wider than many H.264
   # decoders accept (macOS FreeRDP shows a white screen); share the main
@@ -77,6 +109,32 @@
     icon = "applications-games";
     categories = [ "Game" ];
     mimeType = [ "x-scheme-handler/cfauth" ];
+  };
+
+  # Apps started with the (auto-login) session after every boot. Entries are
+  # desktop files: an app's own (e.g. "${pkgs.foo}/share/applications/foo.desktop"),
+  # or one built with makeDesktopItem when it needs extra arguments.
+  xdg.autostart = {
+    enable = true;
+    entries = [
+      # In the tray rather than as an open window.
+      "${
+        pkgs.makeDesktopItem {
+          name = "signal-autostart";
+          desktopName = "Signal";
+          exec = "${lib.getExe pkgs.signal-desktop} --start-in-tray";
+          icon = "signal-desktop";
+        }
+      }/share/applications/signal-autostart.desktop"
+      "${
+        pkgs.makeDesktopItem {
+          name = "discord-autostart";
+          desktopName = "Discord";
+          exec = "${lib.getExe pkgs.discord} --start-minimized";
+          icon = "discord";
+        }
+      }/share/applications/discord-autostart.desktop"
+    ];
   };
 
   programs.plasma = {
@@ -110,15 +168,30 @@
     # physical Ctrl key, as on a Mac; keyd's Cmd layer (hosts/deskmonster)
     # covers the Cmd shortcuts.
     shortcuts.kwin = {
-      "Overview" = [ "Meta+W" "Ctrl+Up" ]; # Mission Control
-      "ExposeClass" = [ "Meta+F7" "Ctrl+Down" ]; # App Exposé
-      "Switch One Desktop to the Left" = [ "Meta+Ctrl+Left" "Ctrl+Left" ];
-      "Switch One Desktop to the Right" = [ "Meta+Ctrl+Right" "Ctrl+Right" ];
+      "Overview" = [
+        "Meta+W"
+        "Ctrl+Up"
+      ]; # Mission Control
+      "ExposeClass" = [
+        "Meta+F7"
+        "Ctrl+Down"
+      ]; # App Exposé
+      "Switch One Desktop to the Left" = [
+        "Meta+Ctrl+Left"
+        "Ctrl+Left"
+      ];
+      "Switch One Desktop to the Right" = [
+        "Meta+Ctrl+Right"
+        "Ctrl+Right"
+      ];
     };
 
     input.keyboard = {
       repeatDelay = 250; # ms before a held key starts repeating
       repeatRate = 40; # repeats per second
+      # Plasma leaves it as found, and it's always off after boot: keyd's
+      # virtual keyboard doesn't inherit the BIOS state.
+      numlockOnStartup = "on";
     };
 
     # Mac-style layout: menu bar on top, floating dock at the bottom, on every

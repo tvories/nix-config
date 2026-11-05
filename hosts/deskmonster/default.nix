@@ -252,6 +252,19 @@ in
 
     modules.services.docker.enable = true;
 
+    # Scraped by the cluster's Prometheus (k8s-gitops kube-prometheus-stack):
+    # node-exporter by scrapeconfigs/deskmonster.yaml, the GPU by the
+    # nvidia_gpu_exporter job in helm-release.yaml, which Windows' exporter
+    # also answers on the same port.
+    modules.services.node-exporter = {
+      enable = true;
+      openFirewall = true;
+    };
+    modules.services.nvidia-gpu-exporter = {
+      enable = true;
+      openFirewall = true;
+    };
+
     users.users.taylor = {
       uid = 1000;
       name = "taylor";
@@ -271,6 +284,9 @@ in
         "networkmanager"
         "docker"
         "gamemode"
+        # Claude Desktop's Cowork runs tasks in a KVM VM and needs
+        # /dev/vhost-vsock, which only this group can open.
+        "kvm"
         "scanner"
         "lp"
       ];
@@ -322,12 +338,16 @@ in
       rebootNix
       claude-code
       signal-desktop
+      (callPackage ../../pkgs/claude-desktop.nix { })
       # At /run/current-system/sw/bin/rg, where the shared VS Code settings
       # point Todo Tree (as on the Macs).
       ripgrep
       powershell
       sops
       python3
+      # Current LTS line. Also provides the npx that the agentmemory MCP
+      # server's client runs from (~/.claude.json).
+      nodejs_26
       gnumake
       gcc
       uv

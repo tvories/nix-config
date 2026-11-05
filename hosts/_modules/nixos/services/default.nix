@@ -11,6 +11,7 @@
     ./nginx
     ./nfs
     ./node-exporter
+    ./nvidia-gpu-exporter
     ./onepassword-connect
     ./openssh
     ./podman

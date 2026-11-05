@@ -69,7 +69,8 @@ All custom modules use the `modules.*` option namespace, not raw NixOS options.
 ### Services (`modules.services.<name>`)
 Available: `traefik`, `docker`, `samba`, `nfs`, `node-exporter`, `smartd`, `smartctl-exporter`,
 `msmtp`, `openssh`, `chrony`, `k3s`, `restic-server`, `zfs-exporter`, `technitium`,
-`cfdyndns`, `bind`, `blocky`, `dnsdist`, `minio`, `nginx`, `onepassword-connect`, `podman`
+`cfdyndns`, `bind`, `blocky`, `dnsdist`, `minio`, `nginx`, `onepassword-connect`, `podman`,
+`nvidia-gpu-exporter`
 
 Enable pattern:
 ```nix

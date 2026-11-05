@@ -31,7 +31,9 @@
       "Bash(fc-list)",
       "Bash(ghostty +show-config)",
       "WebSearch",
-      "WebFetch(domain:getartcraft.com)"
+      "WebFetch(domain:getartcraft.com)",
+      "Read(//home/taylor/**)",
+      "Read(//home/taylor/.claude/**)"
     ],
     "deny": [
       "Bash(rm:*)"

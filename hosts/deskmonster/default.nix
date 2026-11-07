@@ -144,9 +144,38 @@ in
     # Remote desktop: Plasma's KRdp shares the logged-in session over RDP. Turn
     # it on and set its login under System Settings > Remote Desktop. Only
     # reachable from the home networks.
+    # Sunshine's ports (below) are opened here too, also home networks only.
     networking.firewall.extraCommands = ''
       iptables -A nixos-fw -p tcp -s 192.168.0.0/16 --dport 3389 -j nixos-fw-accept
+      iptables -A nixos-fw -p tcp -s 192.168.0.0/16 -m multiport --dports 47984,47989,48010 -j nixos-fw-accept
+      iptables -A nixos-fw -p udp -s 192.168.0.0/16 -m multiport --dports 47998:48000,48002,48010 -j nixos-fw-accept
     '';
+
+    # Game streaming to Moonlight (the Shield TV). Starts with the auto-login
+    # session, so the stream opens on the lock screen until it's unlocked.
+    services.sunshine = {
+      enable = true;
+      # Wayland capture reads the screen through KMS, which needs CAP_SYS_ADMIN.
+      capSysAdmin = true;
+      # Opened above for the home networks only, like RDP. The web UI (47990)
+      # stays local: pair and configure at https://localhost:47990.
+      openFirewall = false;
+      # Replaces the default app list (so Desktop is listed again here), and
+      # makes the web UI's app editor read-only.
+      applications.apps = [
+        {
+          name = "Desktop";
+          image-path = "desktop.png";
+        }
+        {
+          name = "World of Warcraft";
+          # Detached: Lutris hands off to Battle.net and exits, which would
+          # otherwise end the stream at launch. Battle.net opens WoW itself
+          # via --exec="launch WoW" in its Lutris game options.
+          detached = [ "env LUTRIS_SKIP_INIT=1 ${pkgs.lutris}/bin/lutris lutris:rungameid/1" ];
+        }
+      ];
+    };
 
     # Mac muscle memory on a PC keyboard: left Alt sits where Cmd does and
     # acts like it, and Win becomes Alt (Option). The Cmd layer is Ctrl for

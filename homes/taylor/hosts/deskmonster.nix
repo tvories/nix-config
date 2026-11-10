@@ -218,7 +218,7 @@
             iconTasks.launchers = [
               "applications:org.kde.dolphin.desktop"
               "applications:firefox.desktop"
-              "applications:brave-browser.desktop"
+              "applications:chromium-browser.desktop"
               "applications:com.mitchellh.ghostty.desktop"
               "applications:code.desktop"
               "applications:1password.desktop"

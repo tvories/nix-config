@@ -84,7 +84,9 @@
     "tree": {
       "expanded": true
     },
-    "ripgrep.ripgrep": "/run/current-system/sw/bin/rg"
+    "ripgrep": {
+      "ripgrep": "/run/current-system/sw/bin/rg"
+    }
   },
   "update": {
     "mode": "manual",

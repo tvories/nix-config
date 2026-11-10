@@ -24,6 +24,7 @@
         wget
         yq-go
         tree
+        unzip
         # vault
         inetutils
       ];

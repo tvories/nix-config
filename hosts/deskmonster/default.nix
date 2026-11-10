@@ -157,6 +157,13 @@ in
       enable = true;
       # Wayland capture reads the screen through KMS, which needs CAP_SYS_ADMIN.
       capSysAdmin = true;
+      # nixpkgs builds Sunshine without CUDA, which leaves it encoding through
+      # Vulkan; NVENC is better tuned (colour, quality per bit). Not in the
+      # binary cache, so it compiles locally on the first switch.
+      package = pkgs.sunshine.override {
+        cudaSupport = true;
+        inherit (pkgs) cudaPackages;
+      };
       # Opened above for the home networks only, like RDP. The web UI (47990)
       # stays local: pair and configure at https://localhost:47990.
       openFirewall = false;
@@ -170,8 +177,9 @@ in
         {
           name = "World of Warcraft";
           # Detached: Lutris hands off to Battle.net and exits, which would
-          # otherwise end the stream at launch. Battle.net opens WoW itself
-          # via --exec="launch WoW" in its Lutris game options.
+          # otherwise end the stream at launch. Battle.net opens WoW Forever
+          # (product code wowf) via --exec="launch wowf" in its Lutris game
+          # options.
           detached = [ "env LUTRIS_SKIP_INIT=1 ${pkgs.lutris}/bin/lutris lutris:rungameid/1" ];
         }
       ];
@@ -263,17 +271,15 @@ in
       polkitPolicyOwners = [ "taylor" ];
     };
 
-    # Brave (in systemPackages below) reads managed policies from here. Switches off its crypto, VPN, AI
-    # and news extras, and its password manager in favour of 1Password.
-    # Check with brave://policy.
-    environment.etc."brave/policies/managed/privacy.json".text = builtins.toJSON {
-      BraveRewardsDisabled = true;
-      BraveWalletDisabled = true;
-      BraveVPNDisabled = true;
-      BraveAIChatEnabled = false;
-      BraveNewsDisabled = true;
-      BraveTalkDisabled = true;
-      PasswordManagerEnabled = false;
+    # Managed policies for ungoogled-chromium (in systemPackages below), written
+    # to /etc/chromium/policies/managed. Turns off the built-in password
+    # manager in favour of 1Password. Check with chrome://policy.
+    programs.chromium = {
+      enable = true;
+      extraOpts = {
+        PasswordManagerEnabled = false;
+        RestoreOnStartup = 1;
+      };
     };
 
     # GeForce Now's Linux app is only distributed as a Flatpak.
@@ -352,10 +358,11 @@ in
     programs.nix-ld.enable = true;
 
     environment.systemPackages = with pkgs; [
-      # Chromium-based browser for sites that need one; Brave for its built-in
-      # tracker blocking and fingerprint randomisation. Chromium leaves
-      # middle-click scrolling off on Linux; this Blink feature turns it on.
-      (brave.override {
+      # Chromium-based browser for sites that need one. ungoogled-chromium
+      # rather than Brave, which nixpkgs dropped (2026-11) for unpatched
+      # security issues. Chromium leaves middle-click scrolling off on Linux;
+      # this Blink feature turns it on.
+      (ungoogled-chromium.override {
         commandLineArgs = "--enable-blink-features=MiddleClickAutoscroll";
       })
       usbutils

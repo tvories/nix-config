@@ -40,7 +40,10 @@ in
     (lib.mkIf cfg.enable {
       programs.vscode = {
         enable = true;
-        package = pkgs.unstable.vscode.override { commandLineArgs = "--no-sandbox"; };
+        package = pkgs.unstable.vscode.override {
+          commandLineArgs =
+            "--no-sandbox" + lib.optionalString pkgs.stdenv.hostPlatform.isLinux " --password-store=kwallet6";
+        };
         mutableExtensionsDir = true;
 
         profiles.default = {

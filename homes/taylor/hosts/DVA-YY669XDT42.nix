@@ -80,6 +80,13 @@ in
             IdentityAgent = opAgentSock;
             ForwardAgent = "yes";
           };
+          # Short name too: the desktop is usually reached as plain `deskmonster`.
+          "deskmonster.mcbadass.local deskmonster" = {
+            Port = 22;
+            User = "taylor";
+            IdentityAgent = opAgentSock;
+            ForwardAgent = "yes";
+          };
           "192.168.20.107" = {
             Port = 22;
             User = "tvories";
